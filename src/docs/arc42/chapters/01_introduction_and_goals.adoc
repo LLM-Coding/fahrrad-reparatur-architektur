@@ -12,95 +12,109 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-introduction-and-goals]]
 == Einführung und Ziele
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-Beschreibt die wesentlichen Anforderungen und treibenden Kräfte, die bei der Umsetzung der Softwarearchitektur und Entwicklung des Systems berücksichtigt werden müssen.
-
-Dazu gehören:
-
-* zugrunde liegende Geschäftsziele,
-* wesentliche Aufgabenstellungen,
-* wesentliche funktionale Anforderungen,
-* Qualitätsziele für die Architektur und
-* relevante Stakeholder und deren Erwartungshaltung.
-****
-endif::arc42help[]
+Dieses Dokument beschreibt die Architektur des Reparatur-Systems für einen lokalen Fahrradshop. Eberhard Wolff hat das System in den Folgen 111 bis 113 von software-architektur.tv ("Wir bauen eine Software-Architektur", Februar und März 2022) live entworfen. Wir dokumentieren den Entwurf nachträglich nach arc42. Quellen sind die Transkripte der Folgen und der Endstand des Miro-Boards (11 Seiten, Stand 2022-03-25). Zeitmarken ohne Folgenangabe beziehen sich auf Folge 111.
 
 === Aufgabenstellung
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Kurzbeschreibung der fachlichen Aufgabenstellung, treibenden Kräfte, Extrakt (oder Abstract) der Anforderungen.
-Verweis auf (hoffentlich vorliegende) Anforderungsdokumente (mit Versionsbezeichnungen und Ablageorten).
+==== Das System nimmt Reparaturen online an und organisiert die Werkstatt
 
-.Motivation
-Aus Sicht der späteren Nutzung ist die Unterstützung einer fachlichen Aufgabe oder Verbesserung der Qualität der eigentliche Beweggrund, ein neues System zu schaffen oder ein bestehendes zu modifizieren.
+Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Mitarbeitenden will Reparaturen über das Web annehmen und die Werkstatt organisieren (16:46). Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden, statt dafür in den Laden zu kommen (14:02). Der Shop betreibt bereits einen Webshop (14:25). Das Reparatur-System ergänzt ihn um Reparaturen als eigenen Bereich unter `/reparatur` (<<adr-002>>, <<adr-003>>).
 
-.Form
-Kurze textuelle Beschreibung, eventuell in tabellarischer Use-Case Form.
-Sofern vorhanden, sollte die Aufgabenstellung Verweise auf die entsprechenden Anforderungsdokumente enthalten.
+Drei Geschäftsziele treiben den Entwurf:
 
-Halten Sie diese Auszüge so knapp wie möglich und wägen Sie Lesbarkeit und Redundanzfreiheit gegeneinander ab.
+* Kund:innen beauftragen Reparaturen online. "Wenn Kunden damit keine Reparaturen beauftragen, dann haben wir ein Problem" (41:52).
+* Die Werkstatt organisiert Reparaturen im System: Termine, täglicher Reparaturplan, Protokoll, Bestellung von Ersatzteilen und Werkzeug.
+* Funktioniert das System gut, will der Shop es als SaaS-Lösung anderen Fahrradshops anbieten (42:13).
 
+==== Drei Akteure und vierzehn Stories bilden das Backlog
 
-.Weiterführende Informationen
+Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder weniger gut strukturiert" und dient dem Architekten als Input (09:38).
 
-Siehe https://docs.arc42.org/section-1/[Anforderungen und Ziele] in der online-Dokumentation (auf Englisch!).
+[cols="1,3" options="header"]
+|===
+|Akteur |Stories (Miro-Board Seite 1)
 
-****
-endif::arc42help[]
+|Kund:in
+|Fahrrad zur Reparatur anmelden; Reparaturtermin berechnen; Status der Reparatur abfragen; Repariertes Fahrrad abholen
+
+|Shop-Mitarbeiter:in
+|Reparatur bezahlen; Fahrrad zur Reparatur abgeben
+
+|Fahrrad-Mechaniker:in
+|Kunde über das Ende der Reparatur informieren; Fahrrad-Defekt aufnehmen; Reparatur einplanen; Täglichen Reparaturplan erstellen; Nächste Reparatur beginnen; Reparatur protokollieren; Ersatzteile bestellen; Werkzeuge bestellen
+|===
+
+NOTE: Offen: Board Seite 7 nennt zusätzlich die Story "Voraussichtliche Kosten berechnen", die auf Seite 1 fehlt. Wann sie hinzukam, ist nicht belegt. Quelle: Transkript Folge 112/113 ausstehend.
+
+==== Das Beispiel ist eine Architektur-Kata mit expliziten Annahmen
+
+Eberhard entwirft das System live, ohne echten Auftraggeber. Er trifft dafür Annahmen und benennt sie:
+
+* Die Gespräche mit Anforderern und Fachexperten sind imaginär. "Ich dokumentiere das, was in diesem imaginären Gespräch rüberkommt" (14:47).
+* Die fachliche Detaillierung der Stories ist Aufgabe des Requirements Engineering, nicht des Architekten (09:38).
+* Der Shop hat keine IT-Abteilung. "Die haben eigentlich nicht wirklich einen Betrieb" (17:05). Der Betrieb ist deshalb kein Akteur des Systems (17:09).
+* Wo das System läuft (Cloud oder lokaler Server), ist eine Architekturentscheidung und keine Anforderung. Den Geschäftsführer zu fragen bringt "mir egal" oder "was ist die Cloud?" (10:22, 10:42).
+* Die arc42-Kapitelreihenfolge ist nicht die Vorgehensreihenfolge (11:43). Eberhard beginnt mit dem Kontextdiagramm (13:00), erhebt dann Qualitätsszenarien und denkt erst danach über eine Lösung nach.
 
 === Qualitätsziele
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Die Top-3 bis Top-5 der Qualitätsanforderungen für die Architektur, deren Erfüllung oder Einhaltung den maßgeblichen Stakeholdern besonders wichtig sind.
-Gemeint sind hier wirklich Qualitätsziele, die nicht unbedingt mit den Zielen des Projekts übereinstimmen. 
-Beachten Sie den Unterschied.
+Eberhard erhebt die Qualitätsziele selbst und nutzt ISO 25010 als Checkliste, statt reflexhaft "wartbar und skalierbar" zu fordern (43:43). Der Fachexperte nennt Benutzerfreundlichkeit als das, was zählt (41:44). Aus dem Gespräch ergibt sich diese Rangfolge:
 
-Hier ein Überblick möglicher Themen (basierend auf dem ISO 25010 Standard):
+[cols="1,3,4,2" options="header"]
+|===
+|Rang |Qualitätsziel |Motivation |Zeitmarke (Folge 111)
 
-image::01_2_iso-25010-topics-DE-2023.drawio.png["Kategorien von Qualitätsanforderungen"]
+|1
+|Benutzerfreundlichkeit (Usability) für Kund:innen und Mitarbeitende
+|"Insbesondere Benutzerfreundlichkeit ist wichtig. Wenn Kunden damit keine Reparaturen beauftragen, dann haben wir ein Problem. Das wird nur funktionieren, wenn das benutzerfreundlich ist." Gilt "in erster Linie für Kunden, aber auch für die Leute in der Werkstatt". Ohne Benutzerfreundlichkeit stellt sich die Frage, "warum zum Teufel entwickeln wir das überhaupt".
+|41:44, 41:52, 42:06, 42:56, 59:13
 
-.Motivation
-Weil Qualitätsziele grundlegende Architekturentscheidungen oft maßgeblich beeinflussen, sollten Sie die für Ihre Stakeholder relevanten Qualitätsziele kennen, möglichst konkret und operationalisierbar.
+|2
+|Änderbarkeit, konkret Richtung SaaS für andere Shops
+|"Wenn dieses System besonders gut funktioniert, dann wollen wir eine SaaS-Lösung draus machen", also "dafür sorgen, dass andere Leute das benutzen können". Änderungsszenario: Der Umbau zum SaaS dauert höchstens zwei Monate und nicht mehr als 20 Personentage. Ob das Mandantenfähigkeit oder eine Installation pro Fahrradladen bedeutet, hängt davon ab, "ob wir diese Installation pro Fahrradladen finanzieren können".
+|42:13, 43:52, 44:12, 57:42, 58:15
 
-.Form
-Tabellarische Darstellung der Qualitätsziele mit möglichst konkreten Szenarien, geordnet nach Prioritäten.
-****
-endif::arc42help[]
+|3
+|Verfügbarkeit, differenziert nach Nutzergruppe
+|Shop-System: 99 % zwischen 9 und 18 Uhr, nach Ausfall spätestens nach 30 Minuten wieder da. Web-System für Kund:innen: 99,9 % zwischen 7 und 24 Uhr, nachts 99 %. Eberhard fasst zusammen: "Wir haben eher entspannte Anforderungen bezüglich der Verfügbarkeit." Details in <<adr-008>>.
+|55:07, 55:42, 56:21, 59:18
+|===
+
+Security und Vertraulichkeit sind bewusst nachrangig. "Es wäre wahrscheinlich gut, wenn das System nicht Informationen über irgendwelche Kunden nach draußen leckt. Aber selbst wenn das passiert, das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (58:29 bis 58:48). Die übrigen ISO-25010-Kategorien sind "nicht so wahnsinnig wichtig" (58:22).
+
+Die konkreten Qualitätsszenarien vom Miro-Board (Seiten 5 und 6) stehen in <<section-quality-scenarios>>. Wie die Architektur die drei Ziele erreicht, beschreibt <<section-solution-strategy>>.
 
 === Stakeholder
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Expliziter Überblick über die Stakeholder des Systems – über alle Personen, Rollen oder Organisationen –, die
-
-* die Architektur kennen sollten oder
-* von der Architektur überzeugt werden müssen,
-* mit der Architektur oder dem Code arbeiten (z.B. Schnittstellen nutzen),
-* die Dokumentation der Architektur für ihre eigene Arbeit benötigen,
-* Entscheidungen über das System und dessen Entwicklung treffen.
-
-.Motivation
-Sie sollten die Projektbeteiligten und -betroffenen kennen, sonst erleben Sie später im Entwicklungsprozess Überraschungen.
-Diese Stakeholder bestimmen unter anderem Umfang und Detaillierungsgrad der von Ihnen zu leistenden Arbeit und Ergebnisse.
-
-.Form
-Tabelle mit Rollen- oder Personennamen, sowie deren Erwartungshaltung bezüglich der Architektur und deren Dokumentation.
-****
-endif::arc42help[]
+Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es nicht; die Spalte Kontakt nennt, wer die Rolle im Beispiel verkörpert.
 
 [cols="1,1,2" options="header"]
 |===
 |Rolle |Kontakt |Erwartungshaltung
-| _<Rolle-1>_ | _<Kontakt-1>_ | _<Erwartung-1>_
-| _<Rolle-2>_ | _<Kontakt-2>_ | _<Erwartung-2>_ 
+
+|Kund:in
+|Kund:innen des Fahrradshops; im Webshop registriert
+|Meldet das Fahrrad online zur Reparatur an, ohne sich neu zu registrieren (Webshop-Login genügt, <<adr-001>>). 90 % schaffen die Beauftragung in zwei Minuten (Board Seite 5). Fragt den Status ab, wird bei Fertigstellung informiert (<<adr-007>>), zahlt online oder im Laden.
+
+|Shop-Mitarbeiter:in
+|Drei bis vier Personen im Laden (16:46)
+|Nimmt Fahrräder an und rechnet Reparaturen an der Kasse ab (<<adr-004>>). Bedient das System nach einer Stunde Einarbeitung eigenständig. Erwartet Verfügbarkeit im Laden zwischen 9 und 18 Uhr; überbrückt 30 Minuten Ausfall "mit Zettel und Bleistift" (55:42).
+
+|Fahrrad-Mechaniker:in
+|Werkstatt des Shops
+|Nimmt Defekte auf, plant Reparaturen ein, arbeitet den täglichen Reparaturplan ab, protokolliert Positionen, bestellt Ersatzteile und Werkzeug (<<adr-006>>). Bedient das System nach einer Stunde Einarbeitung eigenständig.
+
+|Shop-Inhaber:in
+|Geschäftsführer, Ansprechpartner des Architekten (10:05)
+|Kund:innen beauftragen Reparaturen online, sonst "haben wir ein Problem" (41:52). Das System läuft ohne eigene IT-Kenntnisse im Shop (Cloud, eigener Support; Board Seite 5). Perspektive: SaaS für andere Shops. Zum Betriebsmodell keine Meinung ("mir egal", 10:22).
+
+|Steuerberater:in / Rechnungswesen
+|Extern, außerhalb des Shops
+|Reparaturen werden "vernünftig verbucht gegenüber dem Steuerberater" (20:35). Das System liefert Rechnungselemente an das Rechnungswesen (Board Seite 9).
+
+|Webshop-Betreiber
+|Hersteller und Betreiber des Standard-Webshops
+|Der Webshop bleibt unverändert und hält keine Reparaturdaten (<<adr-005>>). Das Reparatur-System hängt sich per URL-Umleitung von `/reparatur`, JWT-Cookie und REST an (<<adr-001>>, <<adr-002>>).
 |===
+
+NOTE: Offen: Ob der Webshop-Betreiber die URL-Umleitung und den Zugriff auf die User Database tatsächlich anbietet, wurde in Folge 111 nicht geprüft. Quelle: Transkript Folge 112/113 ausstehend.

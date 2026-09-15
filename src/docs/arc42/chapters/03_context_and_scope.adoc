@@ -12,79 +12,157 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-context-and-scope]]
 == Kontextabgrenzung
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Die Kontextabgrenzung grenzt das System gegen alle Kommunikationspartner (Nachbarsysteme und Benutzerrollen) ab.
-Sie legt damit die externen Schnittstellen fest und zeigt damit auch die Verantwortlichkeit (scope) Ihres Systems: Welche Verantwortung trägt das System und welche Verantwortung übernehmen die Nachbarsysteme?
-
-Differenzieren Sie fachlichen (Ein- und Ausgaben) und technischen Kontext (Kanäle, Protokolle, Hardware), falls nötig.
-
-
-.Motivation
-Die fachlichen und technischen Schnittstellen zur Kommunikation gehören zu den kritischsten Aspekten eines Systems.
-Stellen Sie sicher, dass Sie diese komplett verstanden haben.
-
-.Form
-Verschiedene Optionen:
-
-* Diverse Kontextdiagramme
-* Listen von Kommunikationsbeziehungen mit deren Schnittstellen
-
-
-.Weiterführende Informationen
-
-Siehe https://docs.arc42.org/section-3/[Kontextabgrenzung] in der online-Dokumentation (auf Englisch!).
-
-****
-endif::arc42help[]
+Das Kontextdiagramm war Eberhards erster Schritt. "Ich habe dadurch ein besseres Bild bekommen, was ich bauen soll und mit wem ich interagieren muss, insbesondere welche Verantwortung ich habe und welche Schnittstellen" (Folge 111, 26:03). Er trennt fachlichen und technischen Kontext in zwei Diagramme (27:51, 28:22). Beide zeigen dieselben drei Akteure und sieben externen Systeme (Miro-Board Seiten 2 und 3).
 
 === Fachlicher Kontext
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Festlegung *aller* Kommunikationsbeziehungen (Nutzer, IT-Systeme, ...) mit Erklärung der fachlichen Ein- und Ausgabedaten oder Schnittstellen.
-Zusätzlich (bei Bedarf) fachliche Datenformate oder Protokolle der Kommunikation mit den Nachbarsystemen.
+[plantuml, "03-business-context", svg]
+----
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
 
-.Motivation
-Alle Beteiligten müssen verstehen, welche fachlichen Informationen mit der Umwelt ausgetauscht werden.
+title Fachlicher Kontext des Reparatur-Systems (Miro-Board Seite 2)
 
-.Form
-Alle Diagrammarten, die das System als Blackbox darstellen und die fachlichen Schnittstellen zu den Nachbarsystemen beschreiben.
+Person(kunde, "Kund:in", "Im Webshop registriert, meldet Fahrrad online zur Reparatur an")
+Person(mitarbeiter, "Shop-Mitarbeiter:in", "Nimmt Fahrräder an, rechnet im Laden ab")
+Person(mechaniker, "Fahrrad-Mechaniker:in", "Plant, repariert, protokolliert, bestellt Material")
 
-Alternativ oder ergänzend können Sie eine Tabelle verwenden.
-Der Titel gibt den Namen Ihres Systems wieder; die drei Spalten sind: Kommunikationsbeziehung, Eingabe, Ausgabe.
-****
-endif::arc42help[]
+System(repsys, "Reparatur-System", "Nimmt Reparaturen an, plant Termine, führt Protokoll und Material, wickelt Bezahlung ab")
 
-**<Diagramm und/oder Tabelle>**
+System_Ext(webshop, "Webshop", "Bestehendes Fertigprodukt, leitet /reparatur um")
+System_Ext(userdb, "Webshop User Database", "Registrierung, Login, Adresse, Zahlungsart")
+System_Ext(kasse, "Kasse", "Kassensystem im Laden")
+System_Ext(payment, "Online Payment Service", "PayPal-artiger Dienst")
+System_Ext(rechnungswesen, "Rechnungswesen", "Buchhaltung, Steuerberater:in")
+System_Ext(email, "EMail System", "Zugekaufter Versanddienst")
+System_Ext(sms, "SMS Versand", "Zugekaufter Versanddienst, vorgesehen")
 
-**<optional: Erläuterung der externen fachlichen Schnittstellen>**
+Rel(kunde, repsys, "meldet Fahrrad zur Reparatur an, fragt Status ab, holt Fahrrad ab")
+Rel(mitarbeiter, repsys, "nimmt Fahrrad zur Reparatur an, lässt Reparatur bezahlen")
+Rel(mechaniker, repsys, "nimmt Defekt auf, plant und protokolliert Reparatur, bestellt Ersatzteile und Werkzeug")
+
+Rel(webshop, repsys, "leitet Kund:innen unter /reparatur weiter")
+Rel(repsys, userdb, "liest Login, Adresse und Zahlungsart")
+Rel(repsys, kasse, "übergibt Preis zur Bezahlung im Laden")
+Rel(repsys, payment, "startet Online-Zahlung, fragt Buchungsstatus ab")
+Rel(repsys, rechnungswesen, "übergibt Rechnungselemente")
+Rel(repsys, email, "sendet Info über Reparaturstatus")
+Rel(repsys, sms, "sendet Info über Reparaturstatus")
+----
+
+[cols="2,3,3" options="header"]
+|===
+|Kommunikationspartner |Eingabe in das Reparatur-System |Ausgabe aus dem Reparatur-System
+
+|Kund:in
+|Reparaturanmeldung (Fahrrad, Defekt), Statusanfrage, Abholung
+|Reparaturtermin, Status der Reparatur, voraussichtliche Kosten
+
+|Shop-Mitarbeiter:in
+|Fahrradabgabe im Laden, Auslösen der Bezahlung
+|Preis der Reparatur, Bestätigung der Bezahlung
+
+|Fahrrad-Mechaniker:in
+|Fahrrad-Defekt, Einplanung, Protokollpositionen, Materialbestellung
+|Täglicher Reparaturplan, nächste Reparatur, Bestellung an den Großhändler
+
+|Webshop
+|Umgeleitete Aufrufe von `/reparatur`
+|Keine; der Webshop hält keine Reparaturdaten (<<adr-005>>)
+
+|Webshop User Database
+|Identität der eingeloggten Person, Adresse, bevorzugte Zahlungsart
+|Anfrage nach Nutzerdaten (<<adr-001>>)
+
+|Kasse
+|Bestätigung der Zahlung im Laden
+|Zu zahlender Preis (<<adr-004>>)
+
+|Online Payment Service
+|Buchungsstatus der Online-Zahlung
+|Zahlungsauftrag, Weiterleitung der Kund:in (<<adr-004>>)
+
+|Rechnungswesen
+|Keine
+|Rechnungselemente der abgeschlossenen Reparatur
+
+|EMail System
+|Keine
+|Info über Updates, insbesondere Ende der Reparatur (<<adr-007>>)
+
+|SMS Versand
+|Keine
+|Info über Updates, Kanal vorgesehen (<<adr-007>>)
+|===
+
+Das Reparatur-System trägt die Verantwortung für alles rund um die Reparatur: Termine, Plan, Protokoll, Bestand an Ersatzteilen und Werkzeug (<<adr-006>>) und die Bezahlung. Es besitzt keine eigene Nutzerverwaltung und keine eigene Zahlungsabwicklung; beides liegt bei Nachbarsystemen. Der Großhändler für Ersatzteile und Werkzeug ist kein externes System im Kontext, sondern Empfänger einer Bestellung (Board Seite 7).
+
+NOTE: Offen: Ob die Bestellung beim Großhändler über eine Schnittstelle oder manuell läuft, zeigt das Board nicht. Quelle: Transkript Folge 112/113 ausstehend.
 
 === Technischer Kontext
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Technische Schnittstellen (Kanäle, Übertragungsmedien) zwischen dem System und seiner Umwelt.
-Zusätzlich eine Erklärung (_mapping_), welche fachlichen Ein- und Ausgaben über welche technischen Kanäle fließen.
+[plantuml, "03-technical-context", svg]
+----
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
 
-.Motivation
-Viele Stakeholder treffen Architekturentscheidungen auf Basis der technischen Schnittstellen des Systems zu seinem Kontext.
+title Technischer Kontext des Reparatur-Systems (Miro-Board Seite 3)
 
-Insbesondere bei der Entwicklung von Infrastruktur oder Hardware sind diese technischen Schnittstellen durchaus entscheidend.
+Person(nutzer, "Kund:in, Shop-Mitarbeiter:in, Fahrrad-Mechaniker:in", "Bedienung im Webbrowser")
 
-.Form
-Beispielsweise UML Deployment-Diagramme mit den Kanälen zu Nachbarsystemen, begleitet von einer Tabelle, die Kanäle auf Ein-/Ausgaben abbildet.
-****
-endif::arc42help[]
+System(repsys, "Reparatur-System", "Erreichbar unter der Webshop-Domain, Pfad /reparatur")
 
-**<Diagramm oder Tabelle>**
+System_Ext(webshop, "Webshop", "")
+System_Ext(userdb, "Webshop User Database", "")
+System_Ext(kasse, "Kasse", "")
+System_Ext(payment, "Online Payment Service", "")
+System_Ext(rechnungswesen, "Rechnungswesen", "")
+System_Ext(email, "EMail System", "")
+System_Ext(sms, "SMS Versand", "")
 
-**<optional: Erläuterung der externen technischen Schnittstellen>**
+Rel(nutzer, repsys, "bedient", "Webbrowser")
+Rel(webshop, repsys, "leitet /reparatur um", "URL-Umleitung")
+Rel(repsys, userdb, "Login und Nutzerdaten", "JWT als Cookie, REST")
+Rel(repsys, kasse, "Preis, Zahlungsbestätigung", "REST")
+Rel(repsys, payment, "Zahlung, Buchungsstatus", "REST und UI-Redirect-Button")
+Rel(repsys, rechnungswesen, "Rechnungselemente", "REST")
+Rel(repsys, email, "Benachrichtigung", "REST")
+Rel(repsys, sms, "Benachrichtigung", "REST")
+----
 
-**<Mapping fachliche auf technische Schnittstellen>**
+[cols="2,3,3" options="header"]
+|===
+|Externes System |Schnittstelle (Board Seite 3) |Erläuterung
+
+|Webshop
+|Umleitung von URLs (`/reparatur`)
+|Der Webshop leitet den Pfad `/reparatur` an das Reparatur-System weiter. So bleibt das System in derselben Domain und die Same-Origin-Policy lässt den Cookie durch (<<adr-002>>).
+
+|Webshop User Database
+|JWT als Cookie, REST
+|Der Webshop setzt nach dem Login einen JWT als Cookie. Das Reparatur-System liest daraus die Identität und fragt Adresse und Zahlungsart per REST ab (<<adr-001>>).
+
+|Kasse
+|REST
+|Protokoll "meinetwegen REST" (30:52); die Details sind bewusst offen gelassen.
+
+|Online Payment Service
+|REST und UI-Integration (Redirect-Button)
+|Backend-Integration per REST für den Buchungsstatus, dazu ein Button, der die Kund:in zum Dienst umleitet (<<adr-004>>).
+
+|Rechnungswesen
+|REST
+|Übergabe der Rechnungselemente; Protokoll als Default gewählt.
+
+|EMail System
+|REST
+|Zugekaufter Dienst, etwa AWS Simple Email Service (31:02).
+
+|SMS Versand
+|REST
+|Kanal vorgesehen, nicht entschieden (<<adr-007>>).
+|===
+
+Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (29:53, 30:04).
+
+NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst nicht erfasst (35:36). Ob Kasse und Rechnungswesen aus der Cloud erreichbar sind, bleibt eine offene Frage auf dem Board (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.

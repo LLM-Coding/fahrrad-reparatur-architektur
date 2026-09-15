@@ -12,30 +12,95 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-solution-strategy]]
 == Lösungsstrategie
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Kurzer Überblick über die grundlegenden Entscheidungen und Lösungsansätze, die Entwurf und Implementierung des Systems prägen.
-Hierzu gehören:
+Die Lösungsstrategie folgt der Rangfolge der Qualitätsziele aus Kapitel 1.2: zuerst Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Vertraulichkeit stehen bewusst weiter unten (Folge 111, 41:44 und 58:03). Alle Belege stammen aus den ADRs zu Folge 111 und dem Miro-Board zum Endstand nach Folge 113.
 
-* Technologieentscheidungen
-* Entscheidungen über die Top-Level-Zerlegung des Systems, beispielsweise die Verwendung gesamthaft prägender Entwurfs- oder Architekturmuster,
-* Entscheidungen zur Erreichung der wichtigsten Qualitätsanforderungen sowie
-* relevante organisatorische Entscheidungen, beispielsweise für bestimmte Entwicklungsprozesse oder Delegation bestimmter Aufgaben an andere Stakeholder.
+=== Qualitätsziele und Lösungsansätze
 
-.Motivation
-Diese wichtigen Entscheidungen bilden wesentliche „Eckpfeiler“ der Architektur.
-Von ihnen hängen viele weitere Entscheidungen oder Implementierungsregeln ab.
+Jedes Qualitätsziel aus Kapitel 1.2 hat einen benannten Ansatz.
 
-.Form
-Fassen Sie die zentralen Entwurfsentscheidungen *kurz* zusammen.
-Motivieren Sie, ausgehend von Aufgabenstellung, Qualitätszielen und Randbedingungen, was Sie entschieden haben und warum Sie so entschieden haben.
-Vermeiden Sie redundante Beschreibungen und verweisen Sie eher auf weitere Ausführungen in Folgeabschnitten.
+[cols="1,3,2",options="header"]
+|===
+| Qualitätsziel | Lösungsansatz | Beleg
 
-.Weiterführende Informationen
+| 1. Benutzerfreundlichkeit für Kund:innen und Mitarbeitende
+a|
+* Kein zweites Konto: Login und Kundendaten (Adresse, Zahlungsart) kommen aus dem Webshop; das Reparatursystem liest das JWT-Cookie und fragt die REST-Schnittstelle der Webshop User Database ab.
+* Vorbelegtes Auftragsformular, damit 90 % der Kund:innen eine Reparatur in 2 Minuten beauftragen (QS-U-02).
+* Eigener Reparaturbereich unter `/reparatur` der Webshop-Domain statt Reparatur als Webshop-Produkt; der Ablauf folgt dem Reparaturprozess, nicht dem Kaufen und Abholen.
+* Eigene, vom Reparatursystem gerenderte Statusseite; der Status ist immer aktuell.
+| <<adr-001>>, <<adr-002>>, <<adr-003>>, <<adr-005>>; Board Seite 5
 
-Siehe https://docs.arc42.org/section-4/[Lösungsstrategie] in der online-Dokumentation (auf Englisch!).
+| 2. Änderbarkeit Richtung SaaS für andere Shops
+a|
+* Cloud-Betrieb, damit ohne IT-Experten im Shop betrieben werden kann und weitere Shops ohne neue Hardware dazukommen (Board Seite 6, Maßnahme "Cloud").
+* Fachlicher Schnitt in vier Module entlang der Stories: Terminplanung, Reparatur durchführen, Materialbeschaffung, Bezahlung (Board Seite 7 und 9).
+* Mandantenfähigkeit wegen der Betriebskosten; auf dem Board als offene Frage mit `?` markiert, ebenso Skalierbarkeit und der Umgang mit Drittsystemen je Shop.
+| Board Seite 6, 7, 9; Änderungsszenario QS-A-01 (zwei Monate, 20 PT)
 
-****
-endif::arc42help[]
+| 3. Verfügbarkeit, differenziert nach Nutzergruppe
+a|
+* Differenzierte Ziele: Werkstatt 99 % zwischen 9 und 18 Uhr mit Wiederanlauf in 30 Minuten; Web 99,9 % zwischen 7 und 24 Uhr, nachts 99 %; Datenverlust höchstens 5 Minuten.
+* Provider-SLAs von EKS/EC2 für Rechenleistung und RDS für die Datenbank statt eigenem Betriebsteam.
+* Eigener Support von außen, für das nächtliche Web-Ziel als 24/7-Support.
+| <<adr-008>>; Board Seite 6 (Maßnahmen-Karten "EKS / EC2 SLAs", "RDS SLAs?", "Eigener Support")
+|===
+
+=== Technologieentscheidungen
+
+[cols="2,3,1",options="header"]
+|===
+| Entscheidung | Begründung | Beleg
+
+| REST für alle Integrationen nach außen (SMS Versand, EMail System, Kasse, Online Payment Service, Rechnungswesen, Webshop User Database)
+| Standardprotokoll, keine Sonderprotokolle; die gekauften Dienste bieten es ohnehin an.
+| Board Seite 3; <<adr-004>>, <<adr-007>>
+
+| JWT-Cookie des Webshops als Login-Mechanismus
+| Der Webshop stellt es nach dem Login aus; das Reparatursystem übernimmt es und baut keine eigene Nutzerverwaltung.
+| <<adr-001>>
+
+| Pfad `/reparatur` unter der Webshop-Domain, Umleitung bestimmter URLs
+| Die Same-Origin-Policy lässt das Cookie nur innerhalb derselben Domain durch.
+| <<adr-002>>
+
+| Externer Online Payment Service (in erster Linie PayPal): Redirect-Button im Frontend, REST-Statusabfrage im Backend; zusätzlich REST-Integration der Kasse im Laden
+| Keine Zahlungsdaten im eigenen System; Bezahlung bei Abholung bleibt im System sichtbar.
+| <<adr-004>>
+
+| Gekaufter E-Mail-Dienst (Beispiel AWS Simple Email Service); SMS-Kanal vorgesehen, nicht gebaut
+| Dienst kaufen statt betreiben; E-Mail-Adresse liegt im Webshop-Konto vor.
+| <<adr-007>>
+
+| AWS als Cloud-Anbieter: EC2 oder EKS für Rechenleistung, RDS für die Datenbank
+| Annahme aus den Maßnahmen-Karten des Boards. Die SLAs des Anbieters tragen die Verfügbarkeitsziele, weil der Shop keine IT-Experten hat.
+| Board Seite 6, 10, 11; <<adr-008>>
+
+| Browser-Anwendung für alle Nutzergruppen
+| "Rechner nutzen das System über den Webbrowser" (Board Seite 10); Kund:innen kommen ohnehin aus dem Webshop.
+| Board Seite 10; <<adr-003>>, <<adr-005>>
+|===
+
+=== Top-Level-Zerlegung
+
+Das System zerfällt in vier fachliche Module, geschnitten entlang der Stories vom Board (Seite 7):
+
+* *Terminplanung*: anmelden, Termin berechnen, Status abfragen, einplanen, Tagesplan, nächste Reparatur beginnen.
+* *Reparatur durchführen*: Defekt aufnehmen, Fahrrad abgeben und abholen, protokollieren, Kosten berechnen, Kund:in informieren.
+* *Materialbeschaffung*: Ersatzteile und Werkzeuge bestellen. Das Reparatursystem führt die Teile selbst, ohne Inventarsystem (<<adr-006>>).
+* *Bezahlung*: Reparatur bezahlen, angebunden an Kasse und Online Payment Service.
+
+Die Aufrufrichtung geht vom Webshop in die Module Terminplanung, Reparatur durchführen und Bezahlung; Terminplanung liefert den Termin an Reparatur durchführen, Reparatur durchführen den Preis an Bezahlung und die Materialbestellung an Materialbeschaffung (Board Seite 9). Details stehen in Kapitel 5.
+
+Für das Deployment liegen zwei Varianten auf dem Board: alle vier Module in einer EC2-Instanz (Deployment Monolith, Seite 10) oder jedes Modul in einem eigenen Container (Microservices, Seite 11). Eine Entscheidung ist nicht getroffen. Kapitel 7 beschreibt beide Varianten.
+
+=== Organisatorische Leitlinie: kaufen statt bauen
+
+Der Shop hat drei bis vier Mitarbeitende und keine IT-Experten (Folge 111, 16:51 und 54:06). Daraus folgt eine durchgängige Leitlinie: Bezahlung, E-Mail-Versand, Rechenleistung und Datenbank werden als Dienst gekauft, nicht selbst betrieben (<<adr-004>>, <<adr-007>>, Board Seite 5 und 6). Was das System selbst verantwortet, ist die Reparaturfachlichkeit einschließlich der Ersatzteile (<<adr-006>>).
+
+=== Offene Punkte
+
+NOTE: Offen: Die Begründung für den Modulschnitt in genau vier Module stammt aus Folge 112 und ist nur über den Board-Endstand belegt (Seite 7 und 9). Die Herleitung fehlt in dieser Dokumentation, solange das Transkript zu Folge 112 nicht ausgewertet ist.
+
+NOTE: Offen: Die Entscheidung für Cloud-Betrieb ist in Folge 111 ausdrücklich vertagt (59:33 bis 60:31: "es ergibt sich nicht direkt, welches Betriebsmodell angeraten ist"). Das Board zu Folge 113 setzt Cloud als Maßnahme. Ein ADR zum Betriebsmodell fehlt; die Risiken R-010 und R-022 in Kapitel 11 halten die Spannung zwischen lokaler Kasse und Cloud fest.
+
+NOTE: Offen: Deployment Monolith oder Microservices ist auf dem Board nicht entschieden (Seite 10 und 11). Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Seite 9) deutet auf einen möglichen fünften Baustein hin.

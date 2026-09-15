@@ -12,55 +12,163 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-runtime-view]]
 == Laufzeitsicht
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Diese Sicht erklärt konkrete Abläufe und Beziehungen zwischen Bausteinen in Form von Szenarien aus den folgenden Bereichen:
+Die Szenarien in diesem Kapitel sind aus den Pfeilen der Bausteinsicht (Board Seite 9) und dem technischen Kontext (Board Seite 3) abgeleitet. Eberhard Wolff beschreibt in den Videos keinen Ablauf Schritt für Schritt. Wo ein Schritt über die Pfeile hinausgeht, stützt er sich auf ein ADR; wo weder Board noch ADR etwas hergeben, steht eine offene Notiz. Die Reihenfolge der Aufrufe innerhalb eines Szenarios ist eine Lesart, keine Aussage des Boards.
 
-*  Wichtige Abläufe oder _Features_:
-Wie führen die Bausteine der Architektur die wichtigsten Abläufe durch?
-*  Interaktionen an kritischen externen Schnittstellen:
-Wie arbeiten Bausteine mit Nutzern und Nachbarsystemen zusammen?
-* Betrieb und Administration: Inbetriebnahme, Start, Stop.
-* Fehler- und Ausnahmeszenarien
+Jeder Baustein aus Kapitel 5 kommt in mindestens einem Szenario vor: Terminplanung in Szenario 1, Reparatur durchführen und Materialbeschaffung in Szenario 2, Bezahlung in Szenario 2 und 4.
 
-Anmerkung:
-Das Kriterium für die Auswahl der möglichen Szenarien (d.h. Abläufe) des Systems ist deren Architekturrelevanz.
-Es geht nicht darum, möglichst viele Abläufe darzustellen, sondern eine angemessene Auswahl zu dokumentieren.
+=== Reparatur online beauftragen
 
-.Motivation
-Sie sollten verstehen, wie (Instanzen von) Bausteine(n) Ihres Systems ihre jeweiligen Aufgaben erfüllen und zur Laufzeit miteinander kommunizieren.
+Kund:innen beauftragen eine Reparatur über den Webshop. Der Login läuft über den Webshop (<<adr-001>>), das Reparatur-System liegt unter `/reparatur` derselben Domain, damit das JWT-Cookie mitkommt (<<adr-002>>).
 
-Nutzen Sie diese Szenarien in der Dokumentation hauptsächlich für eine verständlichere Kommunikation mit denjenigen Stakeholdern, die die statischen Modelle (z.B. Bausteinsicht, Verteilungssicht) weniger verständlich finden.
+[plantuml, "06-online-beauftragen", svg]
+----
+actor "Kund:in" as kunde
+participant "Browser" as browser
+participant "Webshop" as webshop
+database "Webshop User Database" as userdb
+participant "Terminplanung" as termin
+participant "Reparatur durchführen" as repa
 
-.Form
-Für die Beschreibung von Szenarien gibt es zahlreiche Ausdrucksmöglichkeiten.
-Nutzen Sie beispielsweise:
+kunde -> browser: Webshop öffnen, Login
+browser -> webshop: Login
+webshop -> userdb: Konto prüfen
+userdb --> webshop: Konto
+webshop --> browser: JWT als Cookie
+kunde -> browser: /reparatur aufrufen
+browser -> webshop: GET /reparatur (Cookie: JWT)
+webshop -> termin: Umleitung /reparatur (Cookie: JWT)
+termin -> webshop: Adresse, Zahlungsart abfragen (REST, JWT)
+webshop --> termin: Adresse, Zahlungsart
+termin --> browser: Formular, vorbelegt
+kunde -> browser: Fahrrad und Problem eintragen, absenden
+browser -> termin: Anmeldung
+termin -> termin: Reparaturtermin berechnen
+termin -> repa: Termin
+termin --> browser: Bestätigung mit Termin
+----
 
-* Nummerierte Schrittfolgen oder Aufzählungen in Umgangssprache
-* Aktivitäts- oder Flussdiagramme
-* Sequenzdiagramme
-* BPMN (Geschäftsprozessmodell und -notation) oder EPKs (Ereignis-Prozessketten)
-* Zustandsautomaten
-* ...
+Schritte::
+. Kund:in meldet sich im Webshop an. Der Webshop prüft das Konto in der Webshop User Database und stellt ein JWT als Cookie aus (<<adr-001>>).
+. Kund:in ruft `/reparatur` auf. Der Browser sendet das JWT-Cookie mit, weil Domain und Origin gleich bleiben (<<adr-002>>).
+. Der Webshop leitet `/reparatur` an das Reparatur-System um. Auf dem Board endet der Pfeil bei Terminplanung, Reparatur durchführen und Bezahlung; für die Anmeldung ist Terminplanung der Einstieg.
+. Terminplanung liest das JWT und holt Adresse und Zahlungsart über die REST-Schnittstelle des Webshops (<<adr-001>>).
+. Terminplanung zeigt das Auftragsformular, vorbelegt mit den Daten aus dem Webshop.
+. Kund:in trägt Fahrrad und Problem ein und sendet ab (Story "Fahrrad zur Reparatur anmelden").
+. Terminplanung berechnet den Termin (Story "Reparaturtermin berechnen") und gibt "Termin" an Reparatur durchführen (Board Seite 9).
+. Kund:in sieht die Bestätigung mit dem Termin.
 
-.Weiterführende Informationen
+Besonderheiten:: Der Webshop hält keine Reparaturdaten. Den Status sieht die Kund:in später auf einer Seite, die das Reparatur-System selbst rendert (<<adr-005>>). Das Usability-Ziel aus Kapitel 10 gilt für diesen Ablauf: 90 % der Benutzer:innen beauftragen eine Reparatur in zwei Minuten (Board Seite 5).
 
-Siehe https://docs.arc42.org/section-6/[Laufzeitsicht] in der online-Dokumentation (auf Englisch!).
+NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt.
 
-****
-endif::arc42help[]
+=== Reparatur durchführen, abrechnen, bezahlen
 
-=== _<Bezeichnung Laufzeitszenario 1>_
+Die Werkstatt führt die Reparatur aus, das System rechnet ab und die Kund:in bezahlt bei der Abholung. Das Szenario verbindet vier Bausteine und vier externe Systeme. Die Bezahlung folgt <<adr-004>>, die Benachrichtigung <<adr-007>>.
 
-*  <hier Laufzeitdiagramm oder Ablaufbeschreibung einfügen>
-*  <hier Besonderheiten bei dem Zusammenspiel der Bausteine in diesem Szenario erläutern>
+[plantuml, "06-durchfuehren-bezahlen", svg]
+----
+actor "Fahrrad-Mechaniker:in" as mech
+actor "Shop-Mitarbeiter:in" as shop
+actor "Kund:in" as kunde
+participant "Reparatur durchführen" as repa
+participant "Materialbeschaffung" as material
+participant "Bezahlung" as bezahlung
+participant "Rechnungswesen" as rechnung
+participant "EMail System" as email
+participant "Kasse" as kasse
+participant "Online Payment Service" as payment
 
-=== _<Bezeichnung Laufzeitszenario 2>_
+shop -> repa: Fahrrad zur Reparatur abgeben
+mech -> repa: Defekt aufnehmen: "Schaltung kaputt"
+repa --> mech: Voraussichtliche Kosten
+mech -> repa: Protokoll: Schaltwerk gekauft 100 €
+mech -> repa: Protokoll: Schaltwerk ausgebaut 10 Min, 10 €
+mech -> repa: Protokoll: Schaltwerk eingebaut 10 Min, 10 €
+repa -> material: Materialbestellung
+material --> repa: Bestellung beim Großhändler ausgelöst
+mech -> repa: Reparatur abschließen
+repa -> email: Info über Updates (REST)
+email --> kunde: E-Mail "Fahrrad ist fertig"
+repa -> bezahlung: Preis
+repa -> rechnung: Rechnungselemente (REST)
+kunde -> shop: Fahrrad abholen
+alt Bezahlung im Laden
+  shop -> bezahlung: Reparatur bezahlen
+  bezahlung -> kasse: Zahlung (REST)
+  kasse --> bezahlung: Status
+else Bezahlung online
+  kunde -> bezahlung: Bezahlen-Button
+  bezahlung -> payment: Redirect
+  payment --> bezahlung: Rückkehr
+  bezahlung -> payment: Buchungsstatus abfragen (REST)
+  payment --> bezahlung: Status
+end
+shop -> repa: Repariertes Fahrrad abholen
+----
 
-...
+Schritte::
+. Shop-Mitarbeiter:in nimmt das Fahrrad an (Story "Fahrrad zur Reparatur abgeben").
+. Mechaniker:in nimmt den Defekt auf: "Schaltung kaputt" (Board Seite 7). Reparatur durchführen berechnet die voraussichtlichen Kosten.
+. Mechaniker:in protokolliert jede Position mit Dauer und Preis. Beispiel vom Board: neues Schaltwerk gekauft 100 €; altes Schaltwerk ausgebaut 10 Minuten, 10 €; neues Schaltwerk eingebaut 10 Minuten, 10 €.
+. Braucht die Reparatur Teile, gibt Reparatur durchführen eine "Materialbestellung" an Materialbeschaffung. Materialbeschaffung bestellt beim Großhändler (<<adr-006>>).
+. Nach Abschluss schickt Reparatur durchführen "Info über Updates" an das EMail System. Die Kund:in erhält eine E-Mail (<<adr-007>>). SMS ist vorgesehen, nicht gebaut.
+. Reparatur durchführen meldet den "Preis" an Bezahlung und die "Rechnungselemente" an das Rechnungswesen (Board Seite 9).
+. Kund:in holt das Fahrrad ab und bezahlt. Im Laden kassiert die Shop-Mitarbeiter:in; Bezahlung tauscht den Zahlungsstatus mit der Kasse über REST aus. Online klickt die Kund:in den Bezahlen-Button, wird zum Online Payment Service umgeleitet und kommt zurück; Bezahlung fragt den Buchungsstatus per REST ab (<<adr-004>>).
+. Shop-Mitarbeiter:in schließt die Abholung ab (Story "Repariertes Fahrrad abholen").
 
-=== _<Bezeichnung Laufzeitszenario n>_
+Besonderheiten:: Reparatur durchführen ist die Drehscheibe. Alle Pfeile nach außen außer Kasse und Payment Service gehen von ihm aus. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Kapitel 5) zielt auf die Schritte 6 und 7.
 
-...
+NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder je Position fließen, ist nicht entschieden. Ob die Materialbestellung vor oder während der Reparatur ausgelöst wird, zeigt das Board nicht. Welche Quelle gilt, wenn Kasse und Payment Service verschiedene Zahlungsstatus liefern (R-011), ist offen.
+
+=== Fehlerszenario: Webshop nicht erreichbar
+
+Der Webshop trägt Login und Nutzerdaten (<<adr-001>>). Fällt er aus, scheitern Login und Adressabfrage. Das ist Risiko R-002 aus <<adr-001>> und trifft das Qualitätsziel Verfügbarkeit für Kund:innen: 99,9 % zwischen 7 und 24 Uhr (<<adr-008>>).
+
+[plantuml, "06-fehler-webshop", svg]
+----
+actor "Kund:in" as kunde
+participant "Browser" as browser
+participant "Webshop" as webshop
+participant "Terminplanung" as termin
+
+kunde -> browser: /reparatur aufrufen
+browser -> webshop: GET /reparatur
+webshop --> browser: keine Antwort
+note over webshop: Webshop ausgefallen
+note over termin: Umleitung erreicht\ndas Reparatur-System nicht
+kunde -> browser: erneut versuchen
+browser -> webshop: GET /reparatur
+webshop --> browser: keine Antwort
+----
+
+Was Board und ADRs hergeben::
+* Die Umleitung von `/reparatur` liegt vor dem Webshop (<<adr-002>>, R-005). Antwortet der Webshop nicht, erreicht die Kund:in auch das Reparatur-System nicht, es sei denn, ein Reverse Proxy vor dem Webshop leitet weiter.
+* Ohne Webshop gibt es kein JWT-Cookie und keine Adressabfrage. Das Reparatur-System kann die Kund:in nicht identifizieren (<<adr-001>>).
+* Die Werkstatt im Laden ist nicht betroffen, sofern Mechaniker:innen sich nicht über den Webshop anmelden.
+* Das Board (Seite 6) setzt für den Wiederanlauf des Web-Systems keine Zeit, nur für das System im Shop (30 Minuten, 5 Minuten).
+
+NOTE: Offen: Verhalten nicht entschieden. Weder Board noch ADRs sagen, ob das Reparatur-System eine Fehlermeldung zeigt, den Aufruf wiederholt (Retry) oder ein bereits ausgestelltes JWT weiter akzeptiert. Ob Mechaniker:innen einen Login über den Webshop brauchen, ist nicht entschieden.
+
+=== Fehlerszenario: Kasse aus der Cloud nicht erreichbar
+
+Die Kasse steht im Laden. Läuft das Reparatur-System in der Cloud, muss Bezahlung die Kasse über das Netz des Ladens erreichen. Das Board fragt auf Seite 10 und 11: "Kann man aus der Cloud in die Kasse kommunizieren?". Das ist Risiko R-010 aus <<adr-004>>.
+
+[plantuml, "06-fehler-kasse", svg]
+----
+actor "Shop-Mitarbeiter:in" as shop
+participant "Bezahlung" as bezahlung
+participant "Kasse" as kasse
+
+shop -> bezahlung: Reparatur bezahlen
+bezahlung -> kasse: Zahlung (REST)
+kasse --> bezahlung: keine Antwort
+note over kasse: Kasse aus der Cloud\nnicht erreichbar
+bezahlung --> shop: Zahlungsstatus unbekannt
+----
+
+Was Board und ADRs hergeben::
+* Das Qualitätsszenario "Das System im Shop fällt aus. Spätestens nach 2 Minuten kann man den Preis einer erfolgten Reparatur wieder ermitteln" (Board Seite 6) zeigt, dass der Preis auch bei Ausfall verfügbar sein muss. Für die Kasse selbst gibt es kein Szenario.
+* Eberhard nennt die Integration mit lokalen Systemen "vielleicht in der Cloud schwierig" (Folge 111, 59:46, zitiert in <<adr-004>>).
+* Der zweite Bezahlweg über den Online Payment Service bleibt offen, wenn die Kasse nicht antwortet.
+
+NOTE: Offen: Verhalten nicht entschieden. Ob Bezahlung den Aufruf wiederholt, den Betrag zwischenspeichert oder die Shop-Mitarbeiter:in an der Kasse ohne Systemeintrag kassieren lässt, sagt das Board nicht. Die Antwort hängt an der offenen Entscheidung Cloud oder on-premise (Kapitel 7).

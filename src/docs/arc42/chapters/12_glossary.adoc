@@ -12,41 +12,108 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-glossary]]
 == Glossar
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Die wesentlichen fachlichen und technischen Begriffe, die Stakeholder im Zusammenhang mit dem System verwenden.
-
-Nutzen Sie das Glossar ebenfalls als Übersetzungsreferenz, falls Sie in mehrsprachigen Teams arbeiten.
-
-.Motivation
-Sie sollten relevante Begriffe klar definieren, so dass alle Beteiligten
-
-* diese Begriffe identisch verstehen, und
-* vermeiden, mehrere Begriffe für die gleiche Sache zu haben.
-
-.Form
-
-Zweispaltige Tabelle mit <Begriff> und <Definition>.
-
-Eventuell weitere Spalten mit Übersetzungen, falls notwendig.
-
-
-.Weiterführende Informationen
-
-Siehe https://docs.arc42.org/section-12/[Glossar] in der online-Dokumentation (auf Englisch!).
-
-****
-endif::arc42help[]
+Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stammen vom Miro-Board (Stories, Kontext, Module), technische Begriffe aus Folge 111. Wo ein Begriff eine Entscheidung berührt, verweist die Definition auf den ADR.
 
 [cols="e,2e" options="header"]
 |===
 |Begriff |Definition
 
-|<Begriff-1>
-|<Definition-1>
+|ADR
+|Architecture Decision Record nach Michael Nygard: eine Entscheidung mit Kontext, Optionen, Wahl und Konsequenzen. In diesem Repository ergänzt um eine Pugh-Matrix. Stand: ADR-001 bis ADR-008.
 
-|<Begriff-2
-|<Definition-2>
+|Bezahlung
+|Modul des Reparatur-Systems (Board Seite 7). Enthält die Story "Reparatur bezahlen" und spricht Kasse und Online Payment Service an.
+
+|EMail System
+|Externes System. Zugekaufter Versanddienst, etwa AWS Simple Email Service, per REST. Primärkanal für Kundenbenachrichtigungen (<<adr-007>>).
+
+|Ersatzteil
+|Teil, das bei einer Reparatur verbaut wird, etwa ein Schaltwerk oder Bremsklötze. Den Bestand führt das Reparatur-System selbst, ohne externes Inventarsystem (<<adr-006>>).
+
+|Fahrrad-Mechaniker:in
+|Akteur. Nimmt Defekte auf, plant Reparaturen ein, erstellt den täglichen Reparaturplan, protokolliert und bestellt Ersatzteile und Werkzeug.
+
+|Großhändler
+|Lieferant, bei dem das Modul Materialbeschaffung Ersatzteile und Werkzeug bestellt (Board Seite 7). Kein externes System im Kontextdiagramm.
+
+|JWT
+|JSON Web Token. Signiertes Token, das der Webshop nach dem Login als Cookie setzt. Das Reparatur-System liest daraus die Identität der Kund:in (<<adr-001>>). Im Whisper-Transkript als "Jod Token" wiedergegeben.
+
+|Kasse
+|Externes System. Kassensystem im Laden, "eine Art PC". Nimmt den Preis der Reparatur per REST entgegen; hier zahlen Kund:innen bei Abholung (<<adr-004>>).
+
+|Kund:in
+|Akteur. Im Webshop registrierte Person, die ein Fahrrad zur Reparatur anmeldet, den Status abfragt, bezahlt und das Fahrrad abholt.
+
+|Mandant
+|Ein Fahrradshop als Nutzerorganisation innerhalb einer SaaS-Installation. Mandantenfähigkeit bedeutet: eine Installation bedient mehrere Shops mit getrennten Daten. Alternative ist eine Installation pro Shop; die Wahl ist offen (Folge 111, 43:58, 44:12).
+
+|Materialbeschaffung
+|Modul des Reparatur-Systems (Board Seite 7). Enthält die Stories "Ersatzteile bestellen" und "Werkzeuge bestellen".
+
+|Online Payment Service
+|Externes System. PayPal-artiger Dienst für Online-Zahlung per Konto oder Kreditkarte. Anbindung per REST für den Buchungsstatus und per UI-Redirect-Button (<<adr-004>>).
+
+|Protokoll (Reparaturprotokoll)
+|Liste der Positionen einer Reparatur. Jede Position nennt Tätigkeit oder Teil, Dauer und Preis. Beispiel vom Board (Seite 7): neues Schaltwerk gekauft 100 €; altes Schaltwerk ausgebaut 10 Minuten, 10 €; neues Schaltwerk eingebaut 10 Minuten, 10 €; Bremsklötze 25 €; Bremsklötze einbauen 10 Minuten, 10 €; Kunde informiert 0 €. Aus dem Protokoll ergibt sich der Preis. Nicht zu verwechseln mit Netzwerkprotokollen wie REST.
+
+|Pugh-Matrix
+|Bewertungstabelle, die Optionen gegen Kriterien mit -1, 0 und +1 vergleicht. In den ADRs dieses Repositories macht sie die Abwägung sichtbar.
+
+|Qualitätsszenario
+|Konkretisierung eines Qualitätsziels: Ein Stimulus (Usage, Change oder Failure) trifft auf das System, das Ergebnis ist eine Metrik (Board Seite 4). Beispiel: "90 % der Benutzer:innen können eine Reparatur innerhalb von 2 Minuten beauftragen."
+
+|Rechnungswesen
+|Externes System. Buchhaltung des Shops beziehungsweise Steuerberater:in. Empfängt Rechnungselemente per REST.
+
+|Reparatur
+|Instandsetzung eines Fahrrads. Zentrales fachliches Objekt mit Defekt, Termin, Status, Protokoll und Preis. Beispiel vom Board: "Reparatur / Schaltung kaputt".
+
+|Reparatur durchführen
+|Modul des Reparatur-Systems (Board Seite 7). Enthält Defektaufnahme, Protokoll, Kostenberechnung, Abgabe, Abholung, Statusabfrage und Kundeninformation.
+
+|Reparatur-System
+|Das hier dokumentierte System. Nimmt Reparaturen online an, plant Termine, führt Protokoll und Material, wickelt die Bezahlung ab. Läuft unter der Webshop-Domain im Pfad `/reparatur` (<<adr-002>>).
+
+|Reparaturauftrag
+|Von der Kund:in ausgelöste Beauftragung einer Reparatur, online über `/reparatur` oder im Laden bei Abgabe des Fahrrads. Entspricht der Story "Fahrrad zur Reparatur anmelden".
+
+|Reparaturplan
+|Täglicher Plan der Werkstatt: welche Reparaturen an einem Tag in welcher Reihenfolge anstehen. Story "Täglichen Reparaturplan erstellen", Modul Terminplanung.
+
+|Reparaturtermin
+|Berechneter Termin, an dem die Werkstatt eine Reparatur ausführt. Ergebnis der Story "Reparaturtermin berechnen". Die Terminplanung übergibt den Termin an das Modul Reparatur durchführen (Board Seite 9).
+
+|REST
+|Schnittstellenstil über HTTP. Default für alle Schnittstellen zu Kasse, Rechnungswesen, Payment Service, E-Mail und SMS. Alternativen wie gRPC wurden nicht bewertet (Folge 111, 29:53).
+
+|SaaS
+|Software as a Service. Ziel: das Reparatur-System anderen Fahrradshops über das Internet anbieten. Änderungsszenario: Umbau in höchstens zwei Monaten und 20 Personentagen (Board Seite 6). Im Whisper-Transkript als "SARS" wiedergegeben.
+
+|Same-Origin-Policy
+|Sicherheitsregel des Browsers: Cookies gelten nur innerhalb derselben Domain. Grund dafür, das Reparatur-System als Pfad unter der Webshop-Domain zu betreiben (<<adr-002>>).
+
+|Shop-Mitarbeiter:in
+|Akteur. Person im Laden, die Fahrräder zur Reparatur annimmt und Reparaturen an der Kasse abrechnet.
+
+|SMS Versand
+|Externes System. Zugekaufter Versanddienst per REST. Als zweiter Benachrichtigungskanal vorgesehen, nicht entschieden (<<adr-007>>).
+
+|Status (der Reparatur)
+|Fortschritt einer Reparatur, den Kund:innen auf einer vom Reparatur-System gerenderten Seite abfragen. Der Webshop hält keine Statusdaten (<<adr-005>>).
+
+|Story
+|Eintrag im Backlog, formuliert als Tätigkeit eines Akteurs (Board Seite 1). Input für den Architekten, nicht von ihm erhoben.
+
+|Terminplanung
+|Modul des Reparatur-Systems (Board Seite 7). Enthält Anmeldung, Terminberechnung, Einplanung, Reparaturplan und den Start der nächsten Reparatur.
+
+|Webshop
+|Externes System. Bestehender Standard-Webshop des Fahrradshops für Kaufen und Abholen, ein Fertigprodukt. Leitet `/reparatur` an das Reparatur-System um und hält keine Reparaturdaten (<<adr-003>>, <<adr-005>>).
+
+|Webshop User Database
+|Externes System. Nutzerdatenbank des Webshops mit Registrierung, Login, Adresse und bevorzugter Zahlungsart. Zugriff per JWT-Cookie und REST (<<adr-001>>).
+
+|Werkzeug
+|Arbeitsmittel der Werkstatt, das die Mechaniker:in über das Modul Materialbeschaffung beim Großhändler bestellt. Bestand im Reparatur-System (<<adr-006>>).
 |===

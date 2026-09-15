@@ -12,89 +12,156 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-deployment-view]]
 == Verteilungssicht
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Die Verteilungssicht beschreibt:
+Das Miro-Board zeigt zwei Verteilungen nebeneinander: einen Monolithen in einer EC2-Instanz (Seite 10) und Microservices in Docker-Containern (Seite 11). Beide bilden dieselben vier Bausteine aus Kapitel 5 ab und binden dieselben externen Systeme an. Eine Entscheidung zwischen den Varianten steht nicht auf dem Board.
 
-1. die technische Infrastruktur, auf der Ihr System ausgeführt wird, mit Infrastrukturelementen wie Standorten, Umgebungen, Rechnern, Prozessoren, Kanälen und Netztopologien sowie sonstigen Bestandteilen, und
-
-2. die Abbildung von (Software-)Bausteinen auf diese Infrastruktur.
-
-
-Häufig laufen Systeme in unterschiedlichen Umgebungen, beispielsweise Entwicklung-/Test- oder Produktionsumgebungen.
-In solchen Fällen sollten Sie alle relevanten Umgebungen aufzeigen.
-
-Nutzen Sie die Verteilungssicht insbesondere dann, wenn Ihre Software auf mehr als einem Rechner, Prozessor, Server oder Container abläuft oder Sie Ihre Hardware sogar selbst konstruieren.
-
-Aus Softwaresicht genügt es, auf die Aspekte zu achten, die für die Softwareverteilung relevant sind.
-Insbesondere bei der Hardwareentwicklung kann es notwendig sein, die Infrastruktur mit beliebigen Details zu beschreiben.
-
-.Motivation
-Software läuft nicht ohne Infrastruktur.
-Diese zugrundeliegende Infrastruktur beeinflusst Ihr System und/oder querschnittliche Lösungskonzepte, daher müssen Sie diese Infrastruktur kennen.
-
-.Form
-Das oberste Verteilungsdiagramm könnte bereits in Ihrem technischen Kontext enthalten sein, mit Ihrer Infrastruktur als EINE Blackbox.
-Jetzt zoomen Sie in diese Infrastruktur mit weiteren Verteilungsdiagrammen hinein:
-
-* Die UML stellt mit Verteilungsdiagrammen (Deployment diagrams) eine Diagrammart zur Verfügung, um diese Sicht auszudrücken.
-Nutzen Sie diese, evtl. auch geschachtelt, wenn Ihre Verteilungsstruktur es verlangt.
-* Falls Ihre Infrastruktur-Stakeholder andere Diagrammarten bevorzugen, die beispielsweise Prozessoren und Kanäle zeigen, sind diese hier ebenfalls einsetzbar.
-
-.Weiterführende Informationen
-
-Siehe https://docs.arc42.org/section-7/[Verteilungssicht] in der online-Dokumentation (auf Englisch!).
-
-****
-endif::arc42help[]
+NOTE: Offen: Entscheidung nicht getroffen, wird ADR (Proposed). Quelle: Transkript Folge 112/113 ausstehend.
 
 === Infrastruktur Ebene 1
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-An dieser Stelle beschreiben Sie (als Kombination von Diagrammen mit Tabellen oder Texten):
+Beide Varianten teilen den Rahmen. Nutzer:innen greifen über den Webbrowser zu (Board Seite 10: "Rechner nutzen das System über den Webbrowser"). Der Webshop bindet das Reparatur-System per Links und Umleitung von `/reparatur` an (<<adr-002>>). Alle anderen externen Systeme sind über REST angebunden: Kasse, Online Payment Service, Rechnungswesen, SMS Versand, EMail System (Board Seite 3 und 10).
 
-* die Verteilung des Gesamtsystems auf mehrere Standorte, Umgebungen, Rechner, Prozessoren o. Ä., sowie die physischen Verbindungskanäle zwischen diesen,
-* wichtige Begründungen für diese Verteilungsstruktur,
-* Qualitäts- und/oder Leistungsmerkmale dieser Infrastruktur,
-* Zuordnung von Softwareartefakten zu Bestandteilen der Infrastruktur
+==== Variante A: Monolith in einer EC2-Instanz
 
-Für mehrere Umgebungen oder alternative Deployments kopieren Sie diesen Teil von arc42 für alle wichtigen Umgebungen/Varianten.
-****
-endif::arc42help[]
+Alle vier Bausteine laufen als ein Deployment-Artefakt in einer EC2-Instanz bei AWS (Board Seite 10).
 
-_**<Übersichtsdiagramm>**_
+[plantuml, "07-monolith", svg]
+----
+!include <C4/C4_Deployment>
 
-Begründung:: _<Erläuternder Text>_
+LAYOUT_LEFT_RIGHT()
 
-Qualitäts- und/oder Leistungsmerkmale:: _<Erläuternder Text>_
+Deployment_Node(client, "Rechner im Laden und bei Kund:innen", "Webbrowser") {
+  Container(browser, "Webbrowser", "Browser", "Zugriff auf /reparatur")
+}
 
-Zuordnung von Bausteinen zu Infrastruktur:: _<Beschreibung der Zuordnung>_
+Deployment_Node(aws, "AWS", "Cloud") {
+  Deployment_Node(ec2, "EC2-Instanz", "eine Instanz") {
+    Container(monolith, "Reparatur-System", "Monolith", "Terminplanung, Reparatur durchführen, Materialbeschaffung, Bezahlung")
+  }
+}
+
+System_Ext(webshop, "Webshop", "Fertigprodukt mit User Database")
+System_Ext(kasse, "Kasse", "im Laden")
+System_Ext(payment, "Online Payment Service", "extern")
+System_Ext(rechnungswesen, "Rechnungswesen", "Standort offen")
+System_Ext(sms, "SMS Versand", "extern")
+System_Ext(email, "EMail System", "extern")
+
+Rel(browser, webshop, "Login, Links", "HTTPS")
+Rel(webshop, monolith, "Umleitung /reparatur", "Links")
+Rel(browser, monolith, "Bedienung", "HTTPS")
+Rel(monolith, kasse, "Zahlung", "REST")
+Rel(monolith, payment, "Zahlung", "REST, Redirect")
+Rel(monolith, rechnungswesen, "Rechnungselemente", "REST")
+Rel(monolith, sms, "Info über Updates", "REST")
+Rel(monolith, email, "Info über Updates", "REST")
+----
+
+Zuordnung von Bausteinen zu Infrastruktur:: Terminplanung, Reparatur durchführen, Materialbeschaffung und Bezahlung laufen in einem Prozess auf einer EC2-Instanz. Die Aufrufe "Termin", "Preis" und "Materialbestellung" aus Kapitel 5 bleiben prozessintern.
+
+Begründung:: Das Board nennt keine. Die Variante ist die einfachere von beiden: ein Artefakt, eine Instanz, kein Netz zwischen den Bausteinen.
+
+NOTE: Offen: Datenbank, Reverse Proxy für die Umleitung und Anzahl der Instanzen fehlen auf dem Board.
+
+==== Variante B: Microservices in Docker-Containern
+
+Jeder Baustein läuft in einem eigenen Container aus einem eigenen Docker Image (Board Seite 11). Die Informationsflüsse sind dieselben wie in Variante A, laufen aber über das Netz.
+
+[plantuml, "07-microservices", svg]
+----
+!include <C4/C4_Deployment>
+
+LAYOUT_LEFT_RIGHT()
+
+Deployment_Node(client, "Rechner im Laden und bei Kund:innen", "Webbrowser") {
+  Container(browser, "Webbrowser", "Browser", "Zugriff auf /reparatur")
+}
+
+Deployment_Node(aws, "AWS", "Cloud, Laufzeit offen") {
+  Deployment_Node(c1, "Container", "Docker Image") {
+    Container(terminplanung, "Terminplanung", "Service")
+  }
+  Deployment_Node(c2, "Container", "Docker Image") {
+    Container(durchfuehren, "Reparatur durchführen", "Service")
+  }
+  Deployment_Node(c3, "Container", "Docker Image") {
+    Container(material, "Materialbeschaffung", "Service")
+  }
+  Deployment_Node(c4, "Container", "Docker Image") {
+    Container(bezahlung, "Bezahlung", "Service")
+  }
+}
+
+System_Ext(webshop, "Webshop", "Fertigprodukt mit User Database")
+System_Ext(kasse, "Kasse", "im Laden")
+System_Ext(payment, "Online Payment Service", "extern")
+System_Ext(rechnungswesen, "Rechnungswesen", "Standort offen")
+System_Ext(sms, "SMS Versand", "extern")
+System_Ext(email, "EMail System", "extern")
+
+Rel(browser, webshop, "Login, Links", "HTTPS")
+Rel(webshop, terminplanung, "Umleitung /reparatur", "Links")
+Rel(webshop, durchfuehren, "Umleitung /reparatur", "Links")
+Rel(webshop, bezahlung, "Umleitung /reparatur", "Links")
+Rel(terminplanung, durchfuehren, "Termin")
+Rel(durchfuehren, bezahlung, "Preis")
+Rel(durchfuehren, material, "Materialbestellung")
+Rel(durchfuehren, rechnungswesen, "Rechnungselemente", "REST")
+Rel(durchfuehren, sms, "Info über Updates", "REST")
+Rel(durchfuehren, email, "Info über Updates", "REST")
+Rel(bezahlung, kasse, "Zahlung", "REST")
+Rel(bezahlung, payment, "Zahlung", "REST, Redirect")
+----
+
+Zuordnung von Bausteinen zu Infrastruktur:: Ein Container je Baustein. Die Aufrufe "Termin", "Preis" und "Materialbestellung" werden zu Netzaufrufen zwischen Containern.
+
+Begründung:: Das Board nennt keine. Die Maßnahmen-Karte "EKS / EC2 SLAs" (Board Seite 6) nennt EKS, den Kubernetes-Dienst von AWS, als mögliche Laufzeit für die Container.
+
+NOTE: Offen: Protokoll zwischen den Containern, Laufzeitumgebung (EKS oder Docker auf EC2), Datenhaltung je Service und Reverse Proxy fehlen auf dem Board.
+
+=== Vergleich der Varianten anhand der Qualitätsziele
+
+Die Qualitätsziele aus Kapitel 1 setzen die Rangfolge: Benutzerfreundlichkeit, Änderbarkeit Richtung SaaS, Verfügbarkeit. Die Tabelle bewertet die Varianten nur dort, wo Board oder ADRs einen Beleg liefern. Zellen mit `?` brauchen ein Urteil des Teams.
+
+[cols="2,3,3", options="header"]
+|===
+| Qualitätsziel | Variante A: Monolith | Variante B: Microservices
+
+| Benutzerfreundlichkeit
+| ? Für Kund:innen und Werkstatt ist die Verteilung unsichtbar; das Board gibt keinen Unterschied her.
+| ? Wie A. Ein Einfluss auf die Zwei-Minuten-Beauftragung (Board Seite 5) ist nicht belegt.
+
+| Änderbarkeit Richtung SaaS
+| ? Das Änderungsszenario (Board Seite 6) nennt Cloud, Mandantenfähigkeit und Skalierbarkeit als Maßnahmen, keine Verteilung.
+| ? Wie A. Ob getrennte Container die Mandantenfähigkeit erleichtern, ist nicht belegt.
+
+| Verfügbarkeit
+| Eine Instanz. Die Maßnahmen-Karte "EKS / EC2 SLAs" deckt die Instanz ab. Wiederanlauf in 30 Minuten (Werkstatt) und 99,9 % im Web (<<adr-008>>) hängen am SLA dieser einen Instanz.
+| Vier Container. Ein Ausfall trifft einen Baustein, nicht alle. Ob das die Ziele aus <<adr-008>> messbar verbessert, ist nicht belegt: ?
+
+| Betrieb ohne IT-Experten (Randbedingung, Board Seite 5)
+| Ein Artefakt, eine Instanz. Weniger bewegliche Teile.
+| ? Kubernetes oder Docker-Betrieb ohne IT-Experten ist nur mit "Eigener Support" (Maßnahmen-Karte) denkbar.
+|===
+
+=== Infrastruktur-Annahmen
+
+Die Maßnahmen-Karten der Qualitätsszenarien (Board Seite 5 und 6) sind Annahmen an die Infrastruktur, keine Entscheidungen:
+
+* *Cloud.* Antwort auf "Im Shop sind keine IT-Experten beschäftigt. Das System kann dennoch betrieben werden." und auf das SaaS-Änderungsszenario. Beide Varianten zeichnet das Board bei AWS.
+* *EKS / EC2 SLAs.* Antwort auf alle Verfügbarkeitsszenarien: 99 % Werkstatt 9 bis 18 Uhr, 99,9 % Web 7 bis 24 Uhr, Wiederanlauf in 30, 5 und 2 Minuten (<<adr-008>>).
+* *RDS SLAs?* Antwort auf "Daten, die älter als 5 Minuten sind, stehen mit 99,9 % Sicherheit wieder zur Verfügung." Das Fragezeichen steht auf dem Board.
+* *Eigener Support*, nachts *Eigener Support 24/7.* Antwort auf den Betrieb ohne IT-Experten und auf das nächtliche Web-Ziel.
+
+Zwei offene Fragen stehen auf beiden Deployment-Seiten des Boards (Seite 10 und 11):
+
+* "Kann man aus der Cloud in das Rechnungswesen kommunizieren?"
+* "Kann man aus der Cloud in die Kasse kommunizieren?" (R-010 aus <<adr-004>>)
+
+Beide Fragen entscheiden, ob Cloud überhaupt trägt. Steht Kasse oder Rechnungswesen im Laden ohne Weg von außen, braucht das System entweder einen Tunnel oder einen Teil on-premise. R-022 aus <<adr-008>> hält fest, dass das Web-Ziel 99,9 % und die lokale Integration in verschiedene Richtungen ziehen.
+
+NOTE: Offen: Cloud oder on-premise ist nicht entschieden (A1 in den ADRs). Das Board zeichnet nur Cloud-Varianten.
 
 === Infrastruktur Ebene 2
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-An dieser Stelle können Sie den inneren Aufbau (einiger) Infrastrukturelemente aus Ebene 1 beschreiben.
-
-Für jedes Infrastrukturelement kopieren Sie die Struktur aus Ebene 1.
-****
-endif::arc42help[]
-
-==== _<Infrastrukturelement 1>_
-
-_<Diagramm + Erläuterungen>_
-
-==== _<Infrastrukturelement 2>_
-
-_<Diagramm + Erläuterungen>_
-
-...
-
-==== _<Infrastrukturelement n>_
-
-_<Diagramm + Erläuterungen>_
+NOTE: Offen: Das Board zeigt keine Ebene 2. Netze, Datenbanken, Reverse Proxy und Umgebungen (Entwicklung, Test, Produktion) sind nicht beschrieben.

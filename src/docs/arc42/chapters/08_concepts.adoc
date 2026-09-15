@@ -12,60 +12,82 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-concepts]]
 == Querschnittliche Konzepte
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Dieser Abschnitt beschreibt übergreifende, prinzipielle Regelungen und Lösungsansätze, die an mehreren Stellen (=_querschnittlich_) relevant sind.
+Die fünf Konzepte dieses Kapitels sind aus Kontext, ADRs und Qualitätsszenarien abgeleitet. Das Video behandelt keines davon als eigenes Thema. Was abgeleitet ist, steht so dabei; was die Quellen nicht hergeben, steht als offener Punkt.
 
-Solche Konzepte betreffen oft mehrere Bausteine.
-Dazu können vielerlei Themen gehören, wie beispielsweise die Themen aus dem nachfolgenden Diagramm:
+=== 8.1 Threat Model (STRIDE)
 
-image::08-concepts-DE.drawio.png["Mögliche Themen für querschnittliche Konzepte"]
+NOTE: Die folgende Liste ist abgeleitet aus Kontext und ADRs, nicht aus dem Video. Eberhard stuft Security und Vertraulichkeit bewusst niedrig ein: "das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (Folge 111, A14, 41:44 bis 43:00 und 58:03). Das Threat Model hält fest, was diese Einstufung in Kauf nimmt.
 
-.Motivation
-Konzepte bilden die Grundlage für _konzeptionelle Integrität_ (Konsistenz, Homogenität) der Architektur und damit eine wesentliche Grundlage für die innere Qualität Ihrer Systeme.
+[cols="1,1,3,2",options="header"]
+|===
+| ID | STRIDE | Bedrohung | Betroffenes Element
 
-Dieser Abschnitt im Template ist der richtige Ort für die konsistente Behandlung solcher Themen.
+| T-001 | Spoofing | Ein Angreifer stiehlt das JWT-Cookie des Webshops und tritt als Kund:in auf. Das Reparatursystem prüft nur dieses Cookie (<<adr-001>>). | Login, JWT-Cookie, Origin `/reparatur`
+| T-002 | Tampering | Der Bezahlstatus wird auf dem Weg vom Online Payment Service oder von der Kasse zum Modul Bezahlung manipuliert; eine unbezahlte Reparatur gilt als bezahlt (R-011, R-012). | REST-Statusabfrage Payment Service, REST Kasse
+| T-003 | Repudiation | Eine Mechaniker:in bestreitet eine Protokollposition (etwa "Bremsklötze eingebaut, 10 €"), oder eine Kund:in bestreitet die Beauftragung. | Reparaturprotokoll, Auftrag
+| T-004 | Information Disclosure | Kundenadressen und Zahlungsarten werden über die REST-Schnittstelle der Webshop User Database oder die Statusseite offengelegt (R-001). | REST Webshop User Database, Statusseite
+| T-005 | Denial of Service | Ein Angreifer überlastet das Web-System und bricht das Ziel 99,9 % zwischen 7 und 24 Uhr (QS-Z-04). | Web-System, Umleitung vor dem Webshop
+| T-006 | Elevation of Privilege | Eine Kund:in erreicht Funktionen der Mechaniker:in oder Shop-Mitarbeiter:in, etwa Reparatur protokollieren oder bezahlen. | Rollen im Reparatursystem
+|===
 
-Viele solche Konzepte beeinflussen oder beziehen sich auf mehrerer Ihrer Bausteine.
+=== 8.2 Security
 
-.Form
-Kann vielfältig sein:
+Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleitet; keine ist im Video entschieden.
 
-* Konzeptpapiere mit beliebiger Gliederung,
-* beispielhafte Implementierung speziell für technische Konzepte,
-* übergreifende Modelle/Szenarien mit Notationen, die Sie auch in den Architektursichten nutzen,
+[cols="2,3,1",options="header"]
+|===
+| Maßnahme | Beschreibung | Schließt
 
+| Standard-JWT-Prüfung | Das Reparatursystem prüft Signatur, Ablauf und Aussteller des JWT-Cookies bei jeder Anfrage. Es vertraut keinem Token, das der Webshop nicht ausgestellt hat (<<adr-001>>). | T-001 (teilweise), T-006
+| HTTPS für alle Verbindungen | Browser zu `/reparatur` und alle REST-Aufrufe nach außen laufen verschlüsselt. Das Cookie trägt die Attribute `Secure` und `HttpOnly`. | T-001, T-004
+| Same-Origin-Policy und Pfad `/reparatur` | Das Cookie erreicht nur die Webshop-Domain (<<adr-002>>). Der geteilte Origin mit dem Webshop bleibt als R-007 benannt. | T-001 (Cookie verlässt die Domain nicht)
+| Bezahlstatus nur aus dem Backend | Das Modul Bezahlung übernimmt den Zahlungsstatus ausschließlich per REST-Abfrage beim Payment Service oder bei der Kasse, nie aus dem Redirect des Browsers (<<adr-004>>). | T-002
+| Rollen aus dem Kontext | Drei Rollen: Kund:in, Shop-Mitarbeiter:in, Fahrrad-Mechaniker:in (Board Seite 1). Werkstattfunktionen sind für Kund:innen nicht erreichbar. | T-006
+| Nachvollziehbares Protokoll | Jede Protokollposition trägt Zeitstempel und Urheber:in (siehe 8.4 Audit). | T-003
+| Provider-Schutz gegen Überlast | Der Cloud-Betrieb (Board Seite 6) bringt Lastverteilung und Schutz des Anbieters mit; Details hängen am offenen Betriebsmodell. | T-005 (teilweise)
+|===
 
-.Struktur
-Wählen Sie **nur** die wichtigsten Themen für Ihr System und erklären das jeweilige Konzept dann unter einer Level-2 Überschrift dieser Sektion (z.B. 8.1, 8.2 etc).
+NOTE: Offen: Wie das Reparatursystem Rollen aus dem JWT des Webshops ableitet, ist nicht entschieden. Der Webshop kennt nur Kund:innen; Mitarbeitende und Mechaniker:innen brauchen einen eigenen Login oder eine Zuordnung. Das Video behandelt das nicht.
 
-Beschränken Sie sich auf die wichtigen, und versuchen **auf keinen Fall** alle oben dargestellten Themen zu bearbeiten.
+NOTE: Offen: Security ist laut Video "mit dem Experten nochmal zu sprechen" (43:00). Die Einstufung als nachrangig ist bewusst, aber nicht bestätigt.
 
-.Weiterführende Informationen
+=== 8.3 Test
 
-Einige Themen innerhalb von Systemen betreffen oft mehrere Bausteine, Hardwareelemente oder Prozesse.
-Es könnte einfacher sein, solche _Querschnittsthemen_ an einer zentralen Stelle zu kommunizieren oder zu dokumentieren, anstatt sie in der Beschreibung der betreffenden Bausteine, Hardwareelemente oder Entwicklungsprozesse zu wiederholen.
+Abgeleitet: Es gibt keinen Code und keine Tests. Das Konzept legt fest, wie Tests zu Stories und Qualitätsszenarien zurückverweisen, sobald es Code gibt.
 
-Bestimmte Konzepte können **alle** Elemente eines Systems betreffen, andere sind vielleicht nur für einige wenige relevant.
+* *Unit-Tests* (Basis der Pyramide) prüfen die Logik der vier Module: Terminberechnung, Preisberechnung aus dem Protokoll, Bestandsführung, Zahlungsstatus. Jeder Test nennt die Story vom Board (Seite 1), die er absichert.
+* *Integrationstests* (Mitte) prüfen jede REST-Schnittstelle gegen einen Stub: Webshop User Database, Payment Service, Kasse, Rechnungswesen, EMail System, SMS Versand. Sie decken die Fehlerfälle aus 8.5 ab.
+* *End-to-End-Tests* (Spitze) laufen im Browser unter `/reparatur` mit einem JWT-Cookie und prüfen die Usability-Szenarien mit Zeitmessung: QS-U-02 (Reparatur beauftragen in 2 Minuten) ist mit der Stoppuhr messbar (Folge 111, V8, 49:30).
+* *Betriebstests* prüfen die Zuverlässigkeitsszenarien: Wiederanlauf QS-Z-02 (30 Minuten) und QS-Z-06 (5 Minuten), Datenverlust QS-Z-07 (5 Minuten, 99,9 %). Sie laufen als Chaos-Test gegen die Cloud-Umgebung.
+* Die Szenarien QS-U-03, QS-U-04, QS-U-05 und QS-U-06 sind Befragungen und Einarbeitungsmessungen, keine automatisierten Tests.
 
+NOTE: Offen: kein Code, keine Tests. Testframework, Testdaten und Abdeckungsziel sind nicht festgelegt.
 
-Siehe https://docs.arc42.org/section-8/[Querschnittliche Konzepte] in der online-Dokumentation (auf Englisch).
+=== 8.4 Observability
 
-****
-endif::arc42help[]
+Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6).
 
-=== _<Konzept 1>_
+* *Logs*: Jede Anfrage unter `/reparatur` und jeder REST-Aufruf nach außen mit Zeitstempel, Modul und Ergebnis. Fehler der Schnittstellen aus 8.5 sind eigene Log-Ereignisse.
+* *Metriken*: Verfügbarkeit getrennt für Werkstatt- und Web-Teil, weil die Ziele verschieden sind (<<adr-008>>): 99 % zwischen 9 und 18 Uhr, 99,9 % zwischen 7 und 24 Uhr, 99 % nachts. Dazu Antwortzeit der Statusseite und Zeit bis zur Preisermittlung (QS-Z-03, 2 Minuten).
+* *Traces*: Ein Auftrag lässt sich vom Webshop-Login über Terminplanung, Reparatur durchführen und Bezahlung bis zum Rechnungswesen verfolgen (Aufrufkette Board Seite 9).
+* *Alarmierung*: Ausfall des Web-Systems und der Werkstatt alarmiert den eigenen Support; nachts den 24/7-Support (QS-Z-05).
+* *Audit*: Protokollpositionen und Zahlungsstatus sind unveränderlich mit Urheber:in und Zeitstempel gespeichert. Das schließt T-003 und macht Übergaben an das Rechnungswesen nachvollziehbar.
 
-_<Erklärung>_
+NOTE: Offen: Werkzeuge für Monitoring und Alarmierung sind nicht gewählt. Sie hängen am offenen Betriebsmodell und an der Wahl EKS oder EC2.
 
-=== _<Konzept 2>_
+=== 8.5 Error Handling
 
-_<Erklärung>_
+Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recovery.
 
-...
+[cols="2,2,2,2",options="header"]
+|===
+| Fehlerfall | Retry | Fallback | Recovery
 
-=== _<Konzept n>_
+| Webshop oder Webshop User Database nicht erreichbar (R-002) | Adressabfrage per REST zweimal wiederholen, kurzer Timeout. | Login schlägt fehl; die Statusseite zeigt eine Wartungsmeldung. Werkstattfunktionen laufen weiter, weil sie kein Webshop-Login brauchen. | Sobald der Webshop antwortet, funktioniert der Login ohne Eingriff.
+| Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
+| Payment-Redirect bricht ab (R-012) | Buchungsstatus per REST beim Payment Service nachfragen, auch ohne Rückkehr des Browsers. | Der Auftrag bleibt "Zahlung offen"; Kund:in kann erneut bezahlen oder im Laden zahlen. | Ein periodischer Abgleich holt bezahlte, aber nicht bestätigte Zahlungen nach.
+| EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<adr-005>>). SMS ist nicht gebaut (<<adr-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
+| Rechnungswesen aus der Cloud nicht erreichbar (Board Seite 10) | Rechnungselemente in eine Warteschlange, Wiederholung. | Reparatur und Bezahlung laufen weiter; das Rechnungswesen erhält die Elemente später. | Nachlieferung in Reihenfolge, idempotent.
+|===
 
-_<Erklärung>_
+NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung nicht.

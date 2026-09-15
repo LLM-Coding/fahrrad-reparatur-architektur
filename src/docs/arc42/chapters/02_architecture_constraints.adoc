@@ -12,25 +12,105 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-architecture-constraints]]
 == Randbedingungen
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Randbedingungen und Vorgaben, die ihre Freiheiten bezüglich Entwurf, Implementierung oder Ihres Entwicklungsprozesses einschränken.
-Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die Grenzen einzelner Systeme hinweg.
+Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitmarken) und dem Endstand des Miro-Boards nach Folge 113 (Seitenangaben). Eberhard nennt die Webshop-Integration den wertvollsten Constraint, den das Kontextdiagramm sichtbar macht (28:22). Wo eine Randbedingung zu einer Entscheidung führte, verweist die Tabelle auf den ADR.
 
-.Motivation
-Für eine tragfähige Architektur sollten Sie genau wissen, wo Ihre Freiheitsgrade bezüglich der Entwurfsentscheidungen liegen und wo Sie Randbedingungen beachten müssen.
-Sie können Randbedingungen vielleicht noch verhandeln, zunächst sind sie aber da.
+=== Technische Randbedingungen
 
-.Form
-Einfache Tabellen der Randbedingungen mit Erläuterungen.
-Bei Bedarf unterscheiden Sie technische, organisatorische und politische Randbedingungen oder übergreifende Konventionen (beispielsweise Programmier- oder Versionierungsrichtlinien, Dokumentations- oder Namenskonvention).
+[cols="2,4,2" options="header"]
+|===
+|Randbedingung |Erläuterung |Quelle
 
+|Bestehender Webshop als Fertigprodukt
+|Der Shop betreibt einen Standard-Webshop für Kaufen und Abholen. Er ist nicht änderbar. Eine Reparatur als Produkt darin abzubilden wäre "unnatürlich, das ist etwas anderes". Das Reparatur-System ist deshalb ein eigener Bereich neben dem Webshop (<<adr-003>>).
+|14:25, 17:50, 18:09
 
-.Weiterführende Informationen
+|Webshop User Database mit JWT-Cookie und REST
+|Registrierung und Login bleiben im Webshop. Nach dem Login liefert der Webshop einen JWT als Cookie. Adresse und bevorzugte Zahlungsart liest das Reparatur-System per REST aus der User Database (<<adr-001>>). Ein eigenes Registrierungs-Szenario ist damit "nicht erfüllbar".
+|15:53, 16:04, 28:29; Board Seiten 3 und 5
 
-Siehe https://docs.arc42.org/section-2/[Randbedingungen] in der online-Dokumentation (auf Englisch!).
+|Same-Origin-Policy des Browsers
+|Cookies gelten nur innerhalb derselben Domain. Das Reparatur-System muss deshalb unter der Webshop-Domain laufen; der Webshop leitet den Pfad `/reparatur` um (<<adr-002>>).
+|29:32; Board Seite 3
 
-****
-endif::arc42help[]
+|Kasse im Laden
+|Bezahlt wird typischerweise bei Abholung im Shop. Das Kassensystem ist "eine Art PC" im Laden; Anbindung per REST (<<adr-004>>). Die lokale Integration erschwert einen reinen Cloud-Betrieb.
+|21:03, 21:23, 30:52, 59:46; Board Seite 3
+
+|Rechnungswesen und Steuerberater:in
+|Jede Reparatur muss "vernünftig verbucht" werden. Das Reparatur-System übergibt Rechnungselemente per REST an das Rechnungswesen.
+|20:35, 20:51; Board Seiten 3 und 9
+
+|Online Payment Service
+|Online-Zahlung läuft über einen externen, PayPal-artigen Dienst (Konto oder Kreditkarte). Anbindung per REST für den Buchungsstatus plus UI-Integration über einen Redirect-Button (<<adr-004>>).
+|19:12, 30:16; Board Seite 3
+
+|Bedienung im Browser
+|Alle Nutzergruppen bedienen das System über den Webbrowser. "Rechner nutzen das System über den Webbrowser." Der Webshop verlinkt auf die Komponenten.
+|Board Seite 10
+
+|E-Mail und SMS als gekaufte Dienste
+|Benachrichtigungen laufen über einen zugekauften Dienst wie AWS Simple Email Service, per REST. SMS ist vorgesehen (<<adr-007>>).
+|23:30, 31:02; Board Seite 3
+|===
+
+NOTE: Offen: Ob das System aus der Cloud heraus mit Kasse und Rechnungswesen kommunizieren kann, steht auf dem Board als offene Frage (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.
+
+=== Organisatorische Randbedingungen
+
+[cols="2,4,2" options="header"]
+|===
+|Randbedingung |Erläuterung |Quelle
+
+|Keine IT-Experten im Shop
+|Die Mitarbeitenden haben "keine echte Ahnung von IT". Es gibt keinen Betrieb, deshalb ist der Betrieb kein Akteur. Das System muss ohne eigenes IT-Personal laufen; Maßnahmen auf dem Board: Cloud und eigener Support.
+|16:59, 17:05, 17:09; Board Seite 5
+
+|Kleiner Betrieb
+|Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Leuten. Ob eine eigene Installation pro Shop finanzierbar ist, ist offen und entscheidet über die SaaS-Architektur.
+|16:46, 44:12
+
+|Anforderungen liegen als Backlog vor
+|Es gibt kein Anforderungsdokument, nur Stories auf dem Miro-Board. Der Architekt nimmt das Backlog als Input; fachliche Detaillierung liegt beim Requirements Engineering.
+|09:38, 09:49; Board Seite 1
+
+|Fachexperte ist imaginär
+|Gespräche mit Anforderern und Experten werden nicht geführt, sondern angenommen und dokumentiert.
+|14:38, 14:47
+
+|Ein Architekt entwirft allein, der Chat ist Sparringspartner
+|Eberhard Wolff entwirft live. Der Chat liefert Hinweise, die er übernimmt: Rechnungswesen (20:35), Same-Origin-Policy (29:32), Frage nach dem Betrieb als Akteur (16:22), Mandantenfähigkeit (43:58).
+|Folge 111 durchgehend
+
+|Zeitrahmen der Kata
+|Drei Live-Folgen zu je rund einer Stunde. Das Ergebnis ist ein Miro-Board mit 11 Seiten, keine Implementierung.
+|Board Seite 1 bis 11
+|===
+
+=== Konventionen
+
+Die ersten beiden Konventionen stammen aus dem Video. Die übrigen setzt dieses Repository für die nachträgliche Dokumentation.
+
+[cols="2,4,2" options="header"]
+|===
+|Konvention |Erläuterung |Quelle
+
+|arc42 als Ablagestruktur, nicht als Vorgehensreihenfolge
+|"Man sollte nicht blind so ein arc42-Template ausfüllen." Die Kapitel dienen zum Ablegen von Informationen; die Reihenfolge der Bearbeitung wählt der Architekt selbst.
+|08:01, 11:35, 11:43
+
+|Qualitätsziele als Qualitätsszenarien mit Metrik und Perzentil
+|Stimulus (Usage, Change, Failure) trifft auf das System, das Ergebnis ist eine Metrik. Adjektive wie "benutzerfreundlich" genügen nicht; Szenarien nennen Perzentile und Zeiten.
+|44:36, 49:30; Board Seite 4
+
+|Architekturentscheidungen als ADRs nach Nygard mit Pugh-Matrix
+|Jede Entscheidung mit mehr als einer ernsthaften Option erhält einen ADR (Kontext, Optionen, Entscheidung, Konsequenzen) mit 3-Punkt-Pugh-Matrix. Stand: <<adr-001>> bis <<adr-008>>.
+|`src/docs/arc42/adr/`
+
+|Docs-as-Code mit docToolchain
+|AsciiDoc, PlantUML inline, Build über den `dtcw`-Wrapper und `docToolchainConfig.groovy`. Diagramme nach C4 über die PlantUML-Standardbibliothek.
+|Repository-Wurzel
+
+|Sprache und Stil
+|Deutsch, Fachbegriffe bleiben englisch. Zeitmarken im Format mm:ss beziehen sich auf Folge 111, sofern nicht anders angegeben.
+|Dieses Dokument
+|===

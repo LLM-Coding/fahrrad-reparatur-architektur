@@ -12,98 +12,231 @@ ifndef::imagesdir[:imagesdir: ../../images]
 [[section-quality-scenarios]]
 == Qualitätsanforderungen
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Dieser Abschnitt enthält alle relevanten Qualitätsanforderungen.
+Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlichkeit, 2. Änderbarkeit Richtung SaaS, 3. Verfügbarkeit. Dieses Kapitel deckt alle acht Merkmale der ISO/IEC 25010 ab und markiert je Merkmal, ob es eines der drei Ziele konkretisiert oder abgeleitet ist. Die Szenarien stammen vom Miro-Board zu Folge 113 (Seite 5 und 6). Eberhard hat sie in Folge 111 als Stimulus und Response mit Metrik formuliert, "messbar mit Stoppuhr" (V8, 44:36 und 49:30).
 
-Die wichtigsten davon haben Sie bereits in Abschnitt 1.2 (Qualitätsziele) hervorgehoben, daher soll hier nur auf sie verwiesen werden.
-In diesem Abschnitt 10 sollten Sie auch Qualitätsanforderungen mit geringerer Bedeutung erfassen, deren Nichterfüllung keine großen Risiken birgt (die aber _nice-to-have_ sein könnten).
+=== 10.1 Qualitätsbaum
 
-.Motivation
-Weil Qualitätsanforderungen die Architekturentscheidungen oft maßgeblich beeinflussen, sollten Sie die für Ihre Stakeholder relevanten Qualitätsanforderungen kennen, möglichst konkret und operationalisiert.
+[cols="2,2,3",options="header"]
+|===
+| ISO/IEC-25010-Merkmal | Kennzeichnung | Szenarien und Belege
 
-.Weiterführende Informationen
+| Benutzbarkeit (Usability) | konkretisiert Ziel 1 aus Kapitel 1.2 | QS-U-01 bis QS-U-07 (Board Seite 5)
+| Wartbarkeit (Maintainability), hier Änderbarkeit | konkretisiert Ziel 2 aus Kapitel 1.2 | QS-A-01 (Board Seite 6); fachlicher Schnitt in vier Module (Kapitel 4)
+| Zuverlässigkeit (Reliability), hier Verfügbarkeit und Wiederherstellbarkeit | konkretisiert Ziel 3 aus Kapitel 1.2 | QS-Z-01 bis QS-Z-07 (Board Seite 6); <<adr-008>>
+| Sicherheit (Security) | abgeleitet; bewusst nachrangig (Folge 111, 41:44 und 58:03) | Threat Model 8.1, Maßnahmen 8.2; kein Board-Szenario
+| Performance (Performance Efficiency) | abgeleitet | Einzige Zahl: Preisermittlung in 2 Minuten nach Ausfall (QS-Z-03); Skalierbarkeit auf dem Board mit `?` markiert
+| Kompatibilität (Compatibility) | abgeleitet | Sieben REST-Schnittstellen und JWT-Cookie (Kapitel 3); Same-Origin-Policy (<<adr-002>>)
+| Funktionale Eignung (Functional Suitability) | abgeleitet | Stories auf Board Seite 1; Reparatur als eigener Ablauf statt Webshop-Produkt (<<adr-003>>)
+| Übertragbarkeit (Portability) | abgeleitet | Betriebsmodell offen: Cloud, Monolith oder Microservices (Board Seite 10 und 11)
+|===
 
-* Siehe https://docs.arc42.org/section-10/[Qualitätsanforderungen] in der online-Dokumentation (auf Englisch!).
-* Siehe auch das ausführliche  https://quality.arc42.org[Q42 Qualitätsmodell auf https://quality.arc42.org].
+NOTE: Offen: Für Sicherheit, Performance, Kompatibilität, funktionale Eignung und Übertragbarkeit nennt das Board keine Szenarien mit Zahl. Die Zeilen sind abgeleitet und ohne Maß.
 
-****
-endif::arc42help[]
+=== 10.2 Qualitätsszenarien
 
+Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Board. "Antwort der Architektur" nennt die Maßnahmen-Karte vom Board.
 
-=== Übersicht der Qualitätsanforderungen
+==== Benutzbarkeit
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Eine Übersicht oder Zusammenfassung der Qualitätsanforderungen. 
+.QS-U-01: Registrierung in einer Minute
+[cols="1,4"]
+|===
+| Quelle | Neue Kund:in
+| Stimulus | Will das System nutzen und registriert sich
+| Artefakt | Reparatursystem, Registrierung
+| Umgebung | Normalbetrieb
+| Reaktion | Konto ist angelegt
+| Maß | Innerhalb von 1 Minute
+| Antwort der Architektur | Keine. Auf dem Board als nicht erfüllbar markiert, Registrierung liegt im Webshop (<<adr-001>>).
+| Bezug | konkretisiert Ziel 1
+|===
 
-.Motivation
-Oft stößt man auf Dutzende (oder sogar Hunderte) von detaillierten Qualitätsanforderungen für ein System. 
-In diesem Abschnitt sollten Sie versuchen, sie zusammenzufassen, z. B. durch die Beschreibung von Kategorien oder Themen (wie z.B. von https://www.iso.org/obp/ui/#iso:std:iso-iec:25010:ed-2:v1:en[ISO 25010:2023] oder https://quality.arc42.org[Q42] vorgeschlagen).
+.QS-U-02: Reparatur beauftragen
+[cols="1,4"]
+|===
+| Quelle | Frisch registrierte Kund:in
+| Stimulus | Will eine Reparatur beauftragen
+| Artefakt | Reparaturbereich unter `/reparatur`, Auftragsformular
+| Umgebung | Normalbetrieb, Kund:in ist im Webshop eingeloggt
+| Reaktion | Auftrag ist erfasst
+| Maß | 90 % der Benutzer:innen schaffen das innerhalb von 2 Minuten
+| Antwort der Architektur | Login und vorbelegte Adresse aus dem Webshop (<<adr-001>>, <<adr-002>>); eigener Bezahlvorgang (<<adr-003>>)
+| Bezug | konkretisiert Ziel 1
+|===
 
-Wenn diese Kurzbeschreibungen oder Zusammenfassungen bereits präzise, spezifisch und messbar sind, können Sie Abschnitt 10.2 auslassen.
+.QS-U-03: Bewertung durch Kund:innen
+[cols="1,4"]
+|===
+| Quelle | Kund:in
+| Stimulus | Bewertet das System
+| Artefakt | Reparatursystem, Kundensicht
+| Umgebung | Nach abgeschlossener Reparatur
+| Reaktion | Bewertung liegt vor
+| Maß | Im Schnitt 4 von 5 Punkten
+| Antwort der Architektur | Eigene Statusseite, Benachrichtigung per E-Mail (<<adr-005>>, <<adr-007>>)
+| Bezug | konkretisiert Ziel 1
+|===
 
-.Form
-Verwenden Sie eine einfache Tabelle, in der jede Zeile eine Kategorie oder ein Thema und eine kurze Beschreibung der Qualitätsanforderung enthält.
-Alternativ können Sie auch eine Mindmap verwenden, um diese Qualitätsanforderungen zu strukturieren.
-In der Literatur (insb. [Bass+21]) ist die Idee eines _Quality Attribute Utility Tree_ (auf Deutsch manchmal kurz als _Qualitätsbaum_ bezeichnet) beschrieben worden, der den Oberbegriff „Qualität“ als Wurzel hat und eine baumartige Verfeinerung des Begriffs „Qualität“ verwendet. 
+.QS-U-04: Empfehlung durch Mitarbeitende
+[cols="1,4"]
+|===
+| Quelle | Mitarbeiter:innen des Shops
+| Stimulus | Werden gefragt, ob sie das System empfehlen
+| Artefakt | Reparatursystem, Werkstattsicht
+| Umgebung | Laufender Betrieb
+| Reaktion | Empfehlung
+| Maß | 85 % würden das System sehr wahrscheinlich anderen empfehlen
+| Antwort der Architektur | Keine Maßnahmen-Karte auf dem Board
+| Bezug | konkretisiert Ziel 1
+|===
 
+.QS-U-05: Einarbeitung Shop-Mitarbeiter:in
+[cols="1,4"]
+|===
+| Quelle | Neue Shop-Mitarbeiter:in
+| Stimulus | Wird in das System eingearbeitet
+| Artefakt | Reparatursystem, Funktionen Abgabe und Bezahlung
+| Umgebung | Laufender Betrieb
+| Reaktion | Bedient das System eigenständig
+| Maß | Nach 1 Stunde
+| Antwort der Architektur | Keine Maßnahmen-Karte auf dem Board
+| Bezug | konkretisiert Ziel 1
+|===
 
-****
-endif::arc42help[]
+.QS-U-06: Einarbeitung Fahrrad-Mechaniker:in
+[cols="1,4"]
+|===
+| Quelle | Neue Fahrrad-Mechaniker:in
+| Stimulus | Wird in das System eingearbeitet
+| Artefakt | Reparatursystem, Werkstattfunktionen
+| Umgebung | Laufender Betrieb
+| Reaktion | Bedient das System eigenständig
+| Maß | Nach 1 Stunde
+| Antwort der Architektur | Keine Maßnahmen-Karte auf dem Board
+| Bezug | konkretisiert Ziel 1
+|===
 
-=== Qualitätsszenarien
+.QS-U-07: Betrieb ohne IT-Experten
+[cols="1,4"]
+|===
+| Quelle | Shop
+| Stimulus | Betreibt das System ohne IT-Experten
+| Artefakt | Gesamtsystem, Betrieb
+| Umgebung | Dauerbetrieb
+| Reaktion | Das System läuft dennoch
+| Maß | Kein IT-Experte beschäftigt (Board nennt keine Zahl)
+| Antwort der Architektur | Cloud; Eigener Support
+| Bezug | konkretisiert Ziel 1 (Mitarbeitende); stützt zugleich Ziel 3
+|===
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Inhalt
-Qualitätsszenarien konkretisieren Qualitätsanforderungen und ermöglichen es zu entscheiden, ob sie erfüllt sind (im Sinne von Akzeptanzkriterien).
-Stellen Sie sicher, dass Ihre Szenarien spezifisch und messbar sind.
+==== Zuverlässigkeit
 
+.QS-Z-01: Verfügbarkeit Werkstatt
+[cols="1,4"]
+|===
+| Quelle | Mitarbeiter:in im Shop
+| Stimulus | Will das System zwischen 9 und 18 Uhr nutzen
+| Artefakt | Werkstatt-Teil des Systems
+| Umgebung | Ladenöffnungszeit
+| Reaktion | System steht zur Verfügung
+| Maß | 99 % Verfügbarkeit
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Bezug | konkretisiert Ziel 3 (<<adr-008>>)
+|===
 
-Zwei Arten von Szenarien finden wir besonders nützlich:
+.QS-Z-02: Wiederanlauf Werkstatt
+[cols="1,4"]
+|===
+| Quelle | Ausfall
+| Stimulus | Das System im Shop fällt aus
+| Artefakt | Werkstatt-Teil des Systems
+| Umgebung | Ladenöffnungszeit
+| Reaktion | System steht wieder zur Verfügung
+| Maß | Spätestens nach 30 Minuten
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Bezug | konkretisiert Ziel 3 (<<adr-008>>: "30 Minuten Zettel und Bleistift")
+|===
 
-* Nutzungsszenarien (auch bekannt als Anwendungs- oder Anwendungsfallszenarien) beschreiben, wie das System zur Laufzeit auf einen bestimmten Auslöser reagieren soll.
-Hierunter fallen auch Szenarien zur Beschreibung von Effizienz oder Performance.
-Beispiel: Das System beantwortet eine Benutzeranfrage innerhalb einer Sekunde.
-* Änderungsszenarien_ beschreiben die gewünschte Wirkung einer Änderung oder Erweiterung des Systems oder seiner unmittelbaren Umgebung. 
-Beispiel: Zusätzliche Funktionalität wird implementiert oder Anforderungen an ein Qualitätsmerkmal ändern sich, und der Aufwand oder die Dauer der Änderung wird gemessen.
+.QS-Z-03: Preisermittlung nach Ausfall
+[cols="1,4"]
+|===
+| Quelle | Ausfall
+| Stimulus | Das System im Shop fällt aus
+| Artefakt | Modul Reparatur durchführen, Preis aus dem Protokoll
+| Umgebung | Ladenöffnungszeit, Kund:in wartet an der Kasse
+| Reaktion | Preis einer erfolgten Reparatur ist wieder ermittelbar
+| Maß | Spätestens nach 2 Minuten
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Bezug | konkretisiert Ziel 3
+|===
 
+.QS-Z-04: Verfügbarkeit Web tagsüber
+[cols="1,4"]
+|===
+| Quelle | Kund:in
+| Stimulus | Will das Web-System zwischen 7 und 24 Uhr nutzen
+| Artefakt | Web-Teil des Systems unter `/reparatur`
+| Umgebung | Tag und Abend
+| Reaktion | System steht zur Verfügung
+| Maß | 99,9 % Verfügbarkeit
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Bezug | konkretisiert Ziel 3 (<<adr-008>>: "jede Minute Umsatzausfall")
+|===
 
-.Form
+.QS-Z-05: Verfügbarkeit Web nachts
+[cols="1,4"]
+|===
+| Quelle | Kund:in
+| Stimulus | Will das Web-System zwischen 24 und 7 Uhr nutzen
+| Artefakt | Web-Teil des Systems unter `/reparatur`
+| Umgebung | Nacht
+| Reaktion | System steht zur Verfügung
+| Maß | 99 % Verfügbarkeit
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support 24/7
+| Bezug | konkretisiert Ziel 3
+|===
 
-Typische Informationen für detaillierte Szenarien sind die folgenden:
+.QS-Z-06: Schneller Wiederanlauf
+[cols="1,4"]
+|===
+| Quelle | Ausfall
+| Stimulus | Das System im Shop fällt aus
+| Artefakt | System (Board: "im Shop")
+| Umgebung | Nicht benannt
+| Reaktion | System steht wieder zur Verfügung
+| Maß | Spätestens nach 5 Minuten
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Bezug | konkretisiert Ziel 3
+|===
 
-In Kurzform (bevorzugt im Q42-Modell):
+NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<adr-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären.
 
-* K**ontext/Hintergrund**: Um welche Art von System oder Komponente handelt es sich, wie sieht die Umgebung oder Situation aus?
-* **Quelle/Stimulus**: Wer oder was initiiert oder löst ein Verhalten, eine Reaktion oder eine Aktion aus.
-* **Metrik/Akzeptanzkriterien**: Eine Reaktion einschließlich einer _Maßnahme_ oder _Metrik_
+.QS-Z-07: Datenverlust
+[cols="1,4"]
+|===
+| Quelle | Ausfall
+| Stimulus | Das System fällt aus
+| Artefakt | Persistenz der Reparaturdaten
+| Umgebung | Beliebig
+| Reaktion | Daten, die älter als 5 Minuten sind, stehen wieder zur Verfügung
+| Maß | Mit 99,9 % Sicherheit; Datenverlust höchstens 5 Minuten
+| Antwort der Architektur | RDS SLAs (auf dem Board mit `?` markiert)
+| Bezug | konkretisiert Ziel 3 (<<adr-008>>, R-024)
+|===
 
+==== Änderbarkeit
 
-Die Langform von Szenarien (die von der SEI und [Bass+21] bevorzugt wird) ist detaillierter und enthält die folgenden Informationen:
+.QS-A-01: SaaS für andere Fahrrad-Shops
+[cols="1,4"]
+|===
+| Quelle | Geschäftsführung
+| Stimulus | Das System soll als SaaS-Lösung auch anderen Fahrrad-Shops angeboten werden
+| Artefakt | Gesamtsystem, Betrieb und Integrationen
+| Umgebung | Entwicklungszeit, System ist im Betrieb
+| Reaktion | Die Änderung ist umgesetzt
+| Maß | Höchstens 2 Monate und nicht mehr als 20 PT
+| Antwort der Architektur | Cloud; Mandantenfähigkeit wegen Betriebskosten; Skalierbarkeit (`?`); Drittsysteme je Shop (R-003, R-006, R-013, R-018, R-026)
+| Bezug | konkretisiert Ziel 2
+|===
 
-* **Szenario-ID**: Ein eindeutiger Bezeichner für das Szenario.
-* **Szenario-Name**: Ein kurzer, beschreibender Name für das Szenario.
-* **Quelle**: Die Entität (Benutzer, System oder Ereignis), die das Szenario auslöst.
-* **Stimulus**: Das auslösende Ereignis oder die Bedingung, auf die das System reagieren muss.
-* **Umgebung**: Der betriebliche Kontext oder die Bedingungen, unter denen das System den Stimulus erlebt.
-* **Artefakt**: Die Bausteine oder anderen Elemente des Systems, die von dem Stimulus betroffen sind.
-* **Reaktion**: Das Ergebnis oder Verhalten, das das System als Reaktion auf den Stimulus zeigt.
-* **Antwortmaß**: Das Kriterium oder die Metrik, nach der die Antwort des Systems bewertet wird.
-
-.Beispiele
-Ausführliche Beispiele für Qualitätsanforderungen finden Sie auf https://quality.arc42.org[der Website zum Qualitätsmodell Q42].
-
-.Weitere Informationen
-
-* Len Bass, Paul Clements, Rick Kazman: „Software Architecture in Practice“, 4. Auflage, Addison-Wesley, 2021.
-
-
-****
-endif::arc42help[]
+NOTE: Offen: Das Board nennt keine Szenarien für Security, Performance oder Kompatibilität. Die Zahl "Skalierbarkeit?" bleibt ohne Maß.
