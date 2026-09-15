@@ -1,0 +1,7 @@
+build/
+.gradle/
+transcription/audio/
+transcription/chunks/
+transcription/out/
+transcription/logs/
+.env
