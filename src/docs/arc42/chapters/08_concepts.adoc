@@ -1,4 +1,4 @@
-:jbake-title: Cross-cutting Concepts
+:jbake-title: Querschnittliche Konzepte
 :jbake-type: page_toc
 :jbake-status: published
 :jbake-menu: arc42
@@ -9,67 +9,63 @@ ifndef::imagesdir[:imagesdir: ../../images]
 :toc:
 
 
-
 [[section-concepts]]
-== Cross-cutting Concepts
-
+== Querschnittliche Konzepte
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-.Content
-This section describes crosscutting concepts (practices, patterns, regulations or solution ideas).
-Such concepts are often related to multiple building blocks. 
-They may include many different topics, such as the topics shown in the following diagram:
+.Inhalt
+Dieser Abschnitt beschreibt übergreifende, prinzipielle Regelungen und Lösungsansätze, die an mehreren Stellen (=_querschnittlich_) relevant sind.
 
-image::08-concepts-EN.drawio.png["Possible topics for crosscutting concepts"]
+Solche Konzepte betreffen oft mehrere Bausteine.
+Dazu können vielerlei Themen gehören, wie beispielsweise die Themen aus dem nachfolgenden Diagramm:
+
+image::08-concepts-DE.drawio.png["Mögliche Themen für querschnittliche Konzepte"]
 
 .Motivation
-Concepts form the basis for _conceptual integrity_ (consistency, homogeneity) of the architecture. 
-Thus, they are an important contribution to achieve inner qualities of your system.
+Konzepte bilden die Grundlage für _konzeptionelle Integrität_ (Konsistenz, Homogenität) der Architektur und damit eine wesentliche Grundlage für die innere Qualität Ihrer Systeme.
 
-This is the place in the template that we provided for a cohesive specification of such concepts.
+Dieser Abschnitt im Template ist der richtige Ort für die konsistente Behandlung solcher Themen.
 
-Many of these concepts relate to or influence several of your building blocks. 
+Viele solche Konzepte beeinflussen oder beziehen sich auf mehrerer Ihrer Bausteine.
 
 .Form
-The form can be varied:
+Kann vielfältig sein:
 
-* concept papers with any kind of structure
-* example implementations,especially for technical concepts
-* cross-cutting model excerpts or scenarios using notations of the architecture views
-
-.Structure
-Pick **only** the most-needed topics for your system and assign each a level-2 heading in this section (e.g. 8.1, 8.2 etc).
-
-DO NOT ATTEMPT to cover all of the topics of the aforementioned diagram.
+* Konzeptpapiere mit beliebiger Gliederung,
+* beispielhafte Implementierung speziell für technische Konzepte,
+* übergreifende Modelle/Szenarien mit Notationen, die Sie auch in den Architektursichten nutzen,
 
 
-.Further Information
+.Struktur
+Wählen Sie **nur** die wichtigsten Themen für Ihr System und erklären das jeweilige Konzept dann unter einer Level-2 Überschrift dieser Sektion (z.B. 8.1, 8.2 etc).
 
-Some topics within systems often concern multiple building blocks, hardware elements or development processes.
-It might be easier to communicate or document such _cross-cutting_ topics at a central location, instead of repeating them in the description of the concerned building blocks, hardware elements or development processes.
+Beschränken Sie sich auf die wichtigen, und versuchen **auf keinen Fall** alle oben dargestellten Themen zu bearbeiten.
 
-Certain concepts might concern **all** elements of a system, others might only be relevant for a few.
-In the diagram above, logging concerns all three components, whereas security is relevant only for two components.
+.Weiterführende Informationen
+
+Einige Themen innerhalb von Systemen betreffen oft mehrere Bausteine, Hardwareelemente oder Prozesse.
+Es könnte einfacher sein, solche _Querschnittsthemen_ an einer zentralen Stelle zu kommunizieren oder zu dokumentieren, anstatt sie in der Beschreibung der betreffenden Bausteine, Hardwareelemente oder Entwicklungsprozesse zu wiederholen.
+
+Bestimmte Konzepte können **alle** Elemente eines Systems betreffen, andere sind vielleicht nur für einige wenige relevant.
 
 
-See https://docs.arc42.org/section-8/[Concepts] in the arc42 documentation.
+Siehe https://docs.arc42.org/section-8/[Querschnittliche Konzepte] in der online-Dokumentation (auf Englisch).
+
 ****
 endif::arc42help[]
 
-=== _<Concept 1>_
+=== _<Konzept 1>_
 
-_<explanation>_
+_<Erklärung>_
 
+=== _<Konzept 2>_
 
-
-=== _<Concept 2>_
-
-_<explanation>_
+_<Erklärung>_
 
 ...
 
-=== _<Concept n>_
+=== _<Konzept n>_
 
-_<explanation>_
+_<Erklärung>_

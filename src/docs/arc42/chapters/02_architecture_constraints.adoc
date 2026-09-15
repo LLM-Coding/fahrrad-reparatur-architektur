@@ -1,4 +1,4 @@
-:jbake-title: Architecture Constraints
+:jbake-title: Randbedingungen
 :jbake-type: page_toc
 :jbake-status: published
 :jbake-menu: arc42
@@ -9,31 +9,28 @@ ifndef::imagesdir[:imagesdir: ../../images]
 :toc:
 
 
-
 [[section-architecture-constraints]]
-== Architecture Constraints
-
+== Randbedingungen
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-.Contents
-Any requirement that constraints software architects in their freedom of design and implementation decisions or decision about the development process. These constraints sometimes go beyond individual systems and are valid for whole organizations and companies.
+.Inhalt
+Randbedingungen und Vorgaben, die ihre Freiheiten bezüglich Entwurf, Implementierung oder Ihres Entwicklungsprozesses einschränken.
+Diese Randbedingungen gelten manchmal organisations- oder firmenweit über die Grenzen einzelner Systeme hinweg.
 
 .Motivation
-Architects should know exactly where they are free in their design decisions and where they must adhere to constraints.
-Constraints must always be dealt with; they may be negotiable, though.
+Für eine tragfähige Architektur sollten Sie genau wissen, wo Ihre Freiheitsgrade bezüglich der Entwurfsentscheidungen liegen und wo Sie Randbedingungen beachten müssen.
+Sie können Randbedingungen vielleicht noch verhandeln, zunächst sind sie aber da.
 
 .Form
-Simple tables of constraints with explanations.
-If needed you can subdivide them into
-technical constraints, organizational and political constraints and
-conventions (e.g. programming or versioning guidelines, documentation or naming conventions)
+Einfache Tabellen der Randbedingungen mit Erläuterungen.
+Bei Bedarf unterscheiden Sie technische, organisatorische und politische Randbedingungen oder übergreifende Konventionen (beispielsweise Programmier- oder Versionierungsrichtlinien, Dokumentations- oder Namenskonvention).
 
 
-.Further Information
+.Weiterführende Informationen
 
-See https://docs.arc42.org/section-2/[Architecture Constraints] in the arc42 documentation.
+Siehe https://docs.arc42.org/section-2/[Randbedingungen] in der online-Dokumentation (auf Englisch!).
 
 ****
 endif::arc42help[]

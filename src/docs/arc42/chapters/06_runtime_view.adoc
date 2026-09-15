@@ -1,4 +1,4 @@
-:jbake-title: Runtime View
+:jbake-title: Laufzeitsicht
 :jbake-type: page_toc
 :jbake-status: published
 :jbake-menu: arc42
@@ -9,55 +9,58 @@ ifndef::imagesdir[:imagesdir: ../../images]
 :toc:
 
 
-
 [[section-runtime-view]]
-== Runtime View
-
+== Laufzeitsicht
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-.Contents
-The runtime view describes concrete behavior and interactions of the system’s building blocks in form of scenarios from the following areas:
+.Inhalt
+Diese Sicht erklärt konkrete Abläufe und Beziehungen zwischen Bausteinen in Form von Szenarien aus den folgenden Bereichen:
 
-* important use cases or features: how do building blocks execute them?
-* interactions at critical external interfaces: how do building blocks cooperate with users and neighboring systems?
-* operation and administration: launch, start-up, stop
-* error and exception scenarios
+*  Wichtige Abläufe oder _Features_:
+Wie führen die Bausteine der Architektur die wichtigsten Abläufe durch?
+*  Interaktionen an kritischen externen Schnittstellen:
+Wie arbeiten Bausteine mit Nutzern und Nachbarsystemen zusammen?
+* Betrieb und Administration: Inbetriebnahme, Start, Stop.
+* Fehler- und Ausnahmeszenarien
 
-Remark: The main criterion for the choice of possible scenarios (sequences, workflows) is their *architectural relevance*. It is *not* important to describe a large number of scenarios. You should rather document a representative selection.
+Anmerkung:
+Das Kriterium für die Auswahl der möglichen Szenarien (d.h. Abläufe) des Systems ist deren Architekturrelevanz.
+Es geht nicht darum, möglichst viele Abläufe darzustellen, sondern eine angemessene Auswahl zu dokumentieren.
 
 .Motivation
-You should understand how (instances of) building blocks of your system perform their job and communicate at runtime.
-You will mainly capture scenarios in your documentation to communicate your architecture to stakeholders that are less willing or able to read and understand the static models (building block view, deployment view).
+Sie sollten verstehen, wie (Instanzen von) Bausteine(n) Ihres Systems ihre jeweiligen Aufgaben erfüllen und zur Laufzeit miteinander kommunizieren.
+
+Nutzen Sie diese Szenarien in der Dokumentation hauptsächlich für eine verständlichere Kommunikation mit denjenigen Stakeholdern, die die statischen Modelle (z.B. Bausteinsicht, Verteilungssicht) weniger verständlich finden.
 
 .Form
-There are many notations for describing scenarios, e.g.
+Für die Beschreibung von Szenarien gibt es zahlreiche Ausdrucksmöglichkeiten.
+Nutzen Sie beispielsweise:
 
-* numbered list of steps (in natural language)
-* activity diagrams or flow charts
-* sequence diagrams
-* BPMN or EPCs (event process chains)
-* state machines
+* Nummerierte Schrittfolgen oder Aufzählungen in Umgangssprache
+* Aktivitäts- oder Flussdiagramme
+* Sequenzdiagramme
+* BPMN (Geschäftsprozessmodell und -notation) oder EPKs (Ereignis-Prozessketten)
+* Zustandsautomaten
 * ...
 
+.Weiterführende Informationen
 
-.Further Information
-
-See https://docs.arc42.org/section-6/[Runtime View] in the arc42 documentation.
+Siehe https://docs.arc42.org/section-6/[Laufzeitsicht] in der online-Dokumentation (auf Englisch!).
 
 ****
 endif::arc42help[]
 
-=== <Runtime Scenario 1>
+=== _<Bezeichnung Laufzeitszenario 1>_
 
+*  <hier Laufzeitdiagramm oder Ablaufbeschreibung einfügen>
+*  <hier Besonderheiten bei dem Zusammenspiel der Bausteine in diesem Szenario erläutern>
 
-* _<insert runtime diagram or textual description of the scenario>_
-* _<insert description of the notable aspects of the interactions between the
-building block instances depicted in this diagram.>_
+=== _<Bezeichnung Laufzeitszenario 2>_
 
-=== <Runtime Scenario 2>
+...
 
-=== ...
+=== _<Bezeichnung Laufzeitszenario n>_
 
-=== <Runtime Scenario n>
+...

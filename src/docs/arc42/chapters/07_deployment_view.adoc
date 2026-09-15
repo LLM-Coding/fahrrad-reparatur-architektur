@@ -1,4 +1,4 @@
-:jbake-title: Deployment View
+:jbake-title: Verteilungssicht
 :jbake-type: page_toc
 :jbake-status: published
 :jbake-menu: arc42
@@ -9,102 +9,92 @@ ifndef::imagesdir[:imagesdir: ../../images]
 :toc:
 
 
-
 [[section-deployment-view]]
-
-
-== Deployment View
+== Verteilungssicht
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-.Content
-The deployment view describes:
+.Inhalt
+Die Verteilungssicht beschreibt:
 
- 1. technical infrastructure used to execute your system, with infrastructure elements like geographical locations, environments, computers, processors, channels and net topologies as well as other infrastructure elements and
+1. die technische Infrastruktur, auf der Ihr System ausgeführt wird, mit Infrastrukturelementen wie Standorten, Umgebungen, Rechnern, Prozessoren, Kanälen und Netztopologien sowie sonstigen Bestandteilen, und
 
-2. mapping of (software) building blocks to that infrastructure elements.
+2. die Abbildung von (Software-)Bausteinen auf diese Infrastruktur.
 
-Often systems are executed in different environments, e.g. development environment, test environment, production environment. In such cases you should document all relevant environments.
 
-Especially document a deployment view if your software is executed as distributed system with more than one computer, processor, server or container or when you design and construct your own hardware processors and chips.
+Häufig laufen Systeme in unterschiedlichen Umgebungen, beispielsweise Entwicklung-/Test- oder Produktionsumgebungen.
+In solchen Fällen sollten Sie alle relevanten Umgebungen aufzeigen.
 
-From a software perspective it is sufficient to capture only those elements of an infrastructure that are needed to show a deployment of your building blocks. Hardware architects can go beyond that and describe an infrastructure to any level of detail they need to capture.
+Nutzen Sie die Verteilungssicht insbesondere dann, wenn Ihre Software auf mehr als einem Rechner, Prozessor, Server oder Container abläuft oder Sie Ihre Hardware sogar selbst konstruieren.
+
+Aus Softwaresicht genügt es, auf die Aspekte zu achten, die für die Softwareverteilung relevant sind.
+Insbesondere bei der Hardwareentwicklung kann es notwendig sein, die Infrastruktur mit beliebigen Details zu beschreiben.
 
 .Motivation
-Software does not run without hardware.
-This underlying infrastructure can and will influence a system and/or some
-cross-cutting concepts. Therefore, there is a need to know the infrastructure.
+Software läuft nicht ohne Infrastruktur.
+Diese zugrundeliegende Infrastruktur beeinflusst Ihr System und/oder querschnittliche Lösungskonzepte, daher müssen Sie diese Infrastruktur kennen.
 
 .Form
+Das oberste Verteilungsdiagramm könnte bereits in Ihrem technischen Kontext enthalten sein, mit Ihrer Infrastruktur als EINE Blackbox.
+Jetzt zoomen Sie in diese Infrastruktur mit weiteren Verteilungsdiagrammen hinein:
 
-Maybe a highest level deployment diagram is already contained in section 3.2. as
-technical context with your own infrastructure as ONE black box. In this section one can
-zoom into this black box using additional deployment diagrams:
+* Die UML stellt mit Verteilungsdiagrammen (Deployment diagrams) eine Diagrammart zur Verfügung, um diese Sicht auszudrücken.
+Nutzen Sie diese, evtl. auch geschachtelt, wenn Ihre Verteilungsstruktur es verlangt.
+* Falls Ihre Infrastruktur-Stakeholder andere Diagrammarten bevorzugen, die beispielsweise Prozessoren und Kanäle zeigen, sind diese hier ebenfalls einsetzbar.
 
-* UML offers deployment diagrams to express that view. Use it, probably with nested diagrams,
-when your infrastructure is more complex.
-* When your (hardware) stakeholders prefer other kinds of diagrams rather than a deployment diagram, let them use any kind that is able to show nodes and channels of the infrastructure.
+.Weiterführende Informationen
 
-
-.Further Information
-
-See https://docs.arc42.org/section-7/[Deployment View] in the arc42 documentation.
+Siehe https://docs.arc42.org/section-7/[Verteilungssicht] in der online-Dokumentation (auf Englisch!).
 
 ****
 endif::arc42help[]
 
-=== Infrastructure Level 1
+=== Infrastruktur Ebene 1
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-Describe (usually in a combination of diagrams, tables, and text):
+An dieser Stelle beschreiben Sie (als Kombination von Diagrammen mit Tabellen oder Texten):
 
-* distribution of a system to multiple locations, environments, computers, processors, .., as well as physical connections between them
-* important justifications or motivations for this deployment structure
-* quality and/or performance features of this infrastructure
-* mapping of software artifacts to elements of this infrastructure
+* die Verteilung des Gesamtsystems auf mehrere Standorte, Umgebungen, Rechner, Prozessoren o. Ä., sowie die physischen Verbindungskanäle zwischen diesen,
+* wichtige Begründungen für diese Verteilungsstruktur,
+* Qualitäts- und/oder Leistungsmerkmale dieser Infrastruktur,
+* Zuordnung von Softwareartefakten zu Bestandteilen der Infrastruktur
 
-For multiple environments or alternative deployments please copy and adapt this section of arc42 for all relevant environments.
+Für mehrere Umgebungen oder alternative Deployments kopieren Sie diesen Teil von arc42 für alle wichtigen Umgebungen/Varianten.
 ****
 endif::arc42help[]
 
-_**<Overview Diagram>**_
+_**<Übersichtsdiagramm>**_
 
-Motivation::
+Begründung:: _<Erläuternder Text>_
 
-_<explanation in text form>_
+Qualitäts- und/oder Leistungsmerkmale:: _<Erläuternder Text>_
 
-Quality and/or Performance Features::
+Zuordnung von Bausteinen zu Infrastruktur:: _<Beschreibung der Zuordnung>_
 
-_<explanation in text form>_
-
-Mapping of Building Blocks to Infrastructure::
-_<description of the mapping>_
-
-
-=== Infrastructure Level 2
+=== Infrastruktur Ebene 2
 
 ifdef::arc42help[]
 [role="arc42help"]
 ****
-Here you can include the internal structure of (some) infrastructure elements from level 1.
+An dieser Stelle können Sie den inneren Aufbau (einiger) Infrastrukturelemente aus Ebene 1 beschreiben.
 
-Please copy the structure from level 1 for each selected element.
+Für jedes Infrastrukturelement kopieren Sie die Struktur aus Ebene 1.
 ****
 endif::arc42help[]
 
-==== _<Infrastructure Element 1>_
+==== _<Infrastrukturelement 1>_
 
-_<diagram + explanation>_
+_<Diagramm + Erläuterungen>_
 
-==== _<Infrastructure Element 2>_
+==== _<Infrastrukturelement 2>_
 
-_<diagram + explanation>_
+_<Diagramm + Erläuterungen>_
 
 ...
 
-==== _<Infrastructure Element n>_
+==== _<Infrastrukturelement n>_
 
-_<diagram + explanation>_
+_<Diagramm + Erläuterungen>_
