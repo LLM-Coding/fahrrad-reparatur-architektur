@@ -40,3 +40,16 @@ Dort finden Sie Links und Beispiele zum Thema ADR.
 
 ****
 endif::arc42help[]
+
+=== Übersicht der Entscheidungen
+
+Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113. Zeitmarken verweisen auf die jeweilige Folge.
+
+[cols="1,4,2"]
+|===
+| ADR | Titel | Status
+
+| <<adr-001>> | Nutzerverwaltung und Login über den Webshop | Accepted
+|===
+
+include::../adr/ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]

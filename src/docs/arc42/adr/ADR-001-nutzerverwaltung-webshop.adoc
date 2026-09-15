@@ -1,0 +1,82 @@
+[[adr-001]]
+== ADR-001: Nutzerverwaltung und Login über den Webshop
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 14:25 und 28:29
+|===
+
+=== Problem
+
+Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden. Der Fahrradladen betreibt bereits einen Webshop mit eigener User-Datenbank. Braucht das Reparatursystem eine eigene Nutzerverwaltung mit Registrierung und Login, oder übernimmt es Konten und Anmeldung aus dem Webshop?
+
+=== Kontext
+
+Der Webshop ist ein bestehendes Fertigprodukt. Wer dort registriert ist, hat schon Name, Adresse und bevorzugte Zahlungsart hinterlegt. Der Webshop stellt nach dem Login ein JWT als Cookie aus und bietet eine REST-Schnittstelle für Nutzerdaten.
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen steht an erster Stelle, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Confidentiality stuft Eberhard bewusst niedrig ein, weil es am Ende um Fahrradreparaturdaten geht. Die Usability-Szenarien verlangen, dass eine Reparatur in zwei Minuten beauftragt ist und eine Registrierung eine Minute dauert.
+
+=== Optionen
+
+*Option A: Eigene Nutzerverwaltung.* Das Reparatursystem führt eigene Konten mit Registrierung, Login und Passwortverwaltung. Vorteil: Das System bleibt unabhängig vom Webshop und hat die Hoheit über seine Kundendaten. Nachteil: Bestehende Webshop-Kund:innen müssen sich ein zweites Mal registrieren und ihre Adresse erneut eingeben.
+
+*Option B: Nutzerverwaltung und Login über den Webshop.* Kund:innen melden sich im Webshop an. Das Reparatursystem liest das JWT-Cookie des Webshops und holt Adresse und Zahlungsart über dessen REST-Schnittstelle. Vorteil: Kein zweites Konto, das Auftragsformular ist vorbelegt. Nachteil: Das Reparatursystem hängt vom Webshop ab, und die Kundendaten liegen in dessen User-Datenbank.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Eigene Nutzerverwaltung | B: Webshop (Referenz)
+
+| Benutzerfreundlichkeit für Kund:innen (kein zweites Konto, Formular vorbelegt) | -1 | 0
+| Konsistenz der Kundendaten (Adresse, Zahlungsart an einem Ort) | -1 | 0
+| Datenhoheit über Kundendaten | +1 | 0
+| Unabhängigkeit vom Webshop | +1 | 0
+| Änderbarkeit Richtung SaaS | ? | 0
+| Aufwand für die Umsetzung | ? | 0
+| Security und Confidentiality | ? | 0
+
+| *Summe* | *0 (3 Zellen offen)* | *0*
+|===
+
+Die ungewichtete Summe endet unentschieden. Den Ausschlag gibt die Rangfolge der Qualitätsziele: Benutzerfreundlichkeit für Kund:innen steht an erster Stelle, Datenhoheit und Security stehen bewusst weiter unten.
+
+=== Entscheidung
+
+Wir führen keine eigene Nutzerverwaltung. Wir übernehmen die Konten des Webshops: Kund:innen loggen sich im Webshop ein, das Reparatursystem liest das JWT-Cookie und fragt Adresse und Zahlungsart über die REST-Schnittstelle des Webshops ab. Die Registrierung bleibt im Webshop.
+
+=== Begründung
+
+Das Geschäftsziel entscheidet. Kund:innen sollen online Reparaturen beauftragen, und das gelingt nur, wenn das System benutzerfreundlich ist (41:44). Eberhard formuliert den Wunsch direkt: "es wäre total super, wenn sich dort jemand registriert hat, dass diese Personen gleich Reparatur beauftragen" (15:36). Dafür muss das Reparatursystem "mit dieser Datenbank von dem Webshop interagieren" (15:59) und dort Adresse und Zahlungsart nachfragen (16:11).
+
+Für den Login greift er zum Standard, den der Webshop schon liefert: "ich logge mich ein bei dem Webshop, dann kriege ich einen JWT als Cookie" (28:34). Über dieses Cookie erfährt das Reparatursystem, wer gerade arbeitet, und tauscht darüber die Benutzerinformation aus (28:59). Die Adresse holt es zusätzlich über eine REST-Schnittstelle (29:10).
+
+Die Registrierung im Reparatursystem entfällt damit ganz. Das Usability-Szenario "Registrierung in einer Minute" erklärt Eberhard später für nicht erfüllbar, weil die Registrierung im Webshop liegt (46:00).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Webshop-Kund:innen beauftragen Reparaturen ohne zweites Konto; Adresse und Zahlungsart sind vorbelegt.
+* Das Reparatursystem baut weder Registrierung noch Passwortverwaltung.
+* JWT und REST sind Standards; die Integration braucht keine Sonderprotokolle.
+
+*Negativ*
+
+* Das Reparatursystem kann Kund:innen ohne Webshop-Konto nicht bedienen.
+* Login und Nutzerdaten hängen vom Webshop ab; sein Verhalten liegt außerhalb unserer Verantwortung.
+
+*Risiken*
+
+* R-001: Die Adresse liegt in der User-Datenbank des Webshops, obwohl sie fachlich eine Kundeninformation ist. Eberhard nennt das "ein bisschen borderline" (29:21). Die Grenze zwischen Nutzerdaten und Kundendaten bleibt unscharf.
+* R-002: Fällt der Webshop aus, funktionieren Login und Adressabfrage nicht. Das trifft das Qualitätsziel Verfügbarkeit.
+* R-003: Andere Fahrradläden haben andere oder keine Webshops. Die feste Kopplung an diesen Webshop steht dem Qualitätsziel Änderbarkeit Richtung SaaS entgegen.
+* R-004: Das JWT-Cookie erreicht das Reparatursystem nur innerhalb derselben Domain (Same-Origin-Policy, 31:24). Ohne passende URL-Struktur scheitert der Login.
+
+*Folgeentscheidung*
+
+Aus R-004 folgt <<adr-002>>: Das Reparatursystem läuft unter dem Pfad `/reparatur` der Webshop-Domain, bestimmte URLs werden dorthin umgeleitet.
