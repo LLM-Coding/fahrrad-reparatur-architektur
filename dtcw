@@ -28,6 +28,16 @@ set -o pipefail
 # docToolchain configuration file may be overruled by the user
 : "${DTC_CONFIG_FILE:=docToolchainConfig.groovy}"
 
+# Directory (relative to the project / current working directory) in which
+# docToolchain looks for project-local tasks. A *.groovy file there carrying the
+# '// @task' marker (see ADR-14) is a runnable task. Such a project task either
+# adds a new task (custom tasks) or, when it shares a name with an installed
+# task, overrides it (monkey-patching). See ADR-16.
+: "${DTC_PROJECT_SCRIPTS_DIR:=scripts}"
+# Exported so the createTask/copyTask helper scripts write to the same directory
+# that dtcw resolves project tasks from.
+export DTC_PROJECT_SCRIPTS_DIR
+
 # Contains the current project git branch, "-" if not available
 : "${DTC_PROJECT_BRANCH:=$(git branch --show-current 2> /dev/null || echo -)}"
 export DTC_PROJECT_BRANCH
@@ -47,7 +57,7 @@ GITHUB_PROJECT_URL=https://github.com/docToolchain/docToolchain
 GITHUB_PROJECT_URL_SSH=git@github.com:docToolchain/docToolchain
 
 # Bump this version up if something is changed in the wrapper script
-DTCW_VERSION=0.51
+DTCW_VERSION=0.60
 # Template replaced by the GitHub value upon releasing dtcw
 DTCW_GIT_HASH=##DTCW_GIT_HASH##
 
@@ -94,14 +104,26 @@ main() {
 
     # No install command, so forward call to docToolchain but first we check if
     # everything is there.
+
+    # S1: Validate task name format early (applies to all environments incl. Docker)
+    if [[ ! "${1}" =~ ^[a-zA-Z][a-zA-Z0-9_-]*$ ]]; then
+        error "Invalid task name: '${1}'. Task names must be alphanumeric (letters, digits, hyphens, underscores)."
+        exit ${ERR_ARG}
+    fi
+
+    # v4 (ADR-18): the Groovy launcher (scripts/Launcher.groovy) owns task
+    # discovery, the 'tasks' listing, project-first resolution and unknown-task
+    # guidance. The task-name format was validated above; everything else is the
+    # launcher's job. It resolves project tasks relative to the project root, so
+    # in docker (project mounted at /project) an absolute DTC_PROJECT_SCRIPTS_DIR
+    # simply won't match a project task and resolution falls back to the
+    # installed one — no special-casing needed in the wrapper.
+
     docker_image_name=""
     docker_extra_arguments=""
     if [[ ${environment} != docker ]]; then
         assert_doctoolchain_installed "${environment}" "${DTC_VERSION}"
         assert_java_version_supported
-
-        # TODO: what if 'doctoolchain' found by $PATH does not match the one from the local environment?
-        # The version provided by $DTC_VERSION could be a different one.
     else
         docker_image_name="doctoolchain/doctoolchain"
         if [ "${1}" = "image" ]; then
@@ -182,15 +204,20 @@ Examples:
   Multiple tasks may be provided at once:
     ./dtcw generatePDF generateHTML
 
-Detailed documentation how to use docToolchain may be found at https://doctoolchain.org/
+  List available tasks:
+    ./dtcw tasks
 
-Use './dtcw tasks --group doctoolchain' to see docToolchain related tasks.
-Use './dtcw tasks' to see all tasks.
+Detailed documentation how to use docToolchain may be found at https://doctoolchain.org/
 EOF
 }
 
 print_version_info() {
-    echo "dtcw ${DTCW_VERSION} - ${DTCW_GIT_HASH}"
+    # DTCW_GIT_HASH is substituted at release time; hide the raw placeholder otherwise.
+    if [ "${DTCW_GIT_HASH}" = '##DTCW_GIT_HASH##' ]; then
+        echo "dtcw ${DTCW_VERSION}"
+    else
+        echo "dtcw ${DTCW_VERSION} - ${DTCW_GIT_HASH}"
+    fi
     if is_doctoolchain_development_version "${DTC_VERSION}"; then
         local dtc_git_hash=unknown
         dtc_git_hash=$(git -C "${DTC_HOME}" rev-parse --short=8 HEAD 2> /dev/null || echo "unknown")
@@ -225,7 +252,10 @@ get_dtc_installations() {
     local version=${2}
     local installations=""
 
-    if [ -x "${DTC_HOME}/bin/doctoolchain" ]; then
+    if is_v4_installation "${DTC_HOME}"; then
+        # v4: detected by lib/ directory
+        installations+=" local"
+    elif [ -x "${DTC_HOME}/bin/doctoolchain" ]; then
         installations+=" local"
     else
         # maybe it is just available in the path
@@ -238,8 +268,10 @@ get_dtc_installations() {
         installations+=" sdk"
     fi
 
-    if [[ "${envs}" =~ docker ]]; then
-        # Having docker installed means docToolchain is available
+    if [[ "${envs}" =~ docker ]] && ! is_v4_installation; then
+        # v3: the docToolchain image is published on Docker Hub, so having
+        # docker installed means docToolchain is available there. v4 does not
+        # have a published image yet, so don't claim it for v4.
         installations+=" docker"
     fi
     [ -z "${installations}" ] && installations=" none"
@@ -252,7 +284,8 @@ sdk_home_doctoolchain() {
     local sdk_doctoolchain="${SDKMAN_DIR}/candidates/doctoolchain/${version}"
 
     # Don't use `sdk home doctoolchain ${version}` - see https://github.com/sdkman/sdkman-cli/issues/1196
-    if [[ -x "${sdk_doctoolchain}/bin/doctoolchain" ]]; then
+    # v4: check for lib/ directory; v3: check for bin/doctoolchain
+    if [[ -d "${sdk_doctoolchain}/lib" ]] || [[ -x "${sdk_doctoolchain}/bin/doctoolchain" ]]; then
         printf "%s" "${sdk_doctoolchain}"
         return 0
     fi
@@ -490,10 +523,12 @@ assert_java_version_supported() {
     java_version=$(echo "$java_version" | awk -F '"' '/version/ {print $0}' | head -1 | cut -d'"' -f2)
     major_version=$(echo "$java_version" | sed '/^1\./s///' | cut -d'.' -f1)
 
-    if [ "${major_version}" -eq 17 ]; then
-        echo "Using Java ${java_version} [${JAVA_CMD}]"
-        return
-    fi
+    case "${major_version}" in
+        17|21|25)
+            echo "Using Java ${java_version} [${JAVA_CMD}]"
+            return
+            ;;
+    esac
 
     error "unsupported Java version ${major_version} [${JAVA_CMD}]"
     java_help_and_die
@@ -501,7 +536,7 @@ assert_java_version_supported() {
 
 java_help_and_die() {
     printf "%s\n" \
-        "docToolchain supports Java version 17 only. In case that" \
+        "docToolchain supports Java versions 17, 21 and 25. In case such a" \
         "Java version is installed make sure 'java' is found with your PATH environment" \
         "variable. As alternative you may provide the location of your Java installation" \
         "with JAVA_HOME." \
@@ -515,11 +550,11 @@ java_help_and_die() {
         "Alternatively you can use SDKMAN! (https://sdkman.io) to manage your Java installations" \
         ""
     if ! is_environment_available sdk; then
-        how_to_install_sdkman "Java 17"
+        how_to_install_sdkman "Java 25"
     fi
     # TODO: This will break when we change Java version
     printf "%s\n" \
-        "    $ sdk install java 17.0.14-tem" \
+        "    $ sdk install java 25.0.3-tem" \
         "" \
         "If you prefer not to install Java on your host, you can run docToolchain in a" \
         "docker container. For this case dtcw provides the 'docker' execution environment." \
@@ -537,7 +572,7 @@ how_to_install_sdkman() {
 }
 
 local_install_java() {
-    version=17
+    version=25
     implementation=hotspot
     heapsize=normal
     imagetype=jdk
@@ -605,13 +640,49 @@ how_to_install_doctoolchain() {
         "    \$ sdk install doctoolchain ${version}" \
         "" \
         "Note that running docToolchain in 'local' or 'sdk' environment needs a" \
-        "Java runtime major version 17 installed on your host." \
+        "Java runtime major version 17, 21 or 25 installed on your host." \
         "" \
         "3. 'docker': pull the docToolchain image and execute docToolchain in a container environment." \
         "" \
         "    \$ ./dtcw docker tasks --group doctoolchain" \
         ""
 }
+
+# --- v4: Direct Groovy execution (no Gradle) ---
+
+# Detect v4 installation by presence of lib/ directory (or major version >= 4)
+is_v4_installation() {
+    local home=${1:-${DTC_HOME}}
+    if [ -d "${home}/lib" ]; then
+        return 0
+    fi
+    # Fallback: check version number (for Docker where local lib/ doesn't exist)
+    local major
+    major=$(echo "${DTC_VERSION}" | cut -d'.' -f1)
+    [[ "${major}" =~ ^[0-9]+$ ]] && [ "${major}" -ge 4 ]
+}
+
+# Build Java classpath from all JARs in lib/
+build_classpath() {
+    local home=${1:-${DTC_HOME}}
+    local cp=""
+    for jar in "${home}/lib/"*.jar; do
+        [ -f "$jar" ] || continue
+        if [ -z "$cp" ]; then
+            cp="$jar"
+        else
+            cp="${cp}:${jar}"
+        fi
+    done
+    echo "$cp"
+}
+
+# v4 task discovery, the `tasks` listing, project-first resolution (ADR-16) and
+# unknown-task guidance now live in the Groovy launcher (scripts/Launcher.groovy,
+# ADR-18) so the logic is unit-testable and shared across all platform wrappers.
+# The wrapper only validates the task-name format and builds the JVM invocation.
+
+# --- End v4 functions ---
 
 build_command() {
     local env=${1}
@@ -636,29 +707,89 @@ build_command() {
 
         docker_args="run --rm -i --platform linux/amd64 -u $(id -u):$(id -g) --name ${container_name} \
             -e DTC_HEADLESS=true -e DTC_SITETHEME -e DTC_PROJECT_BRANCH=${DTC_PROJECT_BRANCH} \
+            -e DTC_PROJECT_SCRIPTS_DIR \
             ${docker_extra_arguments} ${env_file_option} \
             --entrypoint /bin/bash -v '${pwd}:/project' ${DTC_DOCKER_PREFIX}${docker_image}:v${version}"
 
-        cmd="docker ${docker_args} -c \"doctoolchain . ${*} ${DTC_OPTS} && exit\""
-    else
-        # TODO: What is this good for? Has probably to do with Docker image creation.
-        if [[ "${DTC_HEADLESS}" = false ]]; then
-            # important for the docker file to find dependencies
-            DTC_OPTS="${DTC_OPTS} '-Dgradle.user.home=${DTC_ROOT}/.gradle'"
-        fi
-        if [ "${env}" = local ]; then
-            if [ -x "${DTC_HOME}/bin/doctoolchain" ]; then
-                cmd="${DTC_HOME}/bin/doctoolchain"
-            # is doctoolchain available on the path?
-            elif command -v doctoolchain >/dev/null 2>&1; then
-                cmd="doctoolchain"
-            else
-                echo "Could not find doctoolchain executable, neither in '${DTC_HOME}' nor on PATH ('${PATH}')" >&2
-                exit 1
-            fi
-            cmd="${cmd} . ${*} ${DTC_OPTS}"
+        if is_v4_installation "${DTC_HOME}"; then
+            # v4 Docker: direct Groovy invocation inside container
+            local task=${1}
+            shift
+            # Short-lived JVM: cap JIT at C1 (skip the C2 compiler, which never
+            # pays off in a seconds-long run) and use SerialGC. Roughly halves
+            # startup + render for typical docs. Override or disable via
+            # DTC_JAVA_STARTUP_OPTS (set it empty for very large docs where C2
+            # eventually amortises).
+            local startup_opts="${DTC_JAVA_STARTUP_OPTS--XX:TieredStopAtLevel=1 -XX:+UseSerialGC}"
+            local java_opts="-Xmx2048m -Dfile.encoding=UTF-8 ${startup_opts}"
+            java_opts="${java_opts} -DdocDir=. -DmainConfigFile=\"${DTC_CONFIG_FILE}\""
+            java_opts="${java_opts} -DDTC_HEADLESS=true -DDTC_PROJECT_BRANCH=\"${DTC_PROJECT_BRANCH}\""
+            # Installed scripts and their lib/ live under /opt/docToolchain; the
+            # launcher resolves project-local tasks relative to /project (ADR-18).
+            java_opts="${java_opts} -Ddtc.scriptsHome=/opt/docToolchain/scripts"
+            # Expansion must happen inside container, not locally
+            # shellcheck disable=SC2016
+            local docker_cp='$(for f in /opt/docToolchain/lib/*.jar; do [ -f "$f" ] && printf "%s:" "$f"; done)'
+            # Hand the task to the Groovy launcher; single-quote paths so they
+            # survive word splitting / glob expansion in the container shell.
+            cmd="docker ${docker_args} -c \"java ${java_opts} -cp ${docker_cp} groovy.ui.GroovyMain '/opt/docToolchain/scripts/Launcher.groovy' '${task}' ${*:-} && exit\""
         else
-            cmd="$(sdk_home_doctoolchain "${version}")/bin/doctoolchain . ${*} ${DTC_OPTS}"
+            # v3 Docker: Gradle via doctoolchain
+            cmd="docker ${docker_args} -c \"doctoolchain . ${*} ${DTC_OPTS} && exit\""
+        fi
+    else
+        local dtc_home="${DTC_HOME}"
+        if [ "${env}" = sdk ]; then
+            dtc_home="$(sdk_home_doctoolchain "${version}")"
+        fi
+
+        if is_v4_installation "${dtc_home}"; then
+            # v4: Direct Groovy script execution — no Gradle, no daemon
+            local task=${1}
+            shift
+            local classpath
+            classpath=$(build_classpath "${dtc_home}")
+            if [ -z "$classpath" ]; then
+                error "No JARs found in '${dtc_home}/lib/'. Installation may be incomplete."
+                echo "Reinstall docToolchain with: ./dtcw local install doctoolchain"
+                exit ${ERR_DTCW}
+            fi
+
+            # Short-lived JVM: cap JIT at C1 (skip the C2 compiler, which never
+            # pays off in a seconds-long run) and use SerialGC. Roughly halves
+            # startup + render for typical docs. Override or disable via
+            # DTC_JAVA_STARTUP_OPTS (set it empty for very large docs where C2
+            # eventually amortises).
+            local startup_opts="${DTC_JAVA_STARTUP_OPTS--XX:TieredStopAtLevel=1 -XX:+UseSerialGC}"
+            local java_opts="-Xmx2048m -Dfile.encoding=UTF-8 ${startup_opts}"
+            java_opts="${java_opts} -DdocDir=. -DmainConfigFile=\"${DTC_CONFIG_FILE}\""
+            java_opts="${java_opts} -DDTC_HEADLESS=${DTC_HEADLESS}"
+            java_opts="${java_opts} -DDTC_PROJECT_BRANCH=\"${DTC_PROJECT_BRANCH}\""
+            # Tell scripts where the installed scripts/ (and its lib/ helpers and
+            # resources) live, so project-local scripts resolve them from the
+            # installation rather than next to themselves (ADR-17).
+            java_opts="${java_opts} -Ddtc.scriptsHome=\"${dtc_home}/scripts\""
+            # Hand the task to the Groovy launcher (ADR-18); it resolves
+            # project-local vs installed tasks, prints notes, and dispatches.
+            cmd="${JAVA_CMD:-java} ${java_opts} -cp \"${classpath}\" groovy.ui.GroovyMain \"${dtc_home}/scripts/Launcher.groovy\" \"${task}\" ${*:-}"
+        else
+            # v3: Gradle-based execution
+            if [[ "${DTC_HEADLESS}" = false ]]; then
+                DTC_OPTS="${DTC_OPTS} '-Dgradle.user.home=${DTC_ROOT}/.gradle'"
+            fi
+            if [ "${env}" = local ]; then
+                if [ -x "${dtc_home}/bin/doctoolchain" ]; then
+                    cmd="${dtc_home}/bin/doctoolchain"
+                elif command -v doctoolchain >/dev/null 2>&1; then
+                    cmd="doctoolchain"
+                else
+                    echo "Could not find doctoolchain executable, neither in '${dtc_home}' nor on PATH ('${PATH}')" >&2
+                    exit 1
+                fi
+                cmd="${cmd} . ${*} ${DTC_OPTS}"
+            else
+                cmd="${dtc_home}/bin/doctoolchain . ${*} ${DTC_OPTS}"
+            fi
         fi
     fi
     echo "${cmd}"

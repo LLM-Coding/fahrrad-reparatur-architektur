@@ -28,23 +28,26 @@ taskInputsDirs = [
 taskInputsFiles = []
 
 //******************************************************************************
-// Microsite: generateSite + previewSite (disabled until a site theme is chosen)
-//
-// microsite = [:]
-// microsite.with {
-//     /** start:microsite **/
-//     contextPath = '/'
-//     siteFolder = '../site'
-//     /** end:microsite **/
-//     title = 'Keynote'
-//     footerMail = ''
-//     footerTwitter = ''
-//     footerSO = ''
-//     footerGithub = ''
-//     footerSlack = ''
-//     menu = [:]
-//     landingPage = 'landingpage.gsp'
-//     footerText = ''
-//     footerLogo = ''
-//     logo = ''
-// }
+// Microsite: generateSite + previewSite
+// microsite.foo becomes site.foo in jBake (config.site_foo in templates).
+microsite = [:]
+microsite.with {
+    /** start:microsite **/
+    contextPath = '/'
+    /** end:microsite **/
+    title = 'Wir bauen eine Software-Architektur \u2013 ADRs'
+    siteTitle = 'Wir bauen eine Software-Architektur \u2013 ADRs'
+    // Landing page, relative to inputPath (src/docs). Static HTML fragment, no JS.
+    landingPage = 'landingpage.gsp'
+    // Menu: code -> title. Codes come from :jbake-menu: headers or folder names.
+    menu = [arc42: 'arc42']
+    footerMail = ''
+    footerTwitter = ''
+    footerSO = ''
+    footerGithub = ''
+    footerSlack = ''
+    footerText = '<small class="text-white">built with <a href="https://doctoolchain.org">docToolchain</a> &middot; powered by <a href="https://asciidoctor.org">AsciiDoctor</a></small>'
+    footerLogo = ''
+    logo = ''
+    branch = System.getenv("DTC_PROJECT_BRANCH") ?: '-'
+}
