@@ -18,7 +18,7 @@ NOTE: Offen: Entscheidung nicht getroffen, wird ADR (Proposed). Quelle: Transkri
 
 === Infrastruktur Ebene 1
 
-Beide Varianten teilen den Rahmen. Nutzer:innen greifen über den Webbrowser zu (Board Seite 10: "Rechner nutzen das System über den Webbrowser"). Der Webshop bindet das Reparatur-System per Links und Umleitung von `/reparatur` an (<<adr-002>>). Alle anderen externen Systeme sind über REST angebunden: Kasse, Online Payment Service, Rechnungswesen, SMS Versand, EMail System (Board Seite 3 und 10).
+Beide Varianten teilen den Rahmen. Nutzer:innen greifen über den Webbrowser zu (Board Seite 10: "Rechner nutzen das System über den Webbrowser"). Der Webshop bindet das Reparatur-System per Links und Umleitung von `/reparatur` an (<<09_architecture_decisions.adoc#adr-002,ADR-002>>). Alle anderen externen Systeme sind über REST angebunden: Kasse, Online Payment Service, Rechnungswesen, SMS Versand, EMail System (Board Seite 3 und 10).
 
 ==== Variante A: Monolith in einer EC2-Instanz
 
@@ -136,8 +136,8 @@ Die Qualitätsziele aus Kapitel 1 setzen die Rangfolge: Benutzerfreundlichkeit, 
 | ? Wie A. Ob getrennte Container die Mandantenfähigkeit erleichtern, ist nicht belegt.
 
 | Verfügbarkeit
-| Eine Instanz. Die Maßnahmen-Karte "EKS / EC2 SLAs" deckt die Instanz ab. Wiederanlauf in 30 Minuten (Werkstatt) und 99,9 % im Web (<<adr-008>>) hängen am SLA dieser einen Instanz.
-| Vier Container. Ein Ausfall trifft einen Baustein, nicht alle. Ob das die Ziele aus <<adr-008>> messbar verbessert, ist nicht belegt: ?
+| Eine Instanz. Die Maßnahmen-Karte "EKS / EC2 SLAs" deckt die Instanz ab. Wiederanlauf in 30 Minuten (Werkstatt) und 99,9 % im Web (<<09_architecture_decisions.adoc#adr-008,ADR-008>>) hängen am SLA dieser einen Instanz.
+| Vier Container. Ein Ausfall trifft einen Baustein, nicht alle. Ob das die Ziele aus <<09_architecture_decisions.adoc#adr-008,ADR-008>> messbar verbessert, ist nicht belegt: ?
 
 | Betrieb ohne IT-Experten (Randbedingung, Board Seite 5)
 | Ein Artefakt, eine Instanz. Weniger bewegliche Teile.
@@ -149,16 +149,16 @@ Die Qualitätsziele aus Kapitel 1 setzen die Rangfolge: Benutzerfreundlichkeit, 
 Die Maßnahmen-Karten der Qualitätsszenarien (Board Seite 5 und 6) sind Annahmen an die Infrastruktur, keine Entscheidungen:
 
 * *Cloud.* Antwort auf "Im Shop sind keine IT-Experten beschäftigt. Das System kann dennoch betrieben werden." und auf das SaaS-Änderungsszenario. Beide Varianten zeichnet das Board bei AWS.
-* *EKS / EC2 SLAs.* Antwort auf alle Verfügbarkeitsszenarien: 99 % Werkstatt 9 bis 18 Uhr, 99,9 % Web 7 bis 24 Uhr, Wiederanlauf in 30, 5 und 2 Minuten (<<adr-008>>).
+* *EKS / EC2 SLAs.* Antwort auf alle Verfügbarkeitsszenarien: 99 % Werkstatt 9 bis 18 Uhr, 99,9 % Web 7 bis 24 Uhr, Wiederanlauf in 30, 5 und 2 Minuten (<<09_architecture_decisions.adoc#adr-008,ADR-008>>).
 * *RDS SLAs?* Antwort auf "Daten, die älter als 5 Minuten sind, stehen mit 99,9 % Sicherheit wieder zur Verfügung." Das Fragezeichen steht auf dem Board.
 * *Eigener Support*, nachts *Eigener Support 24/7.* Antwort auf den Betrieb ohne IT-Experten und auf das nächtliche Web-Ziel.
 
 Zwei offene Fragen stehen auf beiden Deployment-Seiten des Boards (Seite 10 und 11):
 
 * "Kann man aus der Cloud in das Rechnungswesen kommunizieren?"
-* "Kann man aus der Cloud in die Kasse kommunizieren?" (R-010 aus <<adr-004>>)
+* "Kann man aus der Cloud in die Kasse kommunizieren?" (R-010 aus <<09_architecture_decisions.adoc#adr-004,ADR-004>>)
 
-Beide Fragen entscheiden, ob Cloud überhaupt trägt. Steht Kasse oder Rechnungswesen im Laden ohne Weg von außen, braucht das System entweder einen Tunnel oder einen Teil on-premise. R-022 aus <<adr-008>> hält fest, dass das Web-Ziel 99,9 % und die lokale Integration in verschiedene Richtungen ziehen.
+Beide Fragen entscheiden, ob Cloud überhaupt trägt. Steht Kasse oder Rechnungswesen im Laden ohne Weg von außen, braucht das System entweder einen Tunnel oder einen Teil on-premise. R-022 aus <<09_architecture_decisions.adoc#adr-008,ADR-008>> hält fest, dass das Web-Ziel 99,9 % und die lokale Integration in verschiedene Richtungen ziehen.
 
 NOTE: Offen: Cloud oder on-premise ist nicht entschieden (A1 in den ADRs). Das Board zeichnet nur Cloud-Varianten.
 

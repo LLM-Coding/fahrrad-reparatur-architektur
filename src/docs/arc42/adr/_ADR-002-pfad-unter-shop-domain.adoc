@@ -20,7 +20,7 @@ Der Webshop ist ein Fertigprodukt. Sein Login und seine Cookie-Einstellungen lie
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
-*Betroffene Qualitätsszenarien:* <<qs-u-02>>, weil der Login aus dem Webshop nur unter derselben Domain durchläuft und Kund:innen sich sonst ein zweites Mal anmelden müssten; <<qs-a-01>>, weil jeder weitere Laden eine eigene Umleitung unter seiner Domain braucht (R-006).
+*Betroffene Qualitätsszenarien:* <<10_quality_requirements.adoc#qs-u-02,QS-U-02>>, weil der Login aus dem Webshop nur unter derselben Domain durchläuft und Kund:innen sich sonst ein zweites Mal anmelden müssten; <<10_quality_requirements.adoc#qs-a-01,QS-A-01>>, weil jeder weitere Laden eine eigene Umleitung unter seiner Domain braucht (R-006).
 
 === Optionen
 

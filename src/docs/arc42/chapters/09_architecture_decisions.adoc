@@ -59,19 +59,19 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 | <<adr-008>> | Verfügbarkeitsziele nach Nutzergruppe und Tageszeit differenzieren | Accepted
 |===
 
-include::../adr/ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
+include::../adr/_ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
 
-include::../adr/ADR-002-pfad-unter-shop-domain.adoc[leveloffset=+1]
+include::../adr/_ADR-002-pfad-unter-shop-domain.adoc[leveloffset=+1]
 
-include::../adr/ADR-003-reparatur-eigener-bereich.adoc[leveloffset=+1]
+include::../adr/_ADR-003-reparatur-eigener-bereich.adoc[leveloffset=+1]
 
-include::../adr/ADR-004-bezahlung-payment-service-und-kasse.adoc[leveloffset=+1]
+include::../adr/_ADR-004-bezahlung-payment-service-und-kasse.adoc[leveloffset=+1]
 
-include::../adr/ADR-005-statusseite-statt-datenabgleich.adoc[leveloffset=+1]
+include::../adr/_ADR-005-statusseite-statt-datenabgleich.adoc[leveloffset=+1]
 
-include::../adr/ADR-006-ersatzteile-selbst-buchfuehren.adoc[leveloffset=+1]
+include::../adr/_ADR-006-ersatzteile-selbst-buchfuehren.adoc[leveloffset=+1]
 
-include::../adr/ADR-007-benachrichtigung-email.adoc[leveloffset=+1]
+include::../adr/_ADR-007-benachrichtigung-email.adoc[leveloffset=+1]
 
-include::../adr/ADR-008-verfuegbarkeit-differenziert.adoc[leveloffset=+1]
+include::../adr/_ADR-008-verfuegbarkeit-differenziert.adoc[leveloffset=+1]
 

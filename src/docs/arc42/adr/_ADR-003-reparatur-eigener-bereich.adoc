@@ -20,7 +20,7 @@ Die Anforderungen hat Eberhard mit dem Anforderer besprochen. Die Frage kam im C
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
-*Betroffene Qualitätsszenarien:* <<qs-u-02>>, weil der eigene Bereich dem fachlichen Ablauf einer Reparatur folgt und der eigene Bezahlvorgang die Beauftragung in zwei Minuten nicht verlängern darf (R-008).
+*Betroffene Qualitätsszenarien:* <<10_quality_requirements.adoc#qs-u-02,QS-U-02>>, weil der eigene Bereich dem fachlichen Ablauf einer Reparatur folgt und der eigene Bezahlvorgang die Beauftragung in zwei Minuten nicht verlängern darf (R-008).
 
 === Optionen
 

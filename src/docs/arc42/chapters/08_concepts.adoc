@@ -22,7 +22,7 @@ NOTE: Die folgende Liste ist abgeleitet aus Kontext und ADRs, nicht aus dem Vide
 |===
 | ID | STRIDE | Bedrohung | Betroffenes Element
 
-| T-001 | Spoofing | Ein Angreifer stiehlt das JWT-Cookie des Webshops und tritt als Kund:in auf. Das Reparatursystem prüft nur dieses Cookie (<<adr-001>>). | Login, JWT-Cookie, Origin `/reparatur`
+| T-001 | Spoofing | Ein Angreifer stiehlt das JWT-Cookie des Webshops und tritt als Kund:in auf. Das Reparatursystem prüft nur dieses Cookie (<<09_architecture_decisions.adoc#adr-001,ADR-001>>). | Login, JWT-Cookie, Origin `/reparatur`
 | T-002 | Tampering | Der Bezahlstatus wird auf dem Weg vom Online Payment Service oder von der Kasse zum Modul Bezahlung manipuliert; eine unbezahlte Reparatur gilt als bezahlt (R-011, R-012). | REST-Statusabfrage Payment Service, REST Kasse
 | T-003 | Repudiation | Eine Mechaniker:in bestreitet eine Protokollposition (etwa "Bremsklötze eingebaut, 10 €"), oder eine Kund:in bestreitet die Beauftragung. | Reparaturprotokoll, Auftrag
 | T-004 | Information Disclosure | Kundenadressen und Zahlungsarten werden über die REST-Schnittstelle der Webshop User Database oder die Statusseite offengelegt (R-001). | REST Webshop User Database, Statusseite
@@ -38,10 +38,10 @@ Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleite
 |===
 | Maßnahme | Beschreibung | Schließt
 
-| Standard-JWT-Prüfung | Das Reparatursystem prüft Signatur, Ablauf und Aussteller des JWT-Cookies bei jeder Anfrage. Es vertraut keinem Token, das der Webshop nicht ausgestellt hat (<<adr-001>>). | T-001 (teilweise), T-006
+| Standard-JWT-Prüfung | Das Reparatursystem prüft Signatur, Ablauf und Aussteller des JWT-Cookies bei jeder Anfrage. Es vertraut keinem Token, das der Webshop nicht ausgestellt hat (<<09_architecture_decisions.adoc#adr-001,ADR-001>>). | T-001 (teilweise), T-006
 | HTTPS für alle Verbindungen | Browser zu `/reparatur` und alle REST-Aufrufe nach außen laufen verschlüsselt. Das Cookie trägt die Attribute `Secure` und `HttpOnly`. | T-001, T-004
-| Same-Origin-Policy und Pfad `/reparatur` | Das Cookie erreicht nur die Webshop-Domain (<<adr-002>>). Der geteilte Origin mit dem Webshop bleibt als R-007 benannt. | T-001 (Cookie verlässt die Domain nicht)
-| Bezahlstatus nur aus dem Backend | Das Modul Bezahlung übernimmt den Zahlungsstatus ausschließlich per REST-Abfrage beim Payment Service oder bei der Kasse, nie aus dem Redirect des Browsers (<<adr-004>>). | T-002
+| Same-Origin-Policy und Pfad `/reparatur` | Das Cookie erreicht nur die Webshop-Domain (<<09_architecture_decisions.adoc#adr-002,ADR-002>>). Der geteilte Origin mit dem Webshop bleibt als R-007 benannt. | T-001 (Cookie verlässt die Domain nicht)
+| Bezahlstatus nur aus dem Backend | Das Modul Bezahlung übernimmt den Zahlungsstatus ausschließlich per REST-Abfrage beim Payment Service oder bei der Kasse, nie aus dem Redirect des Browsers (<<09_architecture_decisions.adoc#adr-004,ADR-004>>). | T-002
 | Rollen aus dem Kontext | Drei Rollen: Kund:in, Shop-Mitarbeiter:in, Fahrrad-Mechaniker:in (Board Seite 1). Werkstattfunktionen sind für Kund:innen nicht erreichbar. | T-006
 | Nachvollziehbares Protokoll | Jede Protokollposition trägt Zeitstempel und Urheber:in (siehe 8.4 Audit). | T-003
 | Provider-Schutz gegen Überlast | Der Cloud-Betrieb (Board Seite 6) bringt Lastverteilung und Schutz des Anbieters mit; Details hängen am offenen Betriebsmodell. | T-005 (teilweise)
@@ -68,7 +68,7 @@ NOTE: Offen: kein Code, keine Tests. Testframework, Testdaten und Abdeckungsziel
 Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6).
 
 * *Logs*: Jede Anfrage unter `/reparatur` und jeder REST-Aufruf nach außen mit Zeitstempel, Modul und Ergebnis. Fehler der Schnittstellen aus 8.5 sind eigene Log-Ereignisse.
-* *Metriken*: Verfügbarkeit getrennt für Werkstatt- und Web-Teil, weil die Ziele verschieden sind (<<adr-008>>): 99 % zwischen 9 und 18 Uhr, 99,9 % zwischen 7 und 24 Uhr, 99 % nachts. Dazu Antwortzeit der Statusseite und Zeit bis zur Preisermittlung (QS-Z-03, 2 Minuten).
+* *Metriken*: Verfügbarkeit getrennt für Werkstatt- und Web-Teil, weil die Ziele verschieden sind (<<09_architecture_decisions.adoc#adr-008,ADR-008>>): 99 % zwischen 9 und 18 Uhr, 99,9 % zwischen 7 und 24 Uhr, 99 % nachts. Dazu Antwortzeit der Statusseite und Zeit bis zur Preisermittlung (QS-Z-03, 2 Minuten).
 * *Traces*: Ein Auftrag lässt sich vom Webshop-Login über Terminplanung, Reparatur durchführen und Bezahlung bis zum Rechnungswesen verfolgen (Aufrufkette Board Seite 9).
 * *Alarmierung*: Ausfall des Web-Systems und der Werkstatt alarmiert den eigenen Support; nachts den 24/7-Support (QS-Z-05).
 * *Audit*: Protokollpositionen und Zahlungsstatus sind unveränderlich mit Urheber:in und Zeitstempel gespeichert. Das schließt T-003 und macht Übergaben an das Rechnungswesen nachvollziehbar.
@@ -86,7 +86,7 @@ Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recove
 | Webshop oder Webshop User Database nicht erreichbar (R-002) | Adressabfrage per REST zweimal wiederholen, kurzer Timeout. | Login schlägt fehl; die Statusseite zeigt eine Wartungsmeldung. Werkstattfunktionen laufen weiter, weil sie kein Webshop-Login brauchen. | Sobald der Webshop antwortet, funktioniert der Login ohne Eingriff.
 | Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
 | Payment-Redirect bricht ab (R-012) | Buchungsstatus per REST beim Payment Service nachfragen, auch ohne Rückkehr des Browsers. | Der Auftrag bleibt "Zahlung offen"; Kund:in kann erneut bezahlen oder im Laden zahlen. | Ein periodischer Abgleich holt bezahlte, aber nicht bestätigte Zahlungen nach.
-| EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<adr-005>>). SMS ist nicht gebaut (<<adr-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
+| EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<09_architecture_decisions.adoc#adr-005,ADR-005>>). SMS ist nicht gebaut (<<09_architecture_decisions.adoc#adr-007,ADR-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
 | Rechnungswesen aus der Cloud nicht erreichbar (Board Seite 10) | Rechnungselemente in eine Warteschlange, Wiederholung. | Reparatur und Bezahlung laufen weiter; das Rechnungswesen erhält die Elemente später. | Nachlieferung in Reihenfolge, idempotent.
 |===
 

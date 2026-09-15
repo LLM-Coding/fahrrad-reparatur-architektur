@@ -21,19 +21,19 @@ Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitma
 |Randbedingung |Erläuterung |Quelle
 
 |Bestehender Webshop als Fertigprodukt
-|Der Shop betreibt einen Standard-Webshop für Kaufen und Abholen. Er ist nicht änderbar. Eine Reparatur als Produkt darin abzubilden wäre "unnatürlich, das ist etwas anderes". Das Reparatur-System ist deshalb ein eigener Bereich neben dem Webshop (<<adr-003>>).
+|Der Shop betreibt einen Standard-Webshop für Kaufen und Abholen. Er ist nicht änderbar. Eine Reparatur als Produkt darin abzubilden wäre "unnatürlich, das ist etwas anderes". Das Reparatur-System ist deshalb ein eigener Bereich neben dem Webshop (<<09_architecture_decisions.adoc#adr-003,ADR-003>>).
 |14:25, 17:50, 18:09
 
 |Webshop User Database mit JWT-Cookie und REST
-|Registrierung und Login bleiben im Webshop. Nach dem Login liefert der Webshop einen JWT als Cookie. Adresse und bevorzugte Zahlungsart liest das Reparatur-System per REST aus der User Database (<<adr-001>>). Ein eigenes Registrierungs-Szenario ist damit "nicht erfüllbar".
+|Registrierung und Login bleiben im Webshop. Nach dem Login liefert der Webshop einen JWT als Cookie. Adresse und bevorzugte Zahlungsart liest das Reparatur-System per REST aus der User Database (<<09_architecture_decisions.adoc#adr-001,ADR-001>>). Ein eigenes Registrierungs-Szenario ist damit "nicht erfüllbar".
 |15:53, 16:04, 28:29; Board Seiten 3 und 5
 
 |Same-Origin-Policy des Browsers
-|Cookies gelten nur innerhalb derselben Domain. Das Reparatur-System muss deshalb unter der Webshop-Domain laufen; der Webshop leitet den Pfad `/reparatur` um (<<adr-002>>).
+|Cookies gelten nur innerhalb derselben Domain. Das Reparatur-System muss deshalb unter der Webshop-Domain laufen; der Webshop leitet den Pfad `/reparatur` um (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
 |29:32; Board Seite 3
 
 |Kasse im Laden
-|Bezahlt wird typischerweise bei Abholung im Shop. Das Kassensystem ist "eine Art PC" im Laden; Anbindung per REST (<<adr-004>>). Die lokale Integration erschwert einen reinen Cloud-Betrieb.
+|Bezahlt wird typischerweise bei Abholung im Shop. Das Kassensystem ist "eine Art PC" im Laden; Anbindung per REST (<<09_architecture_decisions.adoc#adr-004,ADR-004>>). Die lokale Integration erschwert einen reinen Cloud-Betrieb.
 |21:03, 21:23, 30:52, 59:46; Board Seite 3
 
 |Rechnungswesen und Steuerberater:in
@@ -41,7 +41,7 @@ Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitma
 |20:35, 20:51; Board Seiten 3 und 9
 
 |Online Payment Service
-|Online-Zahlung läuft über einen externen, PayPal-artigen Dienst (Konto oder Kreditkarte). Anbindung per REST für den Buchungsstatus plus UI-Integration über einen Redirect-Button (<<adr-004>>).
+|Online-Zahlung läuft über einen externen, PayPal-artigen Dienst (Konto oder Kreditkarte). Anbindung per REST für den Buchungsstatus plus UI-Integration über einen Redirect-Button (<<09_architecture_decisions.adoc#adr-004,ADR-004>>).
 |19:12, 30:16; Board Seite 3
 
 |Bedienung im Browser
@@ -49,7 +49,7 @@ Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitma
 |Board Seite 10
 
 |E-Mail und SMS als gekaufte Dienste
-|Benachrichtigungen laufen über einen zugekauften Dienst wie AWS Simple Email Service, per REST. SMS ist vorgesehen (<<adr-007>>).
+|Benachrichtigungen laufen über einen zugekauften Dienst wie AWS Simple Email Service, per REST. SMS ist vorgesehen (<<09_architecture_decisions.adoc#adr-007,ADR-007>>).
 |23:30, 31:02; Board Seite 3
 |===
 
@@ -103,7 +103,7 @@ Die ersten beiden Konventionen stammen aus dem Video. Die übrigen setzt dieses 
 |44:36, 49:30; Board Seite 4
 
 |Architekturentscheidungen als ADRs nach Nygard mit Pugh-Matrix
-|Jede Entscheidung mit mehr als einer ernsthaften Option erhält einen ADR (Kontext, Optionen, Entscheidung, Konsequenzen) mit 3-Punkt-Pugh-Matrix. Stand: <<adr-001>> bis <<adr-008>>.
+|Jede Entscheidung mit mehr als einer ernsthaften Option erhält einen ADR (Kontext, Optionen, Entscheidung, Konsequenzen) mit 3-Punkt-Pugh-Matrix. Stand: <<09_architecture_decisions.adoc#adr-001,ADR-001>> bis <<09_architecture_decisions.adoc#adr-008,ADR-008>>.
 |`src/docs/arc42/adr/`
 
 |Docs-as-Code mit docToolchain

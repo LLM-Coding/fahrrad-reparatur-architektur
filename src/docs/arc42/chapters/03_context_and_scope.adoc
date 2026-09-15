@@ -68,19 +68,19 @@ Rel(repsys, sms, "sendet Info über Reparaturstatus")
 
 |Webshop
 |Umgeleitete Aufrufe von `/reparatur`
-|Keine; der Webshop hält keine Reparaturdaten (<<adr-005>>)
+|Keine; der Webshop hält keine Reparaturdaten (<<09_architecture_decisions.adoc#adr-005,ADR-005>>)
 
 |Webshop User Database
 |Identität der eingeloggten Person, Adresse, bevorzugte Zahlungsart
-|Anfrage nach Nutzerdaten (<<adr-001>>)
+|Anfrage nach Nutzerdaten (<<09_architecture_decisions.adoc#adr-001,ADR-001>>)
 
 |Kasse
 |Bestätigung der Zahlung im Laden
-|Zu zahlender Preis (<<adr-004>>)
+|Zu zahlender Preis (<<09_architecture_decisions.adoc#adr-004,ADR-004>>)
 
 |Online Payment Service
 |Buchungsstatus der Online-Zahlung
-|Zahlungsauftrag, Weiterleitung der Kund:in (<<adr-004>>)
+|Zahlungsauftrag, Weiterleitung der Kund:in (<<09_architecture_decisions.adoc#adr-004,ADR-004>>)
 
 |Rechnungswesen
 |Keine
@@ -88,14 +88,14 @@ Rel(repsys, sms, "sendet Info über Reparaturstatus")
 
 |EMail System
 |Keine
-|Info über Updates, insbesondere Ende der Reparatur (<<adr-007>>)
+|Info über Updates, insbesondere Ende der Reparatur (<<09_architecture_decisions.adoc#adr-007,ADR-007>>)
 
 |SMS Versand
 |Keine
-|Info über Updates, Kanal vorgesehen (<<adr-007>>)
+|Info über Updates, Kanal vorgesehen (<<09_architecture_decisions.adoc#adr-007,ADR-007>>)
 |===
 
-Das Reparatur-System trägt die Verantwortung für alles rund um die Reparatur: Termine, Plan, Protokoll, Bestand an Ersatzteilen und Werkzeug (<<adr-006>>) und die Bezahlung. Es besitzt keine eigene Nutzerverwaltung und keine eigene Zahlungsabwicklung; beides liegt bei Nachbarsystemen. Der Großhändler für Ersatzteile und Werkzeug ist kein externes System im Kontext, sondern Empfänger einer Bestellung (Board Seite 7).
+Das Reparatur-System trägt die Verantwortung für alles rund um die Reparatur: Termine, Plan, Protokoll, Bestand an Ersatzteilen und Werkzeug (<<09_architecture_decisions.adoc#adr-006,ADR-006>>) und die Bezahlung. Es besitzt keine eigene Nutzerverwaltung und keine eigene Zahlungsabwicklung; beides liegt bei Nachbarsystemen. Der Großhändler für Ersatzteile und Werkzeug ist kein externes System im Kontext, sondern Empfänger einer Bestellung (Board Seite 7).
 
 NOTE: Offen: Ob die Bestellung beim Großhändler über eine Schnittstelle oder manuell läuft, zeigt das Board nicht. Quelle: Transkript Folge 112/113 ausstehend.
 
@@ -136,11 +136,11 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |Webshop
 |Umleitung von URLs (`/reparatur`)
-|Der Webshop leitet den Pfad `/reparatur` an das Reparatur-System weiter. So bleibt das System in derselben Domain und die Same-Origin-Policy lässt den Cookie durch (<<adr-002>>).
+|Der Webshop leitet den Pfad `/reparatur` an das Reparatur-System weiter. So bleibt das System in derselben Domain und die Same-Origin-Policy lässt den Cookie durch (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
 
 |Webshop User Database
 |JWT als Cookie, REST
-|Der Webshop setzt nach dem Login einen JWT als Cookie. Das Reparatur-System liest daraus die Identität und fragt Adresse und Zahlungsart per REST ab (<<adr-001>>).
+|Der Webshop setzt nach dem Login einen JWT als Cookie. Das Reparatur-System liest daraus die Identität und fragt Adresse und Zahlungsart per REST ab (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
 
 |Kasse
 |REST
@@ -148,7 +148,7 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |Online Payment Service
 |REST und UI-Integration (Redirect-Button)
-|Backend-Integration per REST für den Buchungsstatus, dazu ein Button, der die Kund:in zum Dienst umleitet (<<adr-004>>).
+|Backend-Integration per REST für den Buchungsstatus, dazu ein Button, der die Kund:in zum Dienst umleitet (<<09_architecture_decisions.adoc#adr-004,ADR-004>>).
 
 |Rechnungswesen
 |REST
@@ -160,7 +160,7 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |SMS Versand
 |REST
-|Kanal vorgesehen, nicht entschieden (<<adr-007>>).
+|Kanal vorgesehen, nicht entschieden (<<09_architecture_decisions.adoc#adr-007,ADR-007>>).
 |===
 
 Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (29:53, 30:04).

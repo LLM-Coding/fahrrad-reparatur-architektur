@@ -18,7 +18,7 @@ Dieses Dokument beschreibt die Architektur des Reparatur-Systems für einen loka
 
 ==== Das System nimmt Reparaturen online an und organisiert die Werkstatt
 
-Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Mitarbeitenden will Reparaturen über das Web annehmen und die Werkstatt organisieren (16:46). Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden, statt dafür in den Laden zu kommen (14:02). Der Shop betreibt bereits einen Webshop (14:25). Das Reparatur-System ergänzt ihn um Reparaturen als eigenen Bereich unter `/reparatur` (<<adr-002>>, <<adr-003>>).
+Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Mitarbeitenden will Reparaturen über das Web annehmen und die Werkstatt organisieren (16:46). Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden, statt dafür in den Laden zu kommen (14:02). Der Shop betreibt bereits einen Webshop (14:25). Das Reparatur-System ergänzt ihn um Reparaturen als eigenen Bereich unter `/reparatur` (<<09_architecture_decisions.adoc#adr-002,ADR-002>>, <<09_architecture_decisions.adoc#adr-003,ADR-003>>).
 
 Drei Geschäftsziele treiben den Entwurf:
 
@@ -76,13 +76,13 @@ Eberhard erhebt die Qualitätsziele selbst und nutzt ISO 25010 als Checkliste, s
 
 |3
 |Verfügbarkeit, differenziert nach Nutzergruppe
-|Shop-System: 99 % zwischen 9 und 18 Uhr, nach Ausfall spätestens nach 30 Minuten wieder da. Web-System für Kund:innen: 99,9 % zwischen 7 und 24 Uhr, nachts 99 %. Eberhard fasst zusammen: "Wir haben eher entspannte Anforderungen bezüglich der Verfügbarkeit." Details in <<adr-008>>.
+|Shop-System: 99 % zwischen 9 und 18 Uhr, nach Ausfall spätestens nach 30 Minuten wieder da. Web-System für Kund:innen: 99,9 % zwischen 7 und 24 Uhr, nachts 99 %. Eberhard fasst zusammen: "Wir haben eher entspannte Anforderungen bezüglich der Verfügbarkeit." Details in <<09_architecture_decisions.adoc#adr-008,ADR-008>>.
 |55:07, 55:42, 56:21, 59:18
 |===
 
 Security und Vertraulichkeit sind bewusst nachrangig. "Es wäre wahrscheinlich gut, wenn das System nicht Informationen über irgendwelche Kunden nach draußen leckt. Aber selbst wenn das passiert, das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (58:29 bis 58:48). Die übrigen ISO-25010-Kategorien sind "nicht so wahnsinnig wichtig" (58:22).
 
-Die konkreten Qualitätsszenarien vom Miro-Board (Seiten 5 und 6) stehen in <<section-quality-scenarios>>. Wie die Architektur die drei Ziele erreicht, beschreibt <<section-solution-strategy>>.
+Die konkreten Qualitätsszenarien vom Miro-Board (Seiten 5 und 6) stehen in <<10_quality_requirements.adoc#section-quality-scenarios,Qualitätsanforderungen>>. Wie die Architektur die drei Ziele erreicht, beschreibt <<04_solution_strategy.adoc#section-solution-strategy,Lösungsstrategie>>.
 
 === Stakeholder
 
@@ -94,15 +94,15 @@ Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es 
 
 |Kund:in
 |Kund:innen des Fahrradshops; im Webshop registriert
-|Meldet das Fahrrad online zur Reparatur an, ohne sich neu zu registrieren (Webshop-Login genügt, <<adr-001>>). 90 % schaffen die Beauftragung in zwei Minuten (Board Seite 5). Fragt den Status ab, wird bei Fertigstellung informiert (<<adr-007>>), zahlt online oder im Laden.
+|Meldet das Fahrrad online zur Reparatur an, ohne sich neu zu registrieren (Webshop-Login genügt, <<09_architecture_decisions.adoc#adr-001,ADR-001>>). 90 % schaffen die Beauftragung in zwei Minuten (Board Seite 5). Fragt den Status ab, wird bei Fertigstellung informiert (<<09_architecture_decisions.adoc#adr-007,ADR-007>>), zahlt online oder im Laden.
 
 |Shop-Mitarbeiter:in
 |Drei bis vier Personen im Laden (16:46)
-|Nimmt Fahrräder an und rechnet Reparaturen an der Kasse ab (<<adr-004>>). Bedient das System nach einer Stunde Einarbeitung eigenständig. Erwartet Verfügbarkeit im Laden zwischen 9 und 18 Uhr; überbrückt 30 Minuten Ausfall "mit Zettel und Bleistift" (55:42).
+|Nimmt Fahrräder an und rechnet Reparaturen an der Kasse ab (<<09_architecture_decisions.adoc#adr-004,ADR-004>>). Bedient das System nach einer Stunde Einarbeitung eigenständig. Erwartet Verfügbarkeit im Laden zwischen 9 und 18 Uhr; überbrückt 30 Minuten Ausfall "mit Zettel und Bleistift" (55:42).
 
 |Fahrrad-Mechaniker:in
 |Werkstatt des Shops
-|Nimmt Defekte auf, plant Reparaturen ein, arbeitet den täglichen Reparaturplan ab, protokolliert Positionen, bestellt Ersatzteile und Werkzeug (<<adr-006>>). Bedient das System nach einer Stunde Einarbeitung eigenständig.
+|Nimmt Defekte auf, plant Reparaturen ein, arbeitet den täglichen Reparaturplan ab, protokolliert Positionen, bestellt Ersatzteile und Werkzeug (<<09_architecture_decisions.adoc#adr-006,ADR-006>>). Bedient das System nach einer Stunde Einarbeitung eigenständig.
 
 |Shop-Inhaber:in
 |Geschäftsführer, Ansprechpartner des Architekten (10:05)
@@ -114,7 +114,7 @@ Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es 
 
 |Webshop-Betreiber
 |Hersteller und Betreiber des Standard-Webshops
-|Der Webshop bleibt unverändert und hält keine Reparaturdaten (<<adr-005>>). Das Reparatur-System hängt sich per URL-Umleitung von `/reparatur`, JWT-Cookie und REST an (<<adr-001>>, <<adr-002>>).
+|Der Webshop bleibt unverändert und hält keine Reparaturdaten (<<09_architecture_decisions.adoc#adr-005,ADR-005>>). Das Reparatur-System hängt sich per URL-Umleitung von `/reparatur`, JWT-Cookie und REST an (<<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>).
 |===
 
 NOTE: Offen: Ob der Webshop-Betreiber die URL-Umleitung und den Zugriff auf die User Database tatsächlich anbietet, wurde in Folge 111 nicht geprüft. Quelle: Transkript Folge 112/113 ausstehend.

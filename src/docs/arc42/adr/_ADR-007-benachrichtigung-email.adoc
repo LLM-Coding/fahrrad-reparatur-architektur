@@ -20,7 +20,7 @@ Der Kanal ist eine Frage der Erreichbarkeit. Eberhard hält sich selbst für "eh
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
-*Betroffene Qualitätsszenarien:* keines. Die Entscheidung folgt aus einer Randbedingung, nicht aus einem Szenario. <<qs-u-03>> nennt die Benachrichtigung als Antwort der Architektur, treibt aber nicht die Wahl des Kanals.
+*Betroffene Qualitätsszenarien:* keines. Die Entscheidung folgt aus einer Randbedingung, nicht aus einem Szenario. <<10_quality_requirements.adoc#qs-u-03,QS-U-03>> nennt die Benachrichtigung als Antwort der Architektur, treibt aber nicht die Wahl des Kanals.
 
 === Optionen
 

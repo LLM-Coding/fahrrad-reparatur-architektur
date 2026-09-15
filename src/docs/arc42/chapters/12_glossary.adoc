@@ -25,10 +25,10 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Modul des Reparatur-Systems (Board Seite 7). Enthält die Story "Reparatur bezahlen" und spricht Kasse und Online Payment Service an.
 
 |EMail System
-|Externes System. Zugekaufter Versanddienst, etwa AWS Simple Email Service, per REST. Primärkanal für Kundenbenachrichtigungen (<<adr-007>>).
+|Externes System. Zugekaufter Versanddienst, etwa AWS Simple Email Service, per REST. Primärkanal für Kundenbenachrichtigungen (<<09_architecture_decisions.adoc#adr-007,ADR-007>>).
 
 |Ersatzteil
-|Teil, das bei einer Reparatur verbaut wird, etwa ein Schaltwerk oder Bremsklötze. Den Bestand führt das Reparatur-System selbst, ohne externes Inventarsystem (<<adr-006>>).
+|Teil, das bei einer Reparatur verbaut wird, etwa ein Schaltwerk oder Bremsklötze. Den Bestand führt das Reparatur-System selbst, ohne externes Inventarsystem (<<09_architecture_decisions.adoc#adr-006,ADR-006>>).
 
 |Fahrrad-Mechaniker:in
 |Akteur. Nimmt Defekte auf, plant Reparaturen ein, erstellt den täglichen Reparaturplan, protokolliert und bestellt Ersatzteile und Werkzeug.
@@ -37,10 +37,10 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Lieferant, bei dem das Modul Materialbeschaffung Ersatzteile und Werkzeug bestellt (Board Seite 7). Kein externes System im Kontextdiagramm.
 
 |JWT
-|JSON Web Token. Signiertes Token, das der Webshop nach dem Login als Cookie setzt. Das Reparatur-System liest daraus die Identität der Kund:in (<<adr-001>>). Im Whisper-Transkript als "Jod Token" wiedergegeben.
+|JSON Web Token. Signiertes Token, das der Webshop nach dem Login als Cookie setzt. Das Reparatur-System liest daraus die Identität der Kund:in (<<09_architecture_decisions.adoc#adr-001,ADR-001>>). Im Whisper-Transkript als "Jod Token" wiedergegeben.
 
 |Kasse
-|Externes System. Kassensystem im Laden, "eine Art PC". Nimmt den Preis der Reparatur per REST entgegen; hier zahlen Kund:innen bei Abholung (<<adr-004>>).
+|Externes System. Kassensystem im Laden, "eine Art PC". Nimmt den Preis der Reparatur per REST entgegen; hier zahlen Kund:innen bei Abholung (<<09_architecture_decisions.adoc#adr-004,ADR-004>>).
 
 |Kund:in
 |Akteur. Im Webshop registrierte Person, die ein Fahrrad zur Reparatur anmeldet, den Status abfragt, bezahlt und das Fahrrad abholt.
@@ -52,7 +52,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Modul des Reparatur-Systems (Board Seite 7). Enthält die Stories "Ersatzteile bestellen" und "Werkzeuge bestellen".
 
 |Online Payment Service
-|Externes System. PayPal-artiger Dienst für Online-Zahlung per Konto oder Kreditkarte. Anbindung per REST für den Buchungsstatus und per UI-Redirect-Button (<<adr-004>>).
+|Externes System. PayPal-artiger Dienst für Online-Zahlung per Konto oder Kreditkarte. Anbindung per REST für den Buchungsstatus und per UI-Redirect-Button (<<09_architecture_decisions.adoc#adr-004,ADR-004>>).
 
 |Protokoll (Reparaturprotokoll)
 |Liste der Positionen einer Reparatur. Jede Position nennt Tätigkeit oder Teil, Dauer und Preis. Beispiel vom Board (Seite 7): neues Schaltwerk gekauft 100 €; altes Schaltwerk ausgebaut 10 Minuten, 10 €; neues Schaltwerk eingebaut 10 Minuten, 10 €; Bremsklötze 25 €; Bremsklötze einbauen 10 Minuten, 10 €; Kunde informiert 0 €. Aus dem Protokoll ergibt sich der Preis. Nicht zu verwechseln mit Netzwerkprotokollen wie REST.
@@ -73,7 +73,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Modul des Reparatur-Systems (Board Seite 7). Enthält Defektaufnahme, Protokoll, Kostenberechnung, Abgabe, Abholung, Statusabfrage und Kundeninformation.
 
 |Reparatur-System
-|Das hier dokumentierte System. Nimmt Reparaturen online an, plant Termine, führt Protokoll und Material, wickelt die Bezahlung ab. Läuft unter der Webshop-Domain im Pfad `/reparatur` (<<adr-002>>).
+|Das hier dokumentierte System. Nimmt Reparaturen online an, plant Termine, führt Protokoll und Material, wickelt die Bezahlung ab. Läuft unter der Webshop-Domain im Pfad `/reparatur` (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
 
 |Reparaturauftrag
 |Von der Kund:in ausgelöste Beauftragung einer Reparatur, online über `/reparatur` oder im Laden bei Abgabe des Fahrrads. Entspricht der Story "Fahrrad zur Reparatur anmelden".
@@ -91,16 +91,16 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Software as a Service. Ziel: das Reparatur-System anderen Fahrradshops über das Internet anbieten. Änderungsszenario: Umbau in höchstens zwei Monaten und 20 Personentagen (Board Seite 6). Im Whisper-Transkript als "SARS" wiedergegeben.
 
 |Same-Origin-Policy
-|Sicherheitsregel des Browsers: Cookies gelten nur innerhalb derselben Domain. Grund dafür, das Reparatur-System als Pfad unter der Webshop-Domain zu betreiben (<<adr-002>>).
+|Sicherheitsregel des Browsers: Cookies gelten nur innerhalb derselben Domain. Grund dafür, das Reparatur-System als Pfad unter der Webshop-Domain zu betreiben (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
 
 |Shop-Mitarbeiter:in
 |Akteur. Person im Laden, die Fahrräder zur Reparatur annimmt und Reparaturen an der Kasse abrechnet.
 
 |SMS Versand
-|Externes System. Zugekaufter Versanddienst per REST. Als zweiter Benachrichtigungskanal vorgesehen, nicht entschieden (<<adr-007>>).
+|Externes System. Zugekaufter Versanddienst per REST. Als zweiter Benachrichtigungskanal vorgesehen, nicht entschieden (<<09_architecture_decisions.adoc#adr-007,ADR-007>>).
 
 |Status (der Reparatur)
-|Fortschritt einer Reparatur, den Kund:innen auf einer vom Reparatur-System gerenderten Seite abfragen. Der Webshop hält keine Statusdaten (<<adr-005>>).
+|Fortschritt einer Reparatur, den Kund:innen auf einer vom Reparatur-System gerenderten Seite abfragen. Der Webshop hält keine Statusdaten (<<09_architecture_decisions.adoc#adr-005,ADR-005>>).
 
 |Story
 |Eintrag im Backlog, formuliert als Tätigkeit eines Akteurs (Board Seite 1). Input für den Architekten, nicht von ihm erhoben.
@@ -109,11 +109,11 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Modul des Reparatur-Systems (Board Seite 7). Enthält Anmeldung, Terminberechnung, Einplanung, Reparaturplan und den Start der nächsten Reparatur.
 
 |Webshop
-|Externes System. Bestehender Standard-Webshop des Fahrradshops für Kaufen und Abholen, ein Fertigprodukt. Leitet `/reparatur` an das Reparatur-System um und hält keine Reparaturdaten (<<adr-003>>, <<adr-005>>).
+|Externes System. Bestehender Standard-Webshop des Fahrradshops für Kaufen und Abholen, ein Fertigprodukt. Leitet `/reparatur` an das Reparatur-System um und hält keine Reparaturdaten (<<09_architecture_decisions.adoc#adr-003,ADR-003>>, <<09_architecture_decisions.adoc#adr-005,ADR-005>>).
 
 |Webshop User Database
-|Externes System. Nutzerdatenbank des Webshops mit Registrierung, Login, Adresse und bevorzugter Zahlungsart. Zugriff per JWT-Cookie und REST (<<adr-001>>).
+|Externes System. Nutzerdatenbank des Webshops mit Registrierung, Login, Adresse und bevorzugter Zahlungsart. Zugriff per JWT-Cookie und REST (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
 
 |Werkzeug
-|Arbeitsmittel der Werkstatt, das die Mechaniker:in über das Modul Materialbeschaffung beim Großhändler bestellt. Bestand im Reparatur-System (<<adr-006>>).
+|Arbeitsmittel der Werkstatt, das die Mechaniker:in über das Modul Materialbeschaffung beim Großhändler bestellt. Bestand im Reparatur-System (<<09_architecture_decisions.adoc#adr-006,ADR-006>>).
 |===
