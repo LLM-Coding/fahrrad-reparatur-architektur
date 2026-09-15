@@ -1,0 +1,84 @@
+[[adr-007]]
+== ADR-007: Kundenbenachrichtigung per E-Mail, SMS nur vorgesehen
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 23:30 und 31:02
+|===
+
+=== Problem
+
+Ist die Reparatur fertig, sollen Kund:innen das erfahren, ohne im Laden anzurufen. Über welchen Kanal benachrichtigt das Reparatursystem: E-Mail, SMS, beides oder Push über eine App?
+
+=== Kontext
+
+Kund:innen beauftragen die Reparatur online und holen das Fahrrad im Laden ab (18:04). Zwischen Abgabe und Abholung liegt die Werkstattzeit; eine Benachrichtigung schließt diese Lücke. Der Laden hat keine IT-Experten (53:59); jeder Dienst, den das System braucht, wird eher gekauft als betrieben (54:18).
+
+Der Kanal ist eine Frage der Erreichbarkeit. Eberhard hält sich selbst für "eher oldschool" (23:58) und weiß, dass andere Kund:innen anders erreichbar sind. Das Betriebsmodell des Systems ist noch offen (59:33); ein Cloud-Dienst für E-Mail passt zu beiden Richtungen.
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
+
+=== Optionen
+
+*Option A: E-Mail.* Das Reparatursystem schickt eine E-Mail über einen gekauften Dienst wie AWS Simple Email Service. Vorteil: Jede:r Webshop-Kund:in hat eine E-Mail-Adresse, der Dienst ist fertig und billig. Nachteil: E-Mails werden spät gelesen oder landen im Spam.
+
+*Option B: SMS.* Das Reparatursystem schickt eine SMS über einen SMS-Gateway. Vorteil: Erreicht Kund:innen sofort auf dem Telefon. Nachteil: Braucht eine Mobilnummer, die der Webshop nicht unbedingt kennt, und kostet je Nachricht.
+
+*Option C: E-Mail und SMS.* Beide Kanäle, Kund:innen wählen. Vorteil: Beste Erreichbarkeit. Nachteil: Zwei Integrationen, zwei Dienste, eine Kanalwahl in der Oberfläche.
+
+*Option D: Push über eine App.* Vorteil: Direkter Kanal. Nachteil: Eine eigene App für einen lokalen Fahrradladen, den Kund:innen wenige Male im Jahr brauchen.
+
+=== Bewertung
+
+Option A ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1,1"]
+|===
+| Kriterium | A: E-Mail (Referenz) | B: SMS | C: Beides | D: Push/App
+
+| Erreichbarkeit der Kund:innen | 0 | ? | +1 | ?
+| Zahl der Integrationen | 0 | 0 | -1 | -1
+| Dienst kaufbar, kein eigener Betrieb | 0 | ? | ? | -1
+| Benötigte Kundendaten schon vorhanden (Adresse aus dem Webshop) | 0 | ? | ? | ?
+
+| *Summe* | *0* | *0 (3 Zellen offen)* | *0 (2 Zellen offen)* | *-2 (2 Zellen offen)*
+|===
+
+Die Summe trennt die Optionen kaum. Den Ausschlag gibt die Einfachheit: E-Mail ist mit einer gekauften Schnittstelle erledigt und braucht keine Daten, die der Webshop nicht hat.
+
+=== Entscheidung
+
+Wir benachrichtigen Kund:innen per E-Mail über einen gekauften Dienst wie AWS Simple Email Service, angebunden über eine Schnittstelle des Anbieters. Wir sehen einen SMS-Kanal vor, ohne ihn jetzt zu bauen: Die Benachrichtigung ist im System so gekapselt, dass ein zweiter Kanal später hinzukommt, ohne die Reparaturlogik zu ändern. Push über eine App bauen wir nicht.
+
+=== Begründung
+
+Eberhard setzt E-Mail als Erstes: "wir wollen noch den Kunden darüber informieren, dass die Reparatur fertig ist, und dazu schicken wir eine E-Mail" (23:30). Beim Nachdenken kommt der Zweifel: SMS könnte passender sein, E-Mail "vielleicht nicht so super smart" (23:52). Er begründet seine Wahl mit sich selbst, "mich erreicht man tatsächlich über E-Mail" (23:58), und hält die Tür offen: "vielleicht sollten wir da auch noch eine SMS-Integration vorsehen" (24:04).
+
+Technisch ist E-Mail ein Kaufteil. Beim technischen Kontext nennt er den Simple Email Service von AWS als Beispiel für Dinge, "die man halt bei AWS kaufen kann" (31:02), aufrufbar "über eine Schnittstelle, meinetwegen auch eine REST-Schnittstelle" (31:11). Da das System den E-Mail-Dienst nicht selbst baut, ist das Protokoll für ihn "nicht so super spannend" (31:19).
+
+Die SMS bleibt unentschieden. Eberhard sagt "vorsehen", nicht "bauen". Wir lesen das als Auftrag, den Kanal austauschbar zu halten, und als Frage an den Fachexperten, wie die Kund:innen des Ladens erreichbar sein wollen.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Die Benachrichtigung ist mit einer Schnittstelle zu einem fertigen Dienst erledigt; nichts davon muss der Laden betreiben.
+* Die E-Mail-Adresse kommt aus dem Webshop-Konto (<<adr-001>>); es fehlen keine Daten.
+* Der SMS-Kanal lässt sich nachrüsten, ohne die Reparaturlogik anzufassen.
+
+*Negativ*
+
+* Wer E-Mails selten liest, erfährt spät, dass das Fahrrad fertig ist.
+* Für SMS fehlt die Mobilnummer; sie müsste bei der Beauftragung abgefragt werden und verlängert das Formular (45:44).
+
+*Risiken*
+
+* R-019: Die Benachrichtigung landet im Spam oder wird nicht gelesen. Kund:innen rufen doch im Laden an, das Qualitätsziel Benutzerfreundlichkeit leidet.
+* R-020: Der E-Mail-Dienst ist ein Cloud-Dienst. Fällt das Betriebsmodell auf on-premise (A1, offen), braucht das System trotzdem einen Weg ins Internet zu diesem Dienst.
+* R-021: Wird die Benachrichtigung nicht gekapselt, sondern direkt in der Reparaturlogik verdrahtet, kostet die SMS-Nachrüstung später mehr als geplant.
+
+*Offene Frage*
+
+Ob und wann SMS kommt, entscheidet der Fachexperte anhand der Erreichbarkeit der Kund:innen. Diese Entscheidung ist nicht getroffen.

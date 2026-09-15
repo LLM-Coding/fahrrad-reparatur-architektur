@@ -1,0 +1,82 @@
+[[adr-006]]
+== ADR-006: Ersatzteile und Werkzeuge im Reparatursystem selbst führen
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 22:13 und 22:30
+|===
+
+=== Problem
+
+Eine Reparatur braucht Ersatzteile. Die Werkstatt muss wissen, ob ein Teil da ist, was es kostet und wann es nachbestellt werden muss. Führt das Reparatursystem diese Bestände selbst, oder bindet es ein Inventar- oder Warenwirtschaftssystem an?
+
+=== Kontext
+
+Der Fahrradladen ist klein: drei bis vier Leute, kein IT-Betrieb (16:22). Das Backlog nennt, dass Ersatzteile bestellt werden können und dass Reparaturen protokolliert werden (25:04). Beides deutet darauf hin, dass das System Teile zumindest zum Teil verfolgt (25:09).
+
+Aus dem Chat kommt der Hinweis, ein Inventarsystem für Teile des Rades in den Systemkontext aufzunehmen (22:13). Eberhard nennt das "eine spannende Frage" (22:25). Der Systemkontext hat zu diesem Zeitpunkt schon viele Schnittstellen: Webshop, User-Datenbank, Payment Service, Kasse, Rechnungswesen, E-Mail-Dienst.
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
+
+=== Optionen
+
+*Option A: Inventar- oder Warenwirtschaftssystem anbinden.* Ein externes System führt Bestände, Preise und Bestellungen. Das Reparatursystem fragt dort nach und bucht Verbrauch zurück. Vorteil: Lagerverwaltung ist ein gelöstes Problem, ein Fertigprodukt kann mehr als eine Eigenlösung. Nachteil: Eine weitere Schnittstelle, ein weiteres System, das jemand betreiben muss, und der Laden hat heute keines.
+
+*Option B: Ersatzteile im Reparatursystem selbst führen.* Das Reparatursystem hält selbst fest, welche Teile vorrätig sind und was sie kosten, und löst Bestellungen aus. Vorteil: Keine Schnittstelle, eine klare Verantwortung. Nachteil: Das Reparatursystem baut eine kleine Lagerverwaltung nach.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Inventarsystem anbinden | B: Selbst führen (Referenz)
+
+| Zahl der Schnittstellen im Systemkontext | -1 | 0
+| Klare Verantwortung des Reparatursystems | -1 | 0
+| Betrieb ohne IT-Experten (ein System weniger) | -1 | 0
+| Aufwand im Reparatursystem (Lagerverwaltung nachbauen) | +1 | 0
+| Fachliche Tiefe der Lagerverwaltung | ? | 0
+| Änderbarkeit Richtung SaaS | ? | 0
+
+| *Summe* | *-2 (2 Zellen offen)* | *0*
+|===
+
+Die Summe spricht für Option B. Den Ausschlag gibt die Verantwortung: Das Reparatursystem soll die Teile prüfen, also führt es sie auch.
+
+=== Entscheidung
+
+Wir führen Ersatzteile und Werkzeuge im Reparatursystem selbst. Das System weiß, welche Teile vorrätig sind und was sie kosten, und es löst Bestellungen aus. Wir binden kein Inventar- oder Warenwirtschaftssystem an.
+
+=== Begründung
+
+Eberhard legt die Annahme offen: Das System, das die Reparatur macht, soll "selber Buch führen über Ersatzteile" (22:30). Sein Beispiel ist ein Schaltwerk, das noch da ist und so viel Euro kostet: "das wollen wir halt im Reparatursystem selber drin haben" (22:49).
+
+Der Systemkontext liefert ihm das Argument. Er hat gerade definiert, welche Verantwortung das System hat: "wir müssen eben die Ersatzteile checken" (23:04). Daraus folgt: "wir müssen uns eben nicht integrieren mit irgendeinem anderen System" (23:12). Er nennt das ausdrücklich "eine Entscheidung, die wir jetzt getroffen haben" (23:15). Genau für solche Entscheidungen hält er das Kontextdiagramm für wertvoll (22:59).
+
+Die fachliche Verantwortung selbst gehört nicht ins Kontextdiagramm, sondern in die Anforderungen (24:38). Das Diagramm sagt nur, mit welchen Systemen wir Schnittstellen haben, und das Inventarsystem ist keines davon.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Der Systemkontext bleibt schlank; das Reparatursystem hat eine Schnittstelle weniger.
+* Bestand, Preis und Verbrauch eines Teils stehen dort, wo die Reparatur protokolliert wird.
+* Der Laden muss kein weiteres System kaufen und betreiben.
+
+*Negativ*
+
+* Das Reparatursystem baut eine eigene Lagerverwaltung: Bestand, Preise, Bestellungen, Wareneingang.
+* Die Bestellung beim Lieferanten bleibt Handarbeit oder braucht später doch eine Schnittstelle.
+
+*Risiken*
+
+* R-016: Der Umfang des Reparatursystems wächst um eine Inventardomäne. Bleibt sie unscharf abgegrenzt, verwässert die Verantwortung, die der Systemkontext gerade geklärt hat.
+* R-017: Führt der Laden später ein Warenwirtschaftssystem ein, entstehen zwei Bestände. Ein Abgleich müsste nachgerüstet werden.
+* R-018: Als SaaS trifft das System auf Läden, die schon ein Inventarsystem haben. Die Eigenlösung steht dann dem Qualitätsziel Änderbarkeit Richtung SaaS entgegen.
+
+*Verwandte Entscheidungen*
+
+Die fachliche Verantwortung "Ersatzteile prüfen" steht in den Anforderungen, nicht im Kontextdiagramm (24:38).

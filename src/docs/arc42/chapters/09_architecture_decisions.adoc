@@ -43,13 +43,35 @@ endif::arc42help[]
 
 === Übersicht der Entscheidungen
 
-Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113. Zeitmarken verweisen auf die jeweilige Folge.
+Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113. Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
 
 [cols="1,4,2"]
 |===
 | ADR | Titel | Status
 
 | <<adr-001>> | Nutzerverwaltung und Login über den Webshop | Accepted
+| <<adr-002>> | Reparatursystem als Pfad unter der Webshop-Domain | Accepted
+| <<adr-003>> | Reparatur als eigener Bereich statt als Webshop-Produkt | Accepted
+| <<adr-004>> | Bezahlung über externen Payment Service und Kasse im Laden | Accepted
+| <<adr-005>> | Eigene Statusseite statt Datenabgleich mit dem Webshop | Accepted
+| <<adr-006>> | Ersatzteile und Werkzeuge im Reparatursystem selbst führen | Accepted
+| <<adr-007>> | Kundenbenachrichtigung per E-Mail, SMS nur vorgesehen | Accepted
+| <<adr-008>> | Verfügbarkeitsziele nach Nutzergruppe und Tageszeit differenzieren | Accepted
 |===
 
 include::../adr/ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
+
+include::../adr/ADR-002-pfad-unter-shop-domain.adoc[leveloffset=+1]
+
+include::../adr/ADR-003-reparatur-eigener-bereich.adoc[leveloffset=+1]
+
+include::../adr/ADR-004-bezahlung-payment-service-und-kasse.adoc[leveloffset=+1]
+
+include::../adr/ADR-005-statusseite-statt-datenabgleich.adoc[leveloffset=+1]
+
+include::../adr/ADR-006-ersatzteile-selbst-buchfuehren.adoc[leveloffset=+1]
+
+include::../adr/ADR-007-benachrichtigung-email.adoc[leveloffset=+1]
+
+include::../adr/ADR-008-verfuegbarkeit-differenziert.adoc[leveloffset=+1]
+

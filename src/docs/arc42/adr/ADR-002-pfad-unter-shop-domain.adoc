@@ -1,0 +1,83 @@
+[[adr-002]]
+== ADR-002: Reparatursystem als Pfad unter der Webshop-Domain
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 29:32 und 31:24
+|===
+
+=== Problem
+
+Das Reparatursystem ist eine eigene Anwendung neben dem Webshop. Kund:innen erreichen es über den Browser. Unter welcher URL läuft es: unter einer eigenen Domain, unter einer Subdomain des Webshops oder als Pfad unter der Domain des Webshops?
+
+=== Kontext
+
+<<adr-001>> legt fest, dass Kund:innen sich im Webshop anmelden und das Reparatursystem das JWT-Cookie des Webshops liest. Risiko R-004 aus <<adr-001>> benennt die Hürde: Der Browser sendet ein Cookie nur an die Domain, für die es gesetzt wurde. Zuschauer Jan bringt den Hinweis im Chat: "bei dem Cookie die Same-Origin-Policy beachten" (31:24).
+
+Der Webshop ist ein Fertigprodukt. Sein Login und seine Cookie-Einstellungen liegen außerhalb unserer Verantwortung. Änderungen daran sind nicht vorgesehen.
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
+
+=== Optionen
+
+*Option A: Eigene Domain mit Token-Weitergabe.* Das Reparatursystem läuft unter einer eigenen Domain, etwa `fahrrad-reparatur.de`. Das JWT-Cookie des Webshops kommt dort nicht an. Der Webshop müsste das Token beim Absprung übergeben, etwa als URL-Parameter oder über einen Redirect-Flow. Vorteil: Das Reparatursystem ist vom Webshop technisch entkoppelt und lässt sich unverändert für andere Läden betreiben. Nachteil: Der Webshop müsste mitspielen, und ein Token in der URL ist angreifbar.
+
+*Option B: Subdomain des Webshops.* Das Reparatursystem läuft unter `reparatur.meintollerfahrradshop.de`. Der Browser sendet das Cookie nur mit, wenn der Webshop es mit einem `Domain`-Attribut für alle Subdomains setzt. Vorteil: Eigene Infrastruktur, sauber getrennt vom Webshop. Nachteil: Die Cookie-Einstellung des Fertigprodukts entscheidet, ob der Login funktioniert. Das Video behandelt diese Option nicht.
+
+*Option C: Pfad unter der Webshop-Domain.* Bestimmte URLs werden an das Reparatursystem umgeleitet: `meintollerfahrradshop.de/reparatur`. Der Browser sendet das JWT-Cookie automatisch mit, weil Domain und Origin gleich bleiben. Vorteil: Der Login aus <<adr-001>> funktioniert ohne Umbau am Webshop. Nachteil: Ein Reverse Proxy oder eine Umleitung vor dem Webshop muss den Pfad an das Reparatursystem geben.
+
+=== Bewertung
+
+Option C ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Eigene Domain | B: Subdomain | C: Pfad (Referenz)
+
+| Benutzerfreundlichkeit für Kund:innen (Login aus dem Webshop läuft durch) | -1 | ? | 0
+| Unabhängigkeit vom Webshop (keine Änderung am Fertigprodukt) | -1 | -1 | 0
+| Änderbarkeit Richtung SaaS (eigene Adresse je Laden) | +1 | +1 | 0
+| Security (Token bleibt im Cookie, nicht in der URL) | -1 | 0 | 0
+| Aufwand für die Umsetzung (Umleitung, Proxy) | ? | ? | 0
+
+| *Summe* | *-2 (1 Zelle offen)* | *0 (2 Zellen offen)* | *0*
+|===
+
+Option B endet rechnerisch gleichauf mit der Referenz. Den Ausschlag gibt die Randbedingung: Der Webshop ist ein Fertigprodukt, und nur Option C braucht keine Annahme über dessen Cookie-Einstellungen.
+
+=== Entscheidung
+
+Wir betreiben das Reparatursystem unter dem Pfad `/reparatur` der Webshop-Domain. Bestimmte URLs werden vom Webshop an das Reparatursystem umgeleitet. Alles unter `/reparatur` liegt in unserer Verantwortung.
+
+=== Begründung
+
+Die Entscheidung folgt aus <<adr-001>>. Die Integration mit dem Webshop "funktioniert darüber, dass wir bestimmte URLs umleiten an unser Reparatursystem" (29:36). Eberhard zieht die Grenze klar: "innerhalb von meintollerfahrradshop.de gibt es Slash Reparatur und Slash Reparatur ist unsere Verantwortung" (29:42).
+
+Den technischen Grund liefert der Chat. Jan erinnert an die Same-Origin-Policy (31:24). Eberhard greift das auf: "Cookies können nur ausgetauscht werden, wenn sie in derselben Domäne registriert sind" (31:28). Und weiter: "das ist auch einer der Gründe, weswegen wir bestimmte URLs umleiten wollen" (31:43). Unter `/reparatur` "würden dann eben die Cookies vom meintollerfahrradshop, also genau der mit JWT, übertragen werden" (31:48).
+
+Eine eigene Domain diskutiert Eberhard nicht ausdrücklich. Sie scheidet aus, weil sie den Login aus <<adr-001>> bricht oder den Webshop zu Änderungen zwingt. Beides widerspricht der Rangfolge der Qualitätsziele.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Der Login aus <<adr-001>> funktioniert ohne Änderung am Webshop; der Browser sendet das JWT-Cookie automatisch mit.
+* Kund:innen sehen eine Adresse und einen Login; das stützt das Ziel Benutzerfreundlichkeit.
+* Die Verantwortung ist über die URL klar geschnitten: `/reparatur` gehört uns, der Rest dem Webshop.
+
+*Negativ*
+
+* Zwischen Browser und Reparatursystem braucht es eine Umleitung oder einen Reverse Proxy, der den Pfad an unser System weiterreicht.
+* Das Reparatursystem muss mit einem Pfad-Präfix umgehen; alle Links und Assets liegen unter `/reparatur`.
+
+*Risiken*
+
+* R-005: Die Umleitung liegt vor dem Webshop. Wer sie betreibt und ob das Fertigprodukt sie zulässt, ist offen. Ohne Umleitung ist das Reparatursystem nicht erreichbar.
+* R-006: Beim Umbau zum SaaS braucht jeder Fahrradladen eine eigene Umleitung unter seiner Domain. Das erhöht den Aufwand für das Änderungsszenario "SaaS in zwei Monaten" (57:36).
+* R-007: Das Reparatursystem teilt den Origin mit dem Webshop. Eine Schwachstelle in einem der beiden Systeme betrifft die Cookies des anderen. Security steht bewusst niedrig, das Risiko bleibt benannt.
+
+*Bezug*
+
+Diese Entscheidung schließt R-004 aus <<adr-001>>. Die Wahl des Betriebsmodells (Cloud oder on-premise) bleibt offen und entscheidet, wo Umleitung und Reparatursystem laufen.

@@ -1,0 +1,80 @@
+[[adr-005]]
+== ADR-005: Eigene Statusseite statt Datenabgleich mit dem Webshop
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 19:35 und 20:06
+|===
+
+=== Problem
+
+Kund:innen wollen wissen, ob ihr Fahrrad fertig ist. Der Webshop kennt die Kund:innen (<<adr-001>>), das Reparatursystem kennt den Reparaturstatus. Muss das Reparatursystem seine Daten in den Webshop spielen, damit Kund:innen den Status dort sehen, oder zeigt es den Status auf einer eigenen Seite?
+
+=== Kontext
+
+Der Webshop ist ein Standard-Fertigprodukt für Kaufen und Abholen (17:59). Eine Reparatur ist dort kein Produkt; das Reparatursystem bekommt einen eigenen Bereich neben dem Webshop mit eigenem Bezahlvorgang (18:40). Die Integration mit dem Webshop beschränkt sich auf User-Datenbank und Login.
+
+Aus dem Chat kommt die Frage, ob der Webshop Daten aus dem Reparatursystem braucht oder ob ein regelmäßiger Datenabgleich reicht (19:35). Eberhard ordnet die Frage unterhalb der aktuellen Flughöhe ein: Auf der Ebene des Systemkontexts geht es zunächst darum, welche Systeme überhaupt zu integrieren sind (19:49). Trotzdem ergibt sich die Antwort schon aus den bisherigen Ideen (20:02).
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
+
+=== Optionen
+
+*Option A: Datenabgleich mit dem Webshop.* Das Reparatursystem überträgt Reparaturaufträge und Status regelmäßig in den Webshop. Kund:innen sehen den Status in ihrem gewohnten Kundenkonto. Vorteil: Ein Ort für alles, was die Kund:innen mit dem Laden zu tun haben. Nachteil: Das Fertigprodukt Webshop muss Reparaturdaten aufnehmen und anzeigen, und der Abgleich läuft mit Verzögerung.
+
+*Option B: Eigene, vom Reparatursystem gerenderte Statusseite.* Der Webshop hält keine Reparaturdaten. Kund:innen rufen unter dem Reparaturbereich eine Seite auf, die das Reparatursystem selbst rendert und die den aktuellen Status zeigt. Vorteil: Kein Datenaustausch in Richtung Webshop, der Status ist immer aktuell. Nachteil: Der Reparaturstatus steht nicht im Kundenkonto des Webshops.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Datenabgleich | B: Eigene Statusseite (Referenz)
+
+| Integrationsfläche zum Fertigprodukt Webshop | -1 | 0
+| Aktualität des Status (kein Abgleichsintervall) | -1 | 0
+| Status im gewohnten Kundenkonto sichtbar | ? | 0
+| Änderbarkeit Richtung SaaS (kein webshopspezifischer Abgleich) | ? | 0
+| Aufwand für die Umsetzung | ? | 0
+
+| *Summe* | *-2 (3 Zellen offen)* | *0*
+|===
+
+Die Summe spricht für Option B. Den Ausschlag gibt die Trennung der Verantwortung: Der Webshop bleibt, was er ist, und das Reparatursystem hält seine Daten selbst.
+
+=== Entscheidung
+
+Wir tauschen keine Reparaturdaten mit dem Webshop aus. Der Webshop hält keine Daten aus dem Reparatursystem. Das Reparatursystem rendert eine eigene Statusseite, auf der Kund:innen nach dem Login sehen, ob ihr Fahrrad fertig ist.
+
+=== Begründung
+
+Eberhard beantwortet die Chat-Frage direkt: "der Webshop hat keine Daten aus dem Reparatursystem" (20:06). Stattdessen gibt es eine Seite, "die wir selber rendern, deswegen müssen wir die Daten nicht austauschen" (20:22). Er beschreibt den Ablauf aus Kundensicht: Ich gehe auf die Webseite, sage, wer ich bin, und das System antwortet, ob das abgelieferte Fahrrad fertig ist (20:13).
+
+Die Entscheidung folgt aus <<adr-003>>: Der Reparaturbereich liegt neben dem Webshop, nicht in ihm (18:45). Wer dort beauftragt, schaut auch dort nach. Ein Abgleich würde das Fertigprodukt um eine Funktion erweitern, die es nicht hat.
+
+Eberhard merkt an, dass die Frage eigentlich unter der aktuellen Granularität liegt (19:49). Sie lässt sich trotzdem schon beantworten, und die Antwort passt zu dem Bild, das der Systemkontext gerade zeichnet: wenige, klar geschnittene Schnittstellen.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Der Webshop bleibt unverändert; das Reparatursystem braucht keine Schreibschnittstelle in ein Fertigprodukt.
+* Der Status ist immer aktuell, weil er direkt aus dem Reparatursystem kommt.
+* Reparaturdaten haben genau einen Ort. Das hilft der Änderbarkeit Richtung SaaS: andere Läden mit anderen Webshops brauchen keinen eigenen Abgleich.
+
+*Negativ*
+
+* Kund:innen sehen den Reparaturstatus nicht im Kundenkonto des Webshops, sondern nur im Reparaturbereich.
+* Das Reparatursystem muss eine eigene Web-Oberfläche für Kund:innen bauen und betreiben.
+
+*Risiken*
+
+* R-014: Die Statusseite muss sich optisch und in der Navigation in den Webshop einfügen. Wirkt sie wie ein Fremdkörper, leidet das Qualitätsziel Benutzerfreundlichkeit für Kund:innen.
+* R-015: Kund:innen suchen den Status zuerst im Kundenkonto des Webshops und finden ihn dort nicht. Ohne Verweis vom Webshop auf den Reparaturbereich bleibt die Statusseite unentdeckt.
+
+*Verwandte Entscheidungen*
+
+Die Statusseite liegt unter dem Pfad `/reparatur` der Webshop-Domain (<<adr-002>>), damit das JWT-Cookie des Webshops den Login trägt (<<adr-001>>).

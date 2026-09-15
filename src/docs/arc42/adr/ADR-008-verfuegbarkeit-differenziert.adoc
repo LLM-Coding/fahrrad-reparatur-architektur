@@ -1,0 +1,88 @@
+[[adr-008]]
+== ADR-008: Verfügbarkeitsziele nach Nutzergruppe und Tageszeit differenzieren
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 55:07, 55:42 und 56:21; nächtliches Web-Ziel 99 % aus dem Miro-Board zu Folge 113
+|===
+
+=== Problem
+
+Das Reparatursystem hat zwei Nutzergruppen: die Werkstatt im Laden und die Kund:innen im Web. Gilt für das ganze System ein Verfügbarkeitsziel, oder bekommen Werkstatt und Web verschiedene Ziele, abhängig von der Tageszeit? Die Antwort ist eine Qualitätsanforderung, aber sie erzwingt Architekturmaßnahmen: Betriebsmodell, Provider-SLAs, Wiederanlauf und Datensicherung.
+
+=== Kontext
+
+Der Laden öffnet um 9 Uhr und schließt um 18 Uhr (56:21). Der Laden hat keine IT-Experten, das System soll dennoch betrieben werden können (53:59). Das Betriebsmodell ist offen: Cloud, on-premise oder Fremdbetrieb (59:33). Eberhard hält fest, dass genau diese Constraints das Betriebsmodell beeinflussen (60:13).
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Die Verfügbarkeitsanforderungen nennt Eberhard "eher entspannt" (59:18). Security steht bewusst weiter unten.
+
+=== Optionen
+
+*Option A: Ein hohes Ziel für alles.* 99,9 % rund um die Uhr für Werkstatt und Web. Vorteil: Ein Ziel, eine Architektur, keine Unterscheidung. Nachteil: Die Werkstatt bezahlt eine Verfügbarkeit, die sie nicht braucht; nachts läuft das System für niemanden.
+
+*Option B: Ein niedriges Ziel für alles.* 99 % zu Ladenzeiten für Werkstatt und Web. Vorteil: Billig und einfach zu erfüllen, auch on-premise. Nachteil: Im Web kostet jede Ausfallminute Umsatz, und Kund:innen beauftragen abends.
+
+*Option C: Differenziert.* Werkstatt: 99 % zwischen 9 und 18 Uhr, Wiederanlauf spätestens nach 30 Minuten. Web: 99,9 % zwischen 7 und 24 Uhr, nachts 99 % mit schnellerem Wiederanlauf. Daten, die fünf Minuten vor einem Ausfall erfasst wurden, überleben ihn. Vorteil: Jede Nutzergruppe bekommt, was sie braucht. Nachteil: Zwei Ziele bedeuten zwei Betriebsprofile in einem System.
+
+=== Bewertung
+
+Option C ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Ein Ziel hoch | B: Ein Ziel niedrig | C: Differenziert (Referenz)
+
+| Umsatzschutz im Web (jede Minute Ausfall kostet) | 0 | -1 | 0
+| Angemessenheit für die Werkstatt (30 Minuten Zettel und Bleistift) | -1 | 0 | 0
+| Betriebskosten und SLA-Anforderungen an den Provider | -1 | +1 | 0
+| Einfachheit: ein Ziel statt zwei Betriebsprofile | +1 | +1 | 0
+| Erfüllbarkeit ohne IT-Experten im Laden | ? | ? | 0
+
+| *Summe* | *-1 (1 Zelle offen)* | *+1 (1 Zelle offen)* | *0*
+|===
+
+Die ungewichtete Summe spricht für Option B. Den Ausschlag gibt das Geschäft: Kund:innen sollen online beauftragen, und jede Ausfallminute im Web ist Umsatzausfall (56:52). Option B verfehlt das Ziel, für das das System gebaut wird.
+
+=== Entscheidung
+
+Wir differenzieren die Verfügbarkeitsziele nach Nutzergruppe und Tageszeit:
+
+* Werkstatt-System: 99 % Verfügbarkeit zwischen 9 und 18 Uhr; nach einem Ausfall läuft es spätestens nach 30 Minuten wieder.
+* Web-System für Kund:innen: 99,9 % Verfügbarkeit zwischen 7 und 24 Uhr; nachts 99 %, dafür schnellerer Wiederanlauf.
+* Datenverlust: Daten, die fünf Minuten vor einem Ausfall erfasst wurden, überleben den Ausfall.
+
+Diese Ziele gehen als Qualitätsszenarien in Kapitel 10 und als Constraints in die Entscheidung über das Betriebsmodell.
+
+=== Begründung
+
+Eberhard schreibt die Szenarien als Stimulus und Response auf. Für die Werkstatt: "Ein Mitarbeiter im Shop will das System zwischen 9 und 18 Uhr benutzen und es steht zu 99 Prozent zur Verfügung" (55:07), nach einem Ausfall "spätestens nach 30 Minuten wieder" (55:21). Für das Web: "Das Websystem soll zu 99,9 Prozent zur Verfügung stehen" (55:42), zwischen 7 und 24 Uhr (56:02). Nachts "haben wir nicht so viele Kunden", weniger ist akzeptabel, "aber das System soll schneller wieder anlaufen" (56:07).
+
+Die Differenz begründet der Auftraggeber. Fällt das System um 18 Uhr für eine Minute aus, "ist es egal" (56:32). Dreißig Minuten sind akzeptabel, "weil man kann sich 30 Minuten lang mit Zettel und Bleistift über Wasser halten" (56:39). Im Internet ist das anders: "Jede Minute, die wir nicht haben, führt zu einem Umsatzausfall. Also müssen wir da besser sein" (56:52).
+
+Den Datenverlust begrenzt er getrennt: Was fünf Minuten vor dem Ausfall erfasst wurde, soll ihn "praktisch sicher" überstehen, "damit nicht plötzlich ein Reparaturauftrag weg ist" (57:12). Ein verlorener Auftrag "fährt einfach unschön" (57:22).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Die Werkstatt zahlt nicht für eine Verfügbarkeit, die sie nicht braucht; Wartungsfenster liegen außerhalb der Ladenzeiten.
+* Das Web-Ziel schützt den Umsatz zu den Zeiten, zu denen Kund:innen beauftragen.
+* Die Ziele sind messbar: Prozent, Zeitfenster, Minuten. Sie werden zu Akzeptanzkriterien im Betrieb (49:44).
+
+*Negativ*
+
+* Zwei Betriebsprofile in einem System: Werkstatt- und Web-Teil müssen getrennt betreibbar, überwachbar und wiederanlauffähig sein.
+* 99,9 % im Web sind ohne IT-Experten nur mit Fremdbetrieb oder einem Provider mit passendem SLA erreichbar. Der Laden braucht dafür eigenen Support von außen.
+* Fünf Minuten Datenverlust erzwingen Replikation oder häufige Sicherung der Reparaturdaten.
+
+*Risiken*
+
+* R-022: Das Betriebsmodell ist offen (A1). Kommt on-premise zum Zug, weil die Kasse lokal ist (59:46), lässt sich 99,9 % im Web ohne Betriebsteam kaum halten. Das Web-Ziel und die lokale Integration ziehen in verschiedene Richtungen (60:00).
+* R-023: Lassen sich Werkstatt- und Web-Teil nicht trennen, gilt das strengere Ziel für alles. Dann zahlt der Laden die Kosten von Option A, ohne sie gewollt zu haben.
+* R-024: Das 5-Minuten-Ziel für Datenverlust setzt eine Persistenzstrategie voraus, die noch niemand entschieden hat. Ohne Replikation oder Sicherung im Minutentakt bleibt das Szenario Papier.
+
+*Verwandte Entscheidungen*
+
+Die Verfügbarkeitsziele und die Randbedingung "keine IT-Experten" fließen in die Entscheidung über das Betriebsmodell (A1, vertagt). Der Wiederanlauf in 30 Minuten und der Datenverlust von 5 Minuten setzen die Response Measures der Kapitel-10-Szenarien.

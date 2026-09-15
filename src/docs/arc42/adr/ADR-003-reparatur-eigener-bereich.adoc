@@ -1,0 +1,81 @@
+[[adr-003]]
+== ADR-003: Reparatur als eigener Bereich statt als Webshop-Produkt
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-02-25
+| Quelle | software-architektur.tv Folge 111, 17:50 und 18:09
+|===
+
+=== Problem
+
+Kund:innen sollen eine Reparatur online beauftragen und bezahlen. Der Fahrradladen betreibt bereits einen Webshop, in dem Kund:innen Produkte kaufen und abholen. Bilden wir die Reparatur als Produkt in diesem Webshop ab und nutzen dessen Warenkorb und Bezahlung, oder bauen wir einen eigenen Bereich neben dem Webshop mit eigenem Bezahlvorgang?
+
+=== Kontext
+
+Der Webshop ist ein standardisiertes Fertigprodukt. Sein Ablauf ist Kaufen und Abholen: Kund:innen legen Artikel in den Warenkorb, bezahlen und holen die Ware ab. Eine Reparatur läuft anders. Kund:innen beschreiben ein Problem, geben das Fahrrad ab, die Werkstatt prüft Ersatzteile und Aufwand, und der Preis steht oft erst nach der Reparatur fest. Bezahlt wird meist bei der Abholung im Laden.
+
+Die Anforderungen hat Eberhard mit dem Anforderer besprochen. Die Frage kam im Chat auf, als ein Zuschauer vorschlug, über den Webshop zu bezahlen (17:46).
+
+Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
+
+=== Optionen
+
+*Option A: Reparatur als Produkt im Webshop.* Die Reparatur wird ein Artikel im Webshop. Kund:innen legen sie in den Warenkorb und bezahlen über den Bezahlvorgang des Webshops. Vorteil: Kein eigener Bezahlvorgang, kein eigener Payment Service, Login und Nutzerdaten sind ohnehin da. Nachteil: Der Ablauf einer Reparatur passt nicht in Kaufen und Abholen. Preis, Diagnose und Werkstattstatus müssten in ein Fertigprodukt gepresst werden, das dafür nicht gebaut ist.
+
+*Option B: Eigener Bereich neben dem Webshop.* Das Reparatursystem bekommt einen eigenen Teil der Website. Dort beauftragen Kund:innen die Reparatur und bezahlen über einen eigenen Bezahlvorgang. Login und Nutzerdaten kommen weiterhin aus dem Webshop (<<adr-001>>). Vorteil: Der Ablauf folgt dem fachlichen Prozess der Reparatur. Nachteil: Das Reparatursystem braucht einen eigenen Payment Service und eine eigene Integration in die User-Datenbank des Webshops.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Produkt im Webshop | B: Eigener Bereich (Referenz)
+
+| Benutzerfreundlichkeit für Kund:innen (Ablauf passt zur Reparatur) | -1 | 0
+| Fachliche Passung (Preis, Diagnose, Werkstattstatus abbildbar) | -1 | 0
+| Aufwand für die Umsetzung (Payment Service, User-DB-Integration) | +1 | 0
+| Änderbarkeit Richtung SaaS (unabhängig vom konkreten Webshop) | ? | 0
+| Verfügbarkeit (Abhängigkeit vom Webshop) | ? | 0
+
+| *Summe* | *-1 (2 Zellen offen)* | *0*
+|===
+
+Die Referenz liegt vorn. Option A spart Aufwand, aber sie verliert bei den beiden Kriterien, die das oberste Qualitätsziel tragen.
+
+=== Entscheidung
+
+Wir bilden die Reparatur nicht als Produkt im Webshop ab. Wir bauen einen eigenen Bereich der Website neben dem Webshop. Dort beauftragen Kund:innen die Reparatur, und dort gibt es einen eigenen Bezahlvorgang. Konten und Login übernehmen wir weiterhin aus dem Webshop.
+
+=== Begründung
+
+Der Webshop ist "ein standardisierter Webshop, in dem im Wesentlichen jeder Sachen kaufen kann und anschließend abholen kann" (17:59). Er ist "ein Fertigprodukt" (18:04). Die Diskussion mit dem Anforderer "hatte ergeben, dass wir jetzt nicht eine Reparatur zu einem Produkt im Webshop haben wollen" (18:09). Eberhards Grund ist die fachliche Passung: "weil das ja irgendwie auch unnatürlich ist, also das ist etwas anderes, über das wir reden" (18:19).
+
+Daraus folgt die Form der Lösung: "ich habe einen eigenen Teil der Webseite, neben dem Webshop, in dem ich sagen kann, ich möchte dieses Fahrrad reparieren" (18:40). Und: "da soll es dann einen eigenen Bezahlvorgang geben" (18:45). Die Abgrenzung formuliert er ausdrücklich: "wir werden nicht in den Webshop uns integrieren in dem Sinne, dass wir ein Produkt haben" (18:50).
+
+Die Entscheidung zieht zwei weitere nach sich. Ein eigener Bezahlvorgang braucht einen Payment Service (<<adr-004>>). Ein eigener Bereich braucht die Integration in die User-Datenbank des Webshops, damit Kund:innen kein zweites Konto anlegen (<<adr-001>>).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Der Ablauf im Reparatursystem folgt dem fachlichen Prozess: Problem beschreiben, Fahrrad abgeben, Status verfolgen, bei Abholung bezahlen.
+* Das Reparatursystem hat die Hoheit über Preis, Diagnose und Werkstattstatus; es hängt nicht von den Grenzen des Fertigprodukts ab.
+* Der Webshop bleibt unverändert. Er hält keine Reparaturdaten; das Reparatursystem rendert seine eigene Statusseite (20:06).
+
+*Negativ*
+
+* Das Reparatursystem braucht einen eigenen Payment Service und eine Integration mit der Kasse (<<adr-004>>).
+* Das Reparatursystem braucht die Integration in die User-Datenbank des Webshops (<<adr-001>>).
+* Kund:innen sehen zwei Bezahlvorgänge auf einer Website: den des Webshops und den des Reparatursystems.
+
+*Risiken*
+
+* R-008: Zwei Bezahlvorgänge unter einer Domain können Kund:innen verwirren. Das trifft das Qualitätsziel Benutzerfreundlichkeit. Das Szenario "Reparatur in zwei Minuten beauftragt" (45:44) muss auch für den eigenen Bezahlvorgang gelten.
+* R-009: Der eigene Bereich vergrößert die Zahl der Schnittstellen: Payment Service, Kasse, Rechnungswesen, User-Datenbank. Eberhard nennt die "Vielzahl an Schnittstellen" für ein Spielbeispiel bemerkenswert (32:08). Jede Schnittstelle ist ein eigener Ausfallpunkt.
+
+*Bezug*
+
+Diese Entscheidung ist der Grund für <<adr-001>> (Login aus dem Webshop) und <<adr-004>> (Payment Service und Kasse). Die URL des eigenen Bereichs legt <<adr-002>> fest.
