@@ -20,6 +20,8 @@ Aus dem Chat kommt die Frage, ob der Webshop Daten aus dem Reparatursystem brauc
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
+*Betroffene Qualitätsszenarien:* <<qs-u-03>>, weil die Statusseite das ist, was Kund:innen nach der Reparatur vom System sehen und bewerten (R-014, R-015); <<qs-a-01>>, weil Reparaturdaten genau einen Ort haben und andere Läden mit anderen Webshops keinen Abgleich brauchen.
+
 === Optionen
 
 *Option A: Datenabgleich mit dem Webshop.* Das Reparatursystem überträgt Reparaturaufträge und Status regelmäßig in den Webshop. Kund:innen sehen den Status in ihrem gewohnten Kundenkonto. Vorteil: Ein Ort für alles, was die Kund:innen mit dem Laden zu tun haben. Nachteil: Das Fertigprodukt Webshop muss Reparaturdaten aufnehmen und anzeigen, und der Abgleich läuft mit Verzögerung.

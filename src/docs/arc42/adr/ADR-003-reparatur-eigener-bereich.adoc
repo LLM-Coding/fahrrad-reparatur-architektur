@@ -20,6 +20,8 @@ Die Anforderungen hat Eberhard mit dem Anforderer besprochen. Die Frage kam im C
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
+*Betroffene Qualitätsszenarien:* <<qs-u-02>>, weil der eigene Bereich dem fachlichen Ablauf einer Reparatur folgt und der eigene Bezahlvorgang die Beauftragung in zwei Minuten nicht verlängern darf (R-008).
+
 === Optionen
 
 *Option A: Reparatur als Produkt im Webshop.* Die Reparatur wird ein Artikel im Webshop. Kund:innen legen sie in den Warenkorb und bezahlen über den Bezahlvorgang des Webshops. Vorteil: Kein eigener Bezahlvorgang, kein eigener Payment Service, Login und Nutzerdaten sind ohnehin da. Nachteil: Der Ablauf einer Reparatur passt nicht in Kaufen und Abholen. Preis, Diagnose und Werkstattstatus müssten in ein Fertigprodukt gepresst werden, das dafür nicht gebaut ist.

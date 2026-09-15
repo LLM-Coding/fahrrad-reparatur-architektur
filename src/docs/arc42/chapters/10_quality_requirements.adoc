@@ -38,6 +38,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 
 ==== Benutzbarkeit
 
+[[qs-u-01,QS-U-01]]
 .QS-U-01: Registrierung in einer Minute
 [cols="1,4"]
 |===
@@ -51,6 +52,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-02,QS-U-02]]
 .QS-U-02: Reparatur beauftragen
 [cols="1,4"]
 |===
@@ -64,6 +66,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-03,QS-U-03]]
 .QS-U-03: Bewertung durch Kund:innen
 [cols="1,4"]
 |===
@@ -77,6 +80,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-04,QS-U-04]]
 .QS-U-04: Empfehlung durch Mitarbeitende
 [cols="1,4"]
 |===
@@ -90,6 +94,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-05,QS-U-05]]
 .QS-U-05: Einarbeitung Shop-Mitarbeiter:in
 [cols="1,4"]
 |===
@@ -103,6 +108,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-06,QS-U-06]]
 .QS-U-06: Einarbeitung Fahrrad-Mechaniker:in
 [cols="1,4"]
 |===
@@ -116,6 +122,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 1
 |===
 
+[[qs-u-07,QS-U-07]]
 .QS-U-07: Betrieb ohne IT-Experten
 [cols="1,4"]
 |===
@@ -131,6 +138,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 
 ==== Zuverlässigkeit
 
+[[qs-z-01,QS-Z-01]]
 .QS-Z-01: Verfügbarkeit Werkstatt
 [cols="1,4"]
 |===
@@ -144,6 +152,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3 (<<adr-008>>)
 |===
 
+[[qs-z-02,QS-Z-02]]
 .QS-Z-02: Wiederanlauf Werkstatt
 [cols="1,4"]
 |===
@@ -157,6 +166,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3 (<<adr-008>>: "30 Minuten Zettel und Bleistift")
 |===
 
+[[qs-z-03,QS-Z-03]]
 .QS-Z-03: Preisermittlung nach Ausfall
 [cols="1,4"]
 |===
@@ -170,6 +180,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3
 |===
 
+[[qs-z-04,QS-Z-04]]
 .QS-Z-04: Verfügbarkeit Web tagsüber
 [cols="1,4"]
 |===
@@ -183,6 +194,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3 (<<adr-008>>: "jede Minute Umsatzausfall")
 |===
 
+[[qs-z-05,QS-Z-05]]
 .QS-Z-05: Verfügbarkeit Web nachts
 [cols="1,4"]
 |===
@@ -196,6 +208,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3
 |===
 
+[[qs-z-06,QS-Z-06]]
 .QS-Z-06: Schneller Wiederanlauf
 [cols="1,4"]
 |===
@@ -211,6 +224,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 
 NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<adr-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären.
 
+[[qs-z-07,QS-Z-07]]
 .QS-Z-07: Datenverlust
 [cols="1,4"]
 |===
@@ -226,6 +240,7 @@ NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 
 
 ==== Änderbarkeit
 
+[[qs-a-01,QS-A-01]]
 .QS-A-01: SaaS für andere Fahrrad-Shops
 [cols="1,4"]
 |===
@@ -240,3 +255,48 @@ NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 
 |===
 
 NOTE: Offen: Das Board nennt keine Szenarien für Security, Performance oder Kompatibilität. Die Zahl "Skalierbarkeit?" bleibt ohne Maß.
+
+=== 10.3 Welche Entscheidungen auf welche Szenarien antworten
+
+NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in Abschnitt 10.2 und in den ADRs aus Kapitel 9 schon steht. Er ergänzt nichts vom Board und nichts aus Folge 111.
+
+.Szenario zu Entscheidung
+[cols="2,2,3,3",options="header"]
+|===
+| Szenario | Maß | Antwortende ADRs | Maßnahme laut Board
+
+| <<qs-u-01>> Registrierung | 1 Minute | <<adr-001>> (erklärt das Szenario für nicht erfüllbar) | Keine; auf dem Board als nicht erfüllbar markiert
+| <<qs-u-02>> Reparatur beauftragen | 90 % in 2 Minuten | <<adr-001>>, <<adr-002>>, <<adr-003>> | Login und Adresse aus dem Webshop; eigener Bezahlvorgang
+| <<qs-u-03>> Bewertung durch Kund:innen | 4 von 5 Punkten | <<adr-005>>, <<adr-007>> | Eigene Statusseite; Benachrichtigung per E-Mail
+| <<qs-u-04>> Empfehlung durch Mitarbeitende | 85 % | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
+| <<qs-u-05>> Einarbeitung Shop-Mitarbeiter:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
+| <<qs-u-06>> Einarbeitung Fahrrad-Mechaniker:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
+| <<qs-u-07>> Betrieb ohne IT-Experten | Keine Zahl | <<adr-004>>, <<adr-006>>, <<adr-008>> (betroffen; die Maßnahme Cloud ist nicht entschieden, A1) | Cloud; Eigener Support
+| <<qs-z-01>> Verfügbarkeit Werkstatt | 99 %, 9 bis 18 Uhr | <<adr-008>> (setzt das Ziel; die Maßnahme ist nicht entschieden) | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-02>> Wiederanlauf Werkstatt | 30 Minuten | <<adr-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-03>> Preisermittlung nach Ausfall | 2 Minuten | <<adr-004>>, <<adr-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-04>> Verfügbarkeit Web tagsüber | 99,9 %, 7 bis 24 Uhr | <<adr-008>>; <<adr-001>> (betroffen, R-002) | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-05>> Verfügbarkeit Web nachts | 99 %, 24 bis 7 Uhr | <<adr-008>> | EKS / EC2 SLAs; Eigener Support 24/7
+| <<qs-z-06>> Schneller Wiederanlauf | 5 Minuten | <<adr-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-07>> Datenverlust | 99,9 %, höchstens 5 Minuten | <<adr-008>> (R-024; Persistenz nicht entschieden) | RDS SLAs (`?`)
+| <<qs-a-01>> SaaS für andere Fahrrad-Shops | 2 Monate, 20 PT | <<adr-001>>, <<adr-002>>, <<adr-004>>, <<adr-005>>, <<adr-006>> (betroffen über R-003, R-006, R-013, R-018) | Cloud; Mandantenfähigkeit; Skalierbarkeit (`?`); Drittsysteme je Shop
+|===
+
+.Entscheidung zu Szenario
+[cols="2,3,4",options="header"]
+|===
+| ADR | Szenarien | Bemerkung
+
+| <<adr-001>> Login über den Webshop | <<qs-u-01>>, <<qs-u-02>>, <<qs-z-04>>, <<qs-a-01>> | Treibt QS-U-02; macht QS-U-01 im Reparatursystem unerfüllbar; R-002 und R-003 belasten QS-Z-04 und QS-A-01
+| <<adr-002>> Pfad unter der Webshop-Domain | <<qs-u-02>>, <<qs-a-01>> | Folge aus ADR-001; R-006 belastet QS-A-01
+| <<adr-003>> Reparatur als eigener Bereich | <<qs-u-02>> | Der eigene Bezahlvorgang muss die zwei Minuten halten (R-008)
+| <<adr-004>> Payment Service und Kasse | <<qs-z-03>>, <<qs-u-07>>, <<qs-a-01>> | Die Kasse im Laden trägt QS-Z-03; keine eigene Abwicklung wegen QS-U-07; R-013 belastet QS-A-01
+| <<adr-005>> Eigene Statusseite | <<qs-u-03>>, <<qs-a-01>> | Die Statusseite ist die Kundensicht nach der Reparatur; ein Datenort hilft QS-A-01
+| <<adr-006>> Ersatzteile selbst führen | <<qs-u-07>>, <<qs-a-01>> | Ein System weniger für den Laden; R-018 belastet QS-A-01
+| <<adr-007>> Benachrichtigung per E-Mail | keine Szenario-Basis, folgt aus Randbedingung | QS-U-03 nennt die E-Mail als Antwort; die Kanalwahl selbst folgt aus "Dienste kaufen statt betreiben"
+| <<adr-008>> Verfügbarkeit differenziert | <<qs-z-01>> bis <<qs-z-07>>, <<qs-u-07>> | Setzt die Maße aller QS-Z-Szenarien; die Maßnahmen Betriebsmodell und Persistenz sind offen (R-022 bis R-024)
+|===
+
+Drei Szenarien stehen ohne Entscheidung und ohne Maßnahmen-Karte da: <<qs-u-04>>, <<qs-u-05>> und <<qs-u-06>>. Neun weitere haben ein Ziel, aber keine entschiedene Maßnahme: Für <<qs-u-07>>, <<qs-z-01>> bis <<qs-z-07>> und <<qs-a-01>> nennt das Board Cloud, Provider-SLAs, eigenen Support und Mandantenfähigkeit, doch kein ADR hat das festgelegt. Daraus folgen die Kandidaten für kommende ADRs: das Betriebsmodell Cloud (A1, vertagt), die Persistenzstrategie für höchstens fünf Minuten Datenverlust (R-024), der Support von außen und die Mandantenfähigkeit.
+
+Eine Entscheidung steht ohne Szenario da: <<adr-007>>. Die Wahl des Kanals folgt aus der Randbedingung, dass der Laden Dienste kauft statt betreibt, nicht aus einem Maß. Alle anderen ADRs treiben mindestens ein Szenario oder werden von einem belastet.

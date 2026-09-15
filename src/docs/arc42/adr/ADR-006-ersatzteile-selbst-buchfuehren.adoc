@@ -20,6 +20,8 @@ Aus dem Chat kommt der Hinweis, ein Inventarsystem für Teile des Rades in den S
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
+*Betroffene Qualitätsszenarien:* <<qs-u-07>>, weil ein Inventarsystem weniger ein System weniger ist, das der Laden ohne IT-Experten betreiben müsste; <<qs-a-01>>, weil Läden mit eigenem Inventarsystem als SaaS-Kunden auf die Eigenlösung treffen (R-018).
+
 === Optionen
 
 *Option A: Inventar- oder Warenwirtschaftssystem anbinden.* Ein externes System führt Bestände, Preise und Bestellungen. Das Reparatursystem fragt dort nach und bucht Verbrauch zurück. Vorteil: Lagerverwaltung ist ein gelöstes Problem, ein Fertigprodukt kann mehr als eine Eigenlösung. Nachteil: Eine weitere Schnittstelle, ein weiteres System, das jemand betreiben muss, und der Laden hat heute keines.

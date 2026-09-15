@@ -18,6 +18,8 @@ Der Webshop ist ein bestehendes Fertigprodukt. Wer dort registriert ist, hat sch
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen steht an erster Stelle, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Confidentiality stuft Eberhard bewusst niedrig ein, weil es am Ende um Fahrradreparaturdaten geht. Die Usability-Szenarien verlangen, dass eine Reparatur in zwei Minuten beauftragt ist und eine Registrierung eine Minute dauert.
 
+*Betroffene Qualitätsszenarien:* <<qs-u-01>>, weil die Registrierung im Webshop bleibt und das Szenario im Reparatursystem damit nicht erfüllbar ist; <<qs-u-02>>, weil Login und vorbelegte Adresse aus dem Webshop die Beauftragung in zwei Minuten erst möglich machen; <<qs-z-04>>, weil der Web-Login mit dem Webshop ausfällt (R-002); <<qs-a-01>>, weil die feste Kopplung an diesen einen Webshop den Umbau zum SaaS verteuert (R-003).
+
 === Optionen
 
 *Option A: Eigene Nutzerverwaltung.* Das Reparatursystem führt eigene Konten mit Registrierung, Login und Passwortverwaltung. Vorteil: Das System bleibt unabhängig vom Webshop und hat die Hoheit über seine Kundendaten. Nachteil: Bestehende Webshop-Kund:innen müssen sich ein zweites Mal registrieren und ihre Adresse erneut eingeben.

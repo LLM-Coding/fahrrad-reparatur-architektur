@@ -20,6 +20,8 @@ Der Webshop ist ein Fertigprodukt. Sein Login und seine Cookie-Einstellungen lie
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
+*Betroffene Qualitätsszenarien:* <<qs-u-02>>, weil der Login aus dem Webshop nur unter derselben Domain durchläuft und Kund:innen sich sonst ein zweites Mal anmelden müssten; <<qs-a-01>>, weil jeder weitere Laden eine eigene Umleitung unter seiner Domain braucht (R-006).
+
 === Optionen
 
 *Option A: Eigene Domain mit Token-Weitergabe.* Das Reparatursystem läuft unter einer eigenen Domain, etwa `fahrrad-reparatur.de`. Das JWT-Cookie des Webshops kommt dort nicht an. Der Webshop müsste das Token beim Absprung übergeben, etwa als URL-Parameter oder über einen Redirect-Flow. Vorteil: Das Reparatursystem ist vom Webshop technisch entkoppelt und lässt sich unverändert für andere Läden betreiben. Nachteil: Der Webshop müsste mitspielen, und ein Token in der URL ist angreifbar.

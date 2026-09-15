@@ -22,6 +22,8 @@ Das Betriebsmodell des Reparatursystems ist offen: Cloud oder on-premise ist "ei
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
+*Betroffene Qualitätsszenarien:* <<qs-z-03>>, weil die Kund:in an der Kasse wartet und der Preis der erfolgten Reparatur dort in zwei Minuten vorliegen muss; <<qs-u-07>>, weil ein Laden ohne IT-Experten keine eigene Zahlungsabwicklung betreiben kann; <<qs-a-01>>, weil jeder Laden eine andere Kasse hat und die Integration je Laden neu entsteht (R-013).
+
 === Optionen
 
 *Option A: Eigene Zahlungsabwicklung, nur online.* Das Reparatursystem nimmt Kreditkarten oder Lastschrift selbst entgegen und verbucht sie. Bezahlt wird ausschließlich online. Vorteil: Keine Abhängigkeit von einem Anbieter, keine Gebühren je Transaktion. Nachteil: Zahlungsdaten im eigenen System, hohe Anforderungen an Security und Compliance, Kund:innen können im Laden nicht über das System bezahlen.
