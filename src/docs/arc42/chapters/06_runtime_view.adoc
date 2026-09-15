@@ -7,6 +7,10 @@
 ifndef::imagesdir[:imagesdir: ../../images]
 
 :toc:
+// Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
+ifndef::ch04[:ch04: 04_solution_strategy.adoc]
+ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
+ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 
 
 [[section-runtime-view]]
@@ -18,7 +22,7 @@ Jeder Baustein aus Kapitel 5 kommt in mindestens einem Szenario vor: Terminplanu
 
 === Reparatur online beauftragen
 
-Kund:innen beauftragen eine Reparatur über den Webshop. Der Login läuft über den Webshop (<<09_architecture_decisions.adoc#adr-001,ADR-001>>), das Reparatur-System liegt unter `/reparatur` derselben Domain, damit das JWT-Cookie mitkommt (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
+Kund:innen beauftragen eine Reparatur über den Webshop. Der Login läuft über den Webshop (<<{ch09}#adr-001,ADR-001>>), das Reparatur-System liegt unter `/reparatur` derselben Domain, damit das JWT-Cookie mitkommt (<<{ch09}#adr-002,ADR-002>>).
 
 [plantuml, "06-online-beauftragen", svg]
 ----
@@ -48,22 +52,22 @@ termin --> browser: Bestätigung mit Termin
 ----
 
 Schritte::
-. Kund:in meldet sich im Webshop an. Der Webshop prüft das Konto in der Webshop User Database und stellt ein JWT als Cookie aus (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
-. Kund:in ruft `/reparatur` auf. Der Browser sendet das JWT-Cookie mit, weil Domain und Origin gleich bleiben (<<09_architecture_decisions.adoc#adr-002,ADR-002>>).
+. Kund:in meldet sich im Webshop an. Der Webshop prüft das Konto in der Webshop User Database und stellt ein JWT als Cookie aus (<<{ch09}#adr-001,ADR-001>>).
+. Kund:in ruft `/reparatur` auf. Der Browser sendet das JWT-Cookie mit, weil Domain und Origin gleich bleiben (<<{ch09}#adr-002,ADR-002>>).
 . Der Webshop leitet `/reparatur` an das Reparatur-System um. Auf dem Board endet der Pfeil bei Terminplanung, Reparatur durchführen und Bezahlung; für die Anmeldung ist Terminplanung der Einstieg.
-. Terminplanung liest das JWT und holt Adresse und Zahlungsart über die REST-Schnittstelle des Webshops (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
+. Terminplanung liest das JWT und holt Adresse und Zahlungsart über die REST-Schnittstelle des Webshops (<<{ch09}#adr-001,ADR-001>>).
 . Terminplanung zeigt das Auftragsformular, vorbelegt mit den Daten aus dem Webshop.
 . Kund:in trägt Fahrrad und Problem ein und sendet ab (Story "Fahrrad zur Reparatur anmelden").
 . Terminplanung berechnet den Termin (Story "Reparaturtermin berechnen") und gibt "Termin" an Reparatur durchführen (Board Seite 9).
 . Kund:in sieht die Bestätigung mit dem Termin.
 
-Besonderheiten:: Der Webshop hält keine Reparaturdaten. Den Status sieht die Kund:in später auf einer Seite, die das Reparatur-System selbst rendert (<<09_architecture_decisions.adoc#adr-005,ADR-005>>). Das Usability-Ziel aus Kapitel 10 gilt für diesen Ablauf: 90 % der Benutzer:innen beauftragen eine Reparatur in zwei Minuten (Board Seite 5).
+Besonderheiten:: Der Webshop hält keine Reparaturdaten. Den Status sieht die Kund:in später auf einer Seite, die das Reparatur-System selbst rendert (<<{ch09}#adr-005,ADR-005>>). Das Usability-Ziel aus Kapitel 10 gilt für diesen Ablauf: 90 % der Benutzer:innen beauftragen eine Reparatur in zwei Minuten (Board Seite 5).
 
 NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt.
 
 === Reparatur durchführen, abrechnen, bezahlen
 
-Die Werkstatt führt die Reparatur aus, das System rechnet ab und die Kund:in bezahlt bei der Abholung. Das Szenario verbindet vier Bausteine und vier externe Systeme. Die Bezahlung folgt <<09_architecture_decisions.adoc#adr-004,ADR-004>>, die Benachrichtigung <<09_architecture_decisions.adoc#adr-007,ADR-007>>.
+Die Werkstatt führt die Reparatur aus, das System rechnet ab und die Kund:in bezahlt bei der Abholung. Das Szenario verbindet vier Bausteine und vier externe Systeme. Die Bezahlung folgt <<{ch09}#adr-004,ADR-004>>, die Benachrichtigung <<{ch09}#adr-007,ADR-007>>.
 
 [plantuml, "06-durchfuehren-bezahlen", svg]
 ----
@@ -110,10 +114,10 @@ Schritte::
 . Shop-Mitarbeiter:in nimmt das Fahrrad an (Story "Fahrrad zur Reparatur abgeben").
 . Mechaniker:in nimmt den Defekt auf: "Schaltung kaputt" (Board Seite 7). Reparatur durchführen berechnet die voraussichtlichen Kosten.
 . Mechaniker:in protokolliert jede Position mit Dauer und Preis. Beispiel vom Board: neues Schaltwerk gekauft 100 €; altes Schaltwerk ausgebaut 10 Minuten, 10 €; neues Schaltwerk eingebaut 10 Minuten, 10 €.
-. Braucht die Reparatur Teile, gibt Reparatur durchführen eine "Materialbestellung" an Materialbeschaffung. Materialbeschaffung bestellt beim Großhändler (<<09_architecture_decisions.adoc#adr-006,ADR-006>>).
-. Nach Abschluss schickt Reparatur durchführen "Info über Updates" an das EMail System. Die Kund:in erhält eine E-Mail (<<09_architecture_decisions.adoc#adr-007,ADR-007>>). SMS ist vorgesehen, nicht gebaut.
+. Braucht die Reparatur Teile, gibt Reparatur durchführen eine "Materialbestellung" an Materialbeschaffung. Materialbeschaffung bestellt beim Großhändler (<<{ch09}#adr-006,ADR-006>>).
+. Nach Abschluss schickt Reparatur durchführen "Info über Updates" an das EMail System. Die Kund:in erhält eine E-Mail (<<{ch09}#adr-007,ADR-007>>). SMS ist vorgesehen, nicht gebaut.
 . Reparatur durchführen meldet den "Preis" an Bezahlung und die "Rechnungselemente" an das Rechnungswesen (Board Seite 9).
-. Kund:in holt das Fahrrad ab und bezahlt. Im Laden kassiert die Shop-Mitarbeiter:in; Bezahlung tauscht den Zahlungsstatus mit der Kasse über REST aus. Online klickt die Kund:in den Bezahlen-Button, wird zum Online Payment Service umgeleitet und kommt zurück; Bezahlung fragt den Buchungsstatus per REST ab (<<09_architecture_decisions.adoc#adr-004,ADR-004>>).
+. Kund:in holt das Fahrrad ab und bezahlt. Im Laden kassiert die Shop-Mitarbeiter:in; Bezahlung tauscht den Zahlungsstatus mit der Kasse über REST aus. Online klickt die Kund:in den Bezahlen-Button, wird zum Online Payment Service umgeleitet und kommt zurück; Bezahlung fragt den Buchungsstatus per REST ab (<<{ch09}#adr-004,ADR-004>>).
 . Shop-Mitarbeiter:in schließt die Abholung ab (Story "Repariertes Fahrrad abholen").
 
 Besonderheiten:: Reparatur durchführen ist die Drehscheibe. Alle Pfeile nach außen außer Kasse und Payment Service gehen von ihm aus. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Kapitel 5) zielt auf die Schritte 6 und 7.
@@ -122,7 +126,7 @@ NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder
 
 === Fehlerszenario: Webshop nicht erreichbar
 
-Der Webshop trägt Login und Nutzerdaten (<<09_architecture_decisions.adoc#adr-001,ADR-001>>). Fällt er aus, scheitern Login und Adressabfrage. Das ist Risiko R-002 aus <<09_architecture_decisions.adoc#adr-001,ADR-001>> und trifft das Qualitätsziel Verfügbarkeit für Kund:innen: 99,9 % zwischen 7 und 24 Uhr (<<09_architecture_decisions.adoc#adr-008,ADR-008>>).
+Der Webshop trägt Login und Nutzerdaten (<<{ch09}#adr-001,ADR-001>>). Fällt er aus, scheitern Login und Adressabfrage. Das ist Risiko R-002 aus <<{ch09}#adr-001,ADR-001>> und trifft das Qualitätsziel Verfügbarkeit für Kund:innen: 99,9 % zwischen 7 und 24 Uhr (<<{ch09}#adr-008,ADR-008>>).
 
 [plantuml, "06-fehler-webshop", svg]
 ----
@@ -142,8 +146,8 @@ webshop --> browser: keine Antwort
 ----
 
 Was Board und ADRs hergeben::
-* Die Umleitung von `/reparatur` liegt vor dem Webshop (<<09_architecture_decisions.adoc#adr-002,ADR-002>>, R-005). Antwortet der Webshop nicht, erreicht die Kund:in auch das Reparatur-System nicht, es sei denn, ein Reverse Proxy vor dem Webshop leitet weiter.
-* Ohne Webshop gibt es kein JWT-Cookie und keine Adressabfrage. Das Reparatur-System kann die Kund:in nicht identifizieren (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
+* Die Umleitung von `/reparatur` liegt vor dem Webshop (<<{ch09}#adr-002,ADR-002>>, R-005). Antwortet der Webshop nicht, erreicht die Kund:in auch das Reparatur-System nicht, es sei denn, ein Reverse Proxy vor dem Webshop leitet weiter.
+* Ohne Webshop gibt es kein JWT-Cookie und keine Adressabfrage. Das Reparatur-System kann die Kund:in nicht identifizieren (<<{ch09}#adr-001,ADR-001>>).
 * Die Werkstatt im Laden ist nicht betroffen, sofern Mechaniker:innen sich nicht über den Webshop anmelden.
 * Das Board (Seite 6) setzt für den Wiederanlauf des Web-Systems keine Zeit, nur für das System im Shop (30 Minuten, 5 Minuten).
 
@@ -151,7 +155,7 @@ NOTE: Offen: Verhalten nicht entschieden. Weder Board noch ADRs sagen, ob das Re
 
 === Fehlerszenario: Kasse aus der Cloud nicht erreichbar
 
-Die Kasse steht im Laden. Läuft das Reparatur-System in der Cloud, muss Bezahlung die Kasse über das Netz des Ladens erreichen. Das Board fragt auf Seite 10 und 11: "Kann man aus der Cloud in die Kasse kommunizieren?". Das ist Risiko R-010 aus <<09_architecture_decisions.adoc#adr-004,ADR-004>>.
+Die Kasse steht im Laden. Läuft das Reparatur-System in der Cloud, muss Bezahlung die Kasse über das Netz des Ladens erreichen. Das Board fragt auf Seite 10 und 11: "Kann man aus der Cloud in die Kasse kommunizieren?". Das ist Risiko R-010 aus <<{ch09}#adr-004,ADR-004>>.
 
 [plantuml, "06-fehler-kasse", svg]
 ----
@@ -168,7 +172,7 @@ bezahlung --> shop: Zahlungsstatus unbekannt
 
 Was Board und ADRs hergeben::
 * Das Qualitätsszenario "Das System im Shop fällt aus. Spätestens nach 2 Minuten kann man den Preis einer erfolgten Reparatur wieder ermitteln" (Board Seite 6) zeigt, dass der Preis auch bei Ausfall verfügbar sein muss. Für die Kasse selbst gibt es kein Szenario.
-* Eberhard nennt die Integration mit lokalen Systemen "vielleicht in der Cloud schwierig" (Folge 111, 59:46, zitiert in <<09_architecture_decisions.adoc#adr-004,ADR-004>>).
+* Eberhard nennt die Integration mit lokalen Systemen "vielleicht in der Cloud schwierig" (Folge 111, 59:46, zitiert in <<{ch09}#adr-004,ADR-004>>).
 * Der zweite Bezahlweg über den Online Payment Service bleibt offen, wenn die Kasse nicht antwortet.
 
 NOTE: Offen: Verhalten nicht entschieden. Ob Bezahlung den Aufruf wiederholt, den Betrag zwischenspeichert oder die Shop-Mitarbeiter:in an der Kasse ohne Systemeintrag kassieren lässt, sagt das Board nicht. Die Antwort hängt an der offenen Entscheidung Cloud oder on-premise (Kapitel 7).

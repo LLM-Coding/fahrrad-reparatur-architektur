@@ -7,6 +7,10 @@
 ifndef::imagesdir[:imagesdir: ../../images]
 
 :toc:
+// Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
+ifndef::ch04[:ch04: 04_solution_strategy.adoc]
+ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
+ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 
 
 [[section-building-block-view]]
@@ -78,7 +82,7 @@ Enthaltene Bausteine::
 | Bezahlung | Nimmt den Geldbetrag für eine Reparatur über Kasse oder Online Payment Service entgegen.
 |===
 
-Wichtige Schnittstellen:: Das Board beschriftet vier interne Aufrufe: "Termin" (Terminplanung an Reparatur durchführen), "Preis" (Reparatur durchführen an Bezahlung), "Materialbestellung" (Reparatur durchführen an Materialbeschaffung) und nach außen "Rechnungselemente" (an Rechnungswesen) sowie "Info über Updates" (an SMS Versand und EMail System). Der Webshop ruft Terminplanung, Reparatur durchführen und Bezahlung über die Umleitung von `/reparatur` auf (<<09_architecture_decisions.adoc#adr-002,ADR-002>>). Protokolle und Datenformate der internen Aufrufe legt das Board nicht fest.
+Wichtige Schnittstellen:: Das Board beschriftet vier interne Aufrufe: "Termin" (Terminplanung an Reparatur durchführen), "Preis" (Reparatur durchführen an Bezahlung), "Materialbestellung" (Reparatur durchführen an Materialbeschaffung) und nach außen "Rechnungselemente" (an Rechnungswesen) sowie "Info über Updates" (an SMS Versand und EMail System). Der Webshop ruft Terminplanung, Reparatur durchführen und Bezahlung über die Umleitung von `/reparatur` auf (<<{ch09}#adr-002,ADR-002>>). Protokolle und Datenformate der internen Aufrufe legt das Board nicht fest.
 
 Offene Entwurfsfrage:: Auf dem Board klebt eine gelbe Notiz: "ggf. finanziellen Aspekt separieren?". Gemeint ist, ob Preisermittlung, Rechnungselemente und Bezahlung in einen eigenen Baustein wandern, statt auf Reparatur durchführen und Bezahlung verteilt zu bleiben. Die Frage ist nicht entschieden.
 
@@ -89,7 +93,7 @@ NOTE: Offen: Das Board lässt offen, ob eine Komponente ein eigenes Repository i
 Zweck/Verantwortung:: Terminplanung ist der Einstieg für Kund:innen und der Taktgeber der Werkstatt. Der Baustein nimmt Anmeldungen auf, berechnet den Reparaturtermin, plant Reparaturen ein und erstellt den täglichen Reparaturplan. Über ihn beginnt die Werkstatt die nächste Reparatur, und über ihn fragen Kund:innen den Status ab.
 
 Schnittstellen::
-* Eingehend: Webshop über Umleitung `/reparatur` (<<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>); Kund:in und Mechaniker:in über den Browser.
+* Eingehend: Webshop über Umleitung `/reparatur` (<<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>); Kund:in und Mechaniker:in über den Browser.
 * Ausgehend: "Termin" an Reparatur durchführen.
 
 Zugeordnete Stories (Board Seite 7)::
@@ -105,11 +109,11 @@ Beispieldaten (Board Seite 7):: "Reparatur 18.3. Eberhard"
 Ablageort::
 NOTE: Offen: kein Code vorhanden; Board lässt offen, ob Komponente eigenes Repository oder Verzeichnis ist (Board Seite 9).
 
-Offene Punkte:: Die Story "Status der Reparatur abfragen" steht auf dem Board bei Terminplanung und bei Reparatur durchführen. Welcher Baustein die Statusseite aus <<09_architecture_decisions.adoc#adr-005,ADR-005>> rendert, ist nicht entschieden.
+Offene Punkte:: Die Story "Status der Reparatur abfragen" steht auf dem Board bei Terminplanung und bei Reparatur durchführen. Welcher Baustein die Statusseite aus <<{ch09}#adr-005,ADR-005>> rendert, ist nicht entschieden.
 
 ==== Reparatur durchführen
 
-Zweck/Verantwortung:: Reparatur durchführen ist der fachliche Kern. Der Baustein nimmt den Defekt auf, protokolliert jede Position mit Zeit und Preis, berechnet die voraussichtlichen Kosten und wickelt Abgabe und Abholung im Laden ab. Er stößt Materialbestellungen an, meldet den Preis an Bezahlung, liefert Rechnungselemente an das Rechnungswesen und informiert Kund:innen über Updates (<<09_architecture_decisions.adoc#adr-007,ADR-007>>).
+Zweck/Verantwortung:: Reparatur durchführen ist der fachliche Kern. Der Baustein nimmt den Defekt auf, protokolliert jede Position mit Zeit und Preis, berechnet die voraussichtlichen Kosten und wickelt Abgabe und Abholung im Laden ab. Er stößt Materialbestellungen an, meldet den Preis an Bezahlung, liefert Rechnungselemente an das Rechnungswesen und informiert Kund:innen über Updates (<<{ch09}#adr-007,ADR-007>>).
 
 Schnittstellen::
 * Eingehend: "Termin" von Terminplanung; Webshop über Umleitung `/reparatur`; Mechaniker:in und Shop-Mitarbeiter:in über den Browser.
@@ -140,11 +144,11 @@ Beispieldaten (Board Seite 7):: Reparatur "Schaltung kaputt" mit Protokoll:
 Ablageort::
 NOTE: Offen: kein Code vorhanden; Board lässt offen, ob Komponente eigenes Repository oder Verzeichnis ist (Board Seite 9).
 
-Offene Punkte:: Der Baustein trägt die meisten Schnittstellen nach außen. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" zielt auf Preis und Rechnungselemente in diesem Baustein. Der SMS Versand ist laut <<09_architecture_decisions.adoc#adr-007,ADR-007>> nur vorgesehen, nicht gebaut.
+Offene Punkte:: Der Baustein trägt die meisten Schnittstellen nach außen. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" zielt auf Preis und Rechnungselemente in diesem Baustein. Der SMS Versand ist laut <<{ch09}#adr-007,ADR-007>> nur vorgesehen, nicht gebaut.
 
 ==== Materialbeschaffung
 
-Zweck/Verantwortung:: Materialbeschaffung bestellt Ersatzteile und Werkzeuge beim Großhändler. Laut <<09_architecture_decisions.adoc#adr-006,ADR-006>> führt das Reparatur-System Teile und Bestände selbst; ein Warenwirtschaftssystem wird nicht angebunden.
+Zweck/Verantwortung:: Materialbeschaffung bestellt Ersatzteile und Werkzeuge beim Großhändler. Laut <<{ch09}#adr-006,ADR-006>> führt das Reparatur-System Teile und Bestände selbst; ein Warenwirtschaftssystem wird nicht angebunden.
 
 Schnittstellen::
 * Eingehend: "Materialbestellung" von Reparatur durchführen; Mechaniker:in über den Browser.
@@ -163,7 +167,7 @@ Offene Punkte:: NOTE: Offen: Ob die Bestellung beim Großhändler per Hand, per 
 
 ==== Bezahlung
 
-Zweck/Verantwortung:: Bezahlung nimmt den Geldbetrag für eine Reparatur entgegen. Zwei Wege sind vorgesehen (<<09_architecture_decisions.adoc#adr-004,ADR-004>>): im Laden über die Kasse, online über den Online Payment Service mit Redirect-Button und REST-Statusabfrage.
+Zweck/Verantwortung:: Bezahlung nimmt den Geldbetrag für eine Reparatur entgegen. Zwei Wege sind vorgesehen (<<{ch09}#adr-004,ADR-004>>): im Laden über die Kasse, online über den Online Payment Service mit Redirect-Button und REST-Statusabfrage.
 
 Schnittstellen::
 * Eingehend: "Preis" von Reparatur durchführen; Webshop über Umleitung `/reparatur`; Shop-Mitarbeiter:in und Kund:in über den Browser.
@@ -177,7 +181,7 @@ Beispieldaten (Board Seite 7):: "Geldbetrag"
 Ablageort::
 NOTE: Offen: kein Code vorhanden; Board lässt offen, ob Komponente eigenes Repository oder Verzeichnis ist (Board Seite 9).
 
-Offene Punkte:: R-010 aus <<09_architecture_decisions.adoc#adr-004,ADR-004>>: Läuft das System in der Cloud, muss Bezahlung die Kasse im Laden erreichen (Board Seite 10, "Kann man aus der Cloud in die Kasse kommunizieren?"). R-011: Der Zahlungsstatus kommt aus zwei Quellen.
+Offene Punkte:: R-010 aus <<{ch09}#adr-004,ADR-004>>: Läuft das System in der Cloud, muss Bezahlung die Kasse im Laden erreichen (Board Seite 10, "Kann man aus der Cloud in die Kasse kommunizieren?"). R-011: Der Zahlungsstatus kommt aus zwei Quellen.
 
 === Ebene 2
 

@@ -20,7 +20,7 @@ Aus dem Chat kommt die Frage, ob der Webshop Daten aus dem Reparatursystem brauc
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
-*Betroffene Qualitätsszenarien:* <<10_quality_requirements.adoc#qs-u-03,QS-U-03>>, weil die Statusseite das ist, was Kund:innen nach der Reparatur vom System sehen und bewerten (R-014, R-015); <<10_quality_requirements.adoc#qs-a-01,QS-A-01>>, weil Reparaturdaten genau einen Ort haben und andere Läden mit anderen Webshops keinen Abgleich brauchen.
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-03,QS-U-03>>, weil die Statusseite das ist, was Kund:innen nach der Reparatur vom System sehen und bewerten (R-014, R-015); <<{ch10}#qs-a-01,QS-A-01>>, weil Reparaturdaten genau einen Ort haben und andere Läden mit anderen Webshops keinen Abgleich brauchen.
 
 === Optionen
 

@@ -7,6 +7,10 @@
 ifndef::imagesdir[:imagesdir: ../../images]
 
 :toc:
+// Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
+ifndef::ch04[:ch04: 04_solution_strategy.adoc]
+ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
+ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 
 
 [[section-quality-scenarios]]
@@ -22,11 +26,11 @@ Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlic
 
 | Benutzbarkeit (Usability) | konkretisiert Ziel 1 aus Kapitel 1.2 | QS-U-01 bis QS-U-07 (Board Seite 5)
 | Wartbarkeit (Maintainability), hier Änderbarkeit | konkretisiert Ziel 2 aus Kapitel 1.2 | QS-A-01 (Board Seite 6); fachlicher Schnitt in vier Module (Kapitel 4)
-| Zuverlässigkeit (Reliability), hier Verfügbarkeit und Wiederherstellbarkeit | konkretisiert Ziel 3 aus Kapitel 1.2 | QS-Z-01 bis QS-Z-07 (Board Seite 6); <<09_architecture_decisions.adoc#adr-008,ADR-008>>
+| Zuverlässigkeit (Reliability), hier Verfügbarkeit und Wiederherstellbarkeit | konkretisiert Ziel 3 aus Kapitel 1.2 | QS-Z-01 bis QS-Z-07 (Board Seite 6); <<{ch09}#adr-008,ADR-008>>
 | Sicherheit (Security) | abgeleitet; bewusst nachrangig (Folge 111, 41:44 und 58:03) | Threat Model 8.1, Maßnahmen 8.2; kein Board-Szenario
 | Performance (Performance Efficiency) | abgeleitet | Einzige Zahl: Preisermittlung in 2 Minuten nach Ausfall (QS-Z-03); Skalierbarkeit auf dem Board mit `?` markiert
-| Kompatibilität (Compatibility) | abgeleitet | Sieben REST-Schnittstellen und JWT-Cookie (Kapitel 3); Same-Origin-Policy (<<09_architecture_decisions.adoc#adr-002,ADR-002>>)
-| Funktionale Eignung (Functional Suitability) | abgeleitet | Stories auf Board Seite 1; Reparatur als eigener Ablauf statt Webshop-Produkt (<<09_architecture_decisions.adoc#adr-003,ADR-003>>)
+| Kompatibilität (Compatibility) | abgeleitet | Sieben REST-Schnittstellen und JWT-Cookie (Kapitel 3); Same-Origin-Policy (<<{ch09}#adr-002,ADR-002>>)
+| Funktionale Eignung (Functional Suitability) | abgeleitet | Stories auf Board Seite 1; Reparatur als eigener Ablauf statt Webshop-Produkt (<<{ch09}#adr-003,ADR-003>>)
 | Übertragbarkeit (Portability) | abgeleitet | Betriebsmodell offen: Cloud, Monolith oder Microservices (Board Seite 10 und 11)
 |===
 
@@ -48,7 +52,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Normalbetrieb
 | Reaktion | Konto ist angelegt
 | Maß | Innerhalb von 1 Minute
-| Antwort der Architektur | Keine. Auf dem Board als nicht erfüllbar markiert, Registrierung liegt im Webshop (<<09_architecture_decisions.adoc#adr-001,ADR-001>>).
+| Antwort der Architektur | Keine. Auf dem Board als nicht erfüllbar markiert, Registrierung liegt im Webshop (<<{ch09}#adr-001,ADR-001>>).
 | Bezug | konkretisiert Ziel 1
 |===
 
@@ -62,7 +66,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Normalbetrieb, Kund:in ist im Webshop eingeloggt
 | Reaktion | Auftrag ist erfasst
 | Maß | 90 % der Benutzer:innen schaffen das innerhalb von 2 Minuten
-| Antwort der Architektur | Login und vorbelegte Adresse aus dem Webshop (<<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>); eigener Bezahlvorgang (<<09_architecture_decisions.adoc#adr-003,ADR-003>>)
+| Antwort der Architektur | Login und vorbelegte Adresse aus dem Webshop (<<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>); eigener Bezahlvorgang (<<{ch09}#adr-003,ADR-003>>)
 | Bezug | konkretisiert Ziel 1
 |===
 
@@ -76,7 +80,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Nach abgeschlossener Reparatur
 | Reaktion | Bewertung liegt vor
 | Maß | Im Schnitt 4 von 5 Punkten
-| Antwort der Architektur | Eigene Statusseite, Benachrichtigung per E-Mail (<<09_architecture_decisions.adoc#adr-005,ADR-005>>, <<09_architecture_decisions.adoc#adr-007,ADR-007>>)
+| Antwort der Architektur | Eigene Statusseite, Benachrichtigung per E-Mail (<<{ch09}#adr-005,ADR-005>>, <<{ch09}#adr-007,ADR-007>>)
 | Bezug | konkretisiert Ziel 1
 |===
 
@@ -149,7 +153,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Reaktion | System steht zur Verfügung
 | Maß | 99 % Verfügbarkeit
 | Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
-| Bezug | konkretisiert Ziel 3 (<<09_architecture_decisions.adoc#adr-008,ADR-008>>)
+| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>)
 |===
 
 [[qs-z-02,QS-Z-02]]
@@ -163,7 +167,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Reaktion | System steht wieder zur Verfügung
 | Maß | Spätestens nach 30 Minuten
 | Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
-| Bezug | konkretisiert Ziel 3 (<<09_architecture_decisions.adoc#adr-008,ADR-008>>: "30 Minuten Zettel und Bleistift")
+| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>: "30 Minuten Zettel und Bleistift")
 |===
 
 [[qs-z-03,QS-Z-03]]
@@ -191,7 +195,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Reaktion | System steht zur Verfügung
 | Maß | 99,9 % Verfügbarkeit
 | Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
-| Bezug | konkretisiert Ziel 3 (<<09_architecture_decisions.adoc#adr-008,ADR-008>>: "jede Minute Umsatzausfall")
+| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>: "jede Minute Umsatzausfall")
 |===
 
 [[qs-z-05,QS-Z-05]]
@@ -222,7 +226,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3
 |===
 
-NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<09_architecture_decisions.adoc#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären.
+NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<{ch09}#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären.
 
 [[qs-z-07,QS-Z-07]]
 .QS-Z-07: Datenverlust
@@ -235,7 +239,7 @@ NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 
 | Reaktion | Daten, die älter als 5 Minuten sind, stehen wieder zur Verfügung
 | Maß | Mit 99,9 % Sicherheit; Datenverlust höchstens 5 Minuten
 | Antwort der Architektur | RDS SLAs (auf dem Board mit `?` markiert)
-| Bezug | konkretisiert Ziel 3 (<<09_architecture_decisions.adoc#adr-008,ADR-008>>, R-024)
+| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>, R-024)
 |===
 
 ==== Änderbarkeit
@@ -265,21 +269,21 @@ NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in A
 |===
 | Szenario | Maß | Antwortende ADRs | Maßnahme laut Board
 
-| <<qs-u-01>> Registrierung | 1 Minute | <<09_architecture_decisions.adoc#adr-001,ADR-001>> (erklärt das Szenario für nicht erfüllbar) | Keine; auf dem Board als nicht erfüllbar markiert
-| <<qs-u-02>> Reparatur beauftragen | 90 % in 2 Minuten | <<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>, <<09_architecture_decisions.adoc#adr-003,ADR-003>> | Login und Adresse aus dem Webshop; eigener Bezahlvorgang
-| <<qs-u-03>> Bewertung durch Kund:innen | 4 von 5 Punkten | <<09_architecture_decisions.adoc#adr-005,ADR-005>>, <<09_architecture_decisions.adoc#adr-007,ADR-007>> | Eigene Statusseite; Benachrichtigung per E-Mail
+| <<qs-u-01>> Registrierung | 1 Minute | <<{ch09}#adr-001,ADR-001>> (erklärt das Szenario für nicht erfüllbar) | Keine; auf dem Board als nicht erfüllbar markiert
+| <<qs-u-02>> Reparatur beauftragen | 90 % in 2 Minuten | <<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-003,ADR-003>> | Login und Adresse aus dem Webshop; eigener Bezahlvorgang
+| <<qs-u-03>> Bewertung durch Kund:innen | 4 von 5 Punkten | <<{ch09}#adr-005,ADR-005>>, <<{ch09}#adr-007,ADR-007>> | Eigene Statusseite; Benachrichtigung per E-Mail
 | <<qs-u-04>> Empfehlung durch Mitarbeitende | 85 % | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
 | <<qs-u-05>> Einarbeitung Shop-Mitarbeiter:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
 | <<qs-u-06>> Einarbeitung Fahrrad-Mechaniker:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
-| <<qs-u-07>> Betrieb ohne IT-Experten | Keine Zahl | <<09_architecture_decisions.adoc#adr-004,ADR-004>>, <<09_architecture_decisions.adoc#adr-006,ADR-006>>, <<09_architecture_decisions.adoc#adr-008,ADR-008>> (betroffen; die Maßnahme Cloud ist nicht entschieden, A1) | Cloud; Eigener Support
-| <<qs-z-01>> Verfügbarkeit Werkstatt | 99 %, 9 bis 18 Uhr | <<09_architecture_decisions.adoc#adr-008,ADR-008>> (setzt das Ziel; die Maßnahme ist nicht entschieden) | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-02>> Wiederanlauf Werkstatt | 30 Minuten | <<09_architecture_decisions.adoc#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-03>> Preisermittlung nach Ausfall | 2 Minuten | <<09_architecture_decisions.adoc#adr-004,ADR-004>>, <<09_architecture_decisions.adoc#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-04>> Verfügbarkeit Web tagsüber | 99,9 %, 7 bis 24 Uhr | <<09_architecture_decisions.adoc#adr-008,ADR-008>>; <<09_architecture_decisions.adoc#adr-001,ADR-001>> (betroffen, R-002) | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-05>> Verfügbarkeit Web nachts | 99 %, 24 bis 7 Uhr | <<09_architecture_decisions.adoc#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support 24/7
-| <<qs-z-06>> Schneller Wiederanlauf | 5 Minuten | <<09_architecture_decisions.adoc#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-07>> Datenverlust | 99,9 %, höchstens 5 Minuten | <<09_architecture_decisions.adoc#adr-008,ADR-008>> (R-024; Persistenz nicht entschieden) | RDS SLAs (`?`)
-| <<qs-a-01>> SaaS für andere Fahrrad-Shops | 2 Monate, 20 PT | <<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>, <<09_architecture_decisions.adoc#adr-004,ADR-004>>, <<09_architecture_decisions.adoc#adr-005,ADR-005>>, <<09_architecture_decisions.adoc#adr-006,ADR-006>> (betroffen über R-003, R-006, R-013, R-018) | Cloud; Mandantenfähigkeit; Skalierbarkeit (`?`); Drittsysteme je Shop
+| <<qs-u-07>> Betrieb ohne IT-Experten | Keine Zahl | <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-006,ADR-006>>, <<{ch09}#adr-008,ADR-008>> (betroffen; die Maßnahme Cloud ist nicht entschieden, A1) | Cloud; Eigener Support
+| <<qs-z-01>> Verfügbarkeit Werkstatt | 99 %, 9 bis 18 Uhr | <<{ch09}#adr-008,ADR-008>> (setzt das Ziel; die Maßnahme ist nicht entschieden) | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-02>> Wiederanlauf Werkstatt | 30 Minuten | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-03>> Preisermittlung nach Ausfall | 2 Minuten | <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-04>> Verfügbarkeit Web tagsüber | 99,9 %, 7 bis 24 Uhr | <<{ch09}#adr-008,ADR-008>>; <<{ch09}#adr-001,ADR-001>> (betroffen, R-002) | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-05>> Verfügbarkeit Web nachts | 99 %, 24 bis 7 Uhr | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support 24/7
+| <<qs-z-06>> Schneller Wiederanlauf | 5 Minuten | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-07>> Datenverlust | 99,9 %, höchstens 5 Minuten | <<{ch09}#adr-008,ADR-008>> (R-024; Persistenz nicht entschieden) | RDS SLAs (`?`)
+| <<qs-a-01>> SaaS für andere Fahrrad-Shops | 2 Monate, 20 PT | <<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-005,ADR-005>>, <<{ch09}#adr-006,ADR-006>> (betroffen über R-003, R-006, R-013, R-018) | Cloud; Mandantenfähigkeit; Skalierbarkeit (`?`); Drittsysteme je Shop
 |===
 
 .Entscheidung zu Szenario
@@ -287,16 +291,16 @@ NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in A
 |===
 | ADR | Szenarien | Bemerkung
 
-| <<09_architecture_decisions.adoc#adr-001,ADR-001>> Login über den Webshop | <<qs-u-01>>, <<qs-u-02>>, <<qs-z-04>>, <<qs-a-01>> | Treibt QS-U-02; macht QS-U-01 im Reparatursystem unerfüllbar; R-002 und R-003 belasten QS-Z-04 und QS-A-01
-| <<09_architecture_decisions.adoc#adr-002,ADR-002>> Pfad unter der Webshop-Domain | <<qs-u-02>>, <<qs-a-01>> | Folge aus ADR-001; R-006 belastet QS-A-01
-| <<09_architecture_decisions.adoc#adr-003,ADR-003>> Reparatur als eigener Bereich | <<qs-u-02>> | Der eigene Bezahlvorgang muss die zwei Minuten halten (R-008)
-| <<09_architecture_decisions.adoc#adr-004,ADR-004>> Payment Service und Kasse | <<qs-z-03>>, <<qs-u-07>>, <<qs-a-01>> | Die Kasse im Laden trägt QS-Z-03; keine eigene Abwicklung wegen QS-U-07; R-013 belastet QS-A-01
-| <<09_architecture_decisions.adoc#adr-005,ADR-005>> Eigene Statusseite | <<qs-u-03>>, <<qs-a-01>> | Die Statusseite ist die Kundensicht nach der Reparatur; ein Datenort hilft QS-A-01
-| <<09_architecture_decisions.adoc#adr-006,ADR-006>> Ersatzteile selbst führen | <<qs-u-07>>, <<qs-a-01>> | Ein System weniger für den Laden; R-018 belastet QS-A-01
-| <<09_architecture_decisions.adoc#adr-007,ADR-007>> Benachrichtigung per E-Mail | keine Szenario-Basis, folgt aus Randbedingung | QS-U-03 nennt die E-Mail als Antwort; die Kanalwahl selbst folgt aus "Dienste kaufen statt betreiben"
-| <<09_architecture_decisions.adoc#adr-008,ADR-008>> Verfügbarkeit differenziert | <<qs-z-01>> bis <<qs-z-07>>, <<qs-u-07>> | Setzt die Maße aller QS-Z-Szenarien; die Maßnahmen Betriebsmodell und Persistenz sind offen (R-022 bis R-024)
+| <<{ch09}#adr-001,ADR-001>> Login über den Webshop | <<qs-u-01>>, <<qs-u-02>>, <<qs-z-04>>, <<qs-a-01>> | Treibt QS-U-02; macht QS-U-01 im Reparatursystem unerfüllbar; R-002 und R-003 belasten QS-Z-04 und QS-A-01
+| <<{ch09}#adr-002,ADR-002>> Pfad unter der Webshop-Domain | <<qs-u-02>>, <<qs-a-01>> | Folge aus ADR-001; R-006 belastet QS-A-01
+| <<{ch09}#adr-003,ADR-003>> Reparatur als eigener Bereich | <<qs-u-02>> | Der eigene Bezahlvorgang muss die zwei Minuten halten (R-008)
+| <<{ch09}#adr-004,ADR-004>> Payment Service und Kasse | <<qs-z-03>>, <<qs-u-07>>, <<qs-a-01>> | Die Kasse im Laden trägt QS-Z-03; keine eigene Abwicklung wegen QS-U-07; R-013 belastet QS-A-01
+| <<{ch09}#adr-005,ADR-005>> Eigene Statusseite | <<qs-u-03>>, <<qs-a-01>> | Die Statusseite ist die Kundensicht nach der Reparatur; ein Datenort hilft QS-A-01
+| <<{ch09}#adr-006,ADR-006>> Ersatzteile selbst führen | <<qs-u-07>>, <<qs-a-01>> | Ein System weniger für den Laden; R-018 belastet QS-A-01
+| <<{ch09}#adr-007,ADR-007>> Benachrichtigung per E-Mail | keine Szenario-Basis, folgt aus Randbedingung | QS-U-03 nennt die E-Mail als Antwort; die Kanalwahl selbst folgt aus "Dienste kaufen statt betreiben"
+| <<{ch09}#adr-008,ADR-008>> Verfügbarkeit differenziert | <<qs-z-01>> bis <<qs-z-07>>, <<qs-u-07>> | Setzt die Maße aller QS-Z-Szenarien; die Maßnahmen Betriebsmodell und Persistenz sind offen (R-022 bis R-024)
 |===
 
 Drei Szenarien stehen ohne Entscheidung und ohne Maßnahmen-Karte da: <<qs-u-04>>, <<qs-u-05>> und <<qs-u-06>>. Neun weitere haben ein Ziel, aber keine entschiedene Maßnahme: Für <<qs-u-07>>, <<qs-z-01>> bis <<qs-z-07>> und <<qs-a-01>> nennt das Board Cloud, Provider-SLAs, eigenen Support und Mandantenfähigkeit, doch kein ADR hat das festgelegt. Daraus folgen die Kandidaten für kommende ADRs: das Betriebsmodell Cloud (A1, vertagt), die Persistenzstrategie für höchstens fünf Minuten Datenverlust (R-024), der Support von außen und die Mandantenfähigkeit.
 
-Eine Entscheidung steht ohne Szenario da: <<09_architecture_decisions.adoc#adr-007,ADR-007>>. Die Wahl des Kanals folgt aus der Randbedingung, dass der Laden Dienste kauft statt betreibt, nicht aus einem Maß. Alle anderen ADRs treiben mindestens ein Szenario oder werden von einem belastet.
+Eine Entscheidung steht ohne Szenario da: <<{ch09}#adr-007,ADR-007>>. Die Wahl des Kanals folgt aus der Randbedingung, dass der Laden Dienste kauft statt betreibt, nicht aus einem Maß. Alle anderen ADRs treiben mindestens ein Szenario oder werden von einem belastet.

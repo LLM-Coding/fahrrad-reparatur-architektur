@@ -22,7 +22,7 @@ Das Betriebsmodell des Reparatursystems ist offen: Cloud oder on-premise ist "ei
 
 Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
-*Betroffene Qualitätsszenarien:* <<10_quality_requirements.adoc#qs-z-03,QS-Z-03>>, weil die Kund:in an der Kasse wartet und der Preis der erfolgten Reparatur dort in zwei Minuten vorliegen muss; <<10_quality_requirements.adoc#qs-u-07,QS-U-07>>, weil ein Laden ohne IT-Experten keine eigene Zahlungsabwicklung betreiben kann; <<10_quality_requirements.adoc#qs-a-01,QS-A-01>>, weil jeder Laden eine andere Kasse hat und die Integration je Laden neu entsteht (R-013).
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-03,QS-Z-03>>, weil die Kund:in an der Kasse wartet und der Preis der erfolgten Reparatur dort in zwei Minuten vorliegen muss; <<{ch10}#qs-u-07,QS-U-07>>, weil ein Laden ohne IT-Experten keine eigene Zahlungsabwicklung betreiben kann; <<{ch10}#qs-a-01,QS-A-01>>, weil jeder Laden eine andere Kasse hat und die Integration je Laden neu entsteht (R-013).
 
 === Optionen
 

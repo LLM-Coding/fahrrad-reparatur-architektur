@@ -14,6 +14,10 @@ include::chapters/config.adoc[]
 :revdate: {revdate}
 :revremark: {revremark}
 :toc-title: Inhaltsverzeichnis
+// Leere Kapitel-Attribute: Querverweise werden dokumentintern (<<#anker>>)
+:ch04:
+:ch09:
+:ch10:
 
 //additional style for arc42 help callouts
 

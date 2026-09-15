@@ -7,6 +7,10 @@
 ifndef::imagesdir[:imagesdir: ../../images]
 
 :toc:
+// Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
+ifndef::ch04[:ch04: 04_solution_strategy.adoc]
+ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
+ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 
 
 [[section-solution-strategy]]
@@ -28,7 +32,7 @@ a|
 * Vorbelegtes Auftragsformular, damit 90 % der Kund:innen eine Reparatur in 2 Minuten beauftragen (QS-U-02).
 * Eigener Reparaturbereich unter `/reparatur` der Webshop-Domain statt Reparatur als Webshop-Produkt; der Ablauf folgt dem Reparaturprozess, nicht dem Kaufen und Abholen.
 * Eigene, vom Reparatursystem gerenderte Statusseite; der Status ist immer aktuell.
-| <<09_architecture_decisions.adoc#adr-001,ADR-001>>, <<09_architecture_decisions.adoc#adr-002,ADR-002>>, <<09_architecture_decisions.adoc#adr-003,ADR-003>>, <<09_architecture_decisions.adoc#adr-005,ADR-005>>; Board Seite 5
+| <<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-003,ADR-003>>, <<{ch09}#adr-005,ADR-005>>; Board Seite 5
 
 | 2. Änderbarkeit Richtung SaaS für andere Shops
 a|
@@ -42,7 +46,7 @@ a|
 * Differenzierte Ziele: Werkstatt 99 % zwischen 9 und 18 Uhr mit Wiederanlauf in 30 Minuten; Web 99,9 % zwischen 7 und 24 Uhr, nachts 99 %; Datenverlust höchstens 5 Minuten.
 * Provider-SLAs von EKS/EC2 für Rechenleistung und RDS für die Datenbank statt eigenem Betriebsteam.
 * Eigener Support von außen, für das nächtliche Web-Ziel als 24/7-Support.
-| <<09_architecture_decisions.adoc#adr-008,ADR-008>>; Board Seite 6 (Maßnahmen-Karten "EKS / EC2 SLAs", "RDS SLAs?", "Eigener Support")
+| <<{ch09}#adr-008,ADR-008>>; Board Seite 6 (Maßnahmen-Karten "EKS / EC2 SLAs", "RDS SLAs?", "Eigener Support")
 |===
 
 === Technologieentscheidungen
@@ -53,31 +57,31 @@ a|
 
 | REST für alle Integrationen nach außen (SMS Versand, EMail System, Kasse, Online Payment Service, Rechnungswesen, Webshop User Database)
 | Standardprotokoll, keine Sonderprotokolle; die gekauften Dienste bieten es ohnehin an.
-| Board Seite 3; <<09_architecture_decisions.adoc#adr-004,ADR-004>>, <<09_architecture_decisions.adoc#adr-007,ADR-007>>
+| Board Seite 3; <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-007,ADR-007>>
 
 | JWT-Cookie des Webshops als Login-Mechanismus
 | Der Webshop stellt es nach dem Login aus; das Reparatursystem übernimmt es und baut keine eigene Nutzerverwaltung.
-| <<09_architecture_decisions.adoc#adr-001,ADR-001>>
+| <<{ch09}#adr-001,ADR-001>>
 
 | Pfad `/reparatur` unter der Webshop-Domain, Umleitung bestimmter URLs
 | Die Same-Origin-Policy lässt das Cookie nur innerhalb derselben Domain durch.
-| <<09_architecture_decisions.adoc#adr-002,ADR-002>>
+| <<{ch09}#adr-002,ADR-002>>
 
 | Externer Online Payment Service (in erster Linie PayPal): Redirect-Button im Frontend, REST-Statusabfrage im Backend; zusätzlich REST-Integration der Kasse im Laden
 | Keine Zahlungsdaten im eigenen System; Bezahlung bei Abholung bleibt im System sichtbar.
-| <<09_architecture_decisions.adoc#adr-004,ADR-004>>
+| <<{ch09}#adr-004,ADR-004>>
 
 | Gekaufter E-Mail-Dienst (Beispiel AWS Simple Email Service); SMS-Kanal vorgesehen, nicht gebaut
 | Dienst kaufen statt betreiben; E-Mail-Adresse liegt im Webshop-Konto vor.
-| <<09_architecture_decisions.adoc#adr-007,ADR-007>>
+| <<{ch09}#adr-007,ADR-007>>
 
 | AWS als Cloud-Anbieter: EC2 oder EKS für Rechenleistung, RDS für die Datenbank
 | Annahme aus den Maßnahmen-Karten des Boards. Die SLAs des Anbieters tragen die Verfügbarkeitsziele, weil der Shop keine IT-Experten hat.
-| Board Seite 6, 10, 11; <<09_architecture_decisions.adoc#adr-008,ADR-008>>
+| Board Seite 6, 10, 11; <<{ch09}#adr-008,ADR-008>>
 
 | Browser-Anwendung für alle Nutzergruppen
 | "Rechner nutzen das System über den Webbrowser" (Board Seite 10); Kund:innen kommen ohnehin aus dem Webshop.
-| Board Seite 10; <<09_architecture_decisions.adoc#adr-003,ADR-003>>, <<09_architecture_decisions.adoc#adr-005,ADR-005>>
+| Board Seite 10; <<{ch09}#adr-003,ADR-003>>, <<{ch09}#adr-005,ADR-005>>
 |===
 
 === Top-Level-Zerlegung
@@ -86,7 +90,7 @@ Das System zerfällt in vier fachliche Module, geschnitten entlang der Stories v
 
 * *Terminplanung*: anmelden, Termin berechnen, Status abfragen, einplanen, Tagesplan, nächste Reparatur beginnen.
 * *Reparatur durchführen*: Defekt aufnehmen, Fahrrad abgeben und abholen, protokollieren, Kosten berechnen, Kund:in informieren.
-* *Materialbeschaffung*: Ersatzteile und Werkzeuge bestellen. Das Reparatursystem führt die Teile selbst, ohne Inventarsystem (<<09_architecture_decisions.adoc#adr-006,ADR-006>>).
+* *Materialbeschaffung*: Ersatzteile und Werkzeuge bestellen. Das Reparatursystem führt die Teile selbst, ohne Inventarsystem (<<{ch09}#adr-006,ADR-006>>).
 * *Bezahlung*: Reparatur bezahlen, angebunden an Kasse und Online Payment Service.
 
 Die Aufrufrichtung geht vom Webshop in die Module Terminplanung, Reparatur durchführen und Bezahlung; Terminplanung liefert den Termin an Reparatur durchführen, Reparatur durchführen den Preis an Bezahlung und die Materialbestellung an Materialbeschaffung (Board Seite 9). Details stehen in Kapitel 5.
@@ -95,7 +99,7 @@ Für das Deployment liegen zwei Varianten auf dem Board: alle vier Module in ein
 
 === Organisatorische Leitlinie: kaufen statt bauen
 
-Der Shop hat drei bis vier Mitarbeitende und keine IT-Experten (Folge 111, 16:51 und 54:06). Daraus folgt eine durchgängige Leitlinie: Bezahlung, E-Mail-Versand, Rechenleistung und Datenbank werden als Dienst gekauft, nicht selbst betrieben (<<09_architecture_decisions.adoc#adr-004,ADR-004>>, <<09_architecture_decisions.adoc#adr-007,ADR-007>>, Board Seite 5 und 6). Was das System selbst verantwortet, ist die Reparaturfachlichkeit einschließlich der Ersatzteile (<<09_architecture_decisions.adoc#adr-006,ADR-006>>).
+Der Shop hat drei bis vier Mitarbeitende und keine IT-Experten (Folge 111, 16:51 und 54:06). Daraus folgt eine durchgängige Leitlinie: Bezahlung, E-Mail-Versand, Rechenleistung und Datenbank werden als Dienst gekauft, nicht selbst betrieben (<<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-007,ADR-007>>, Board Seite 5 und 6). Was das System selbst verantwortet, ist die Reparaturfachlichkeit einschließlich der Ersatzteile (<<{ch09}#adr-006,ADR-006>>).
 
 === Offene Punkte
 

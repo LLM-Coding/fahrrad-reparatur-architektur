@@ -7,6 +7,10 @@
 ifndef::imagesdir[:imagesdir: ../../images]
 
 :toc:
+// Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
+ifndef::ch04[:ch04: 04_solution_strategy.adoc]
+ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
+ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 
 
 [[section-design-decisions]]
