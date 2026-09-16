@@ -16,7 +16,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-solution-strategy]]
 == Lösungsstrategie
 
-Die Lösungsstrategie folgt der Rangfolge der Qualitätsziele aus Kapitel 1.2: zuerst Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Vertraulichkeit stehen bewusst weiter unten (Folge 111, 41:44 und 58:03). Alle Belege stammen aus den ADRs zu Folge 111 und dem Miro-Board zum Endstand nach Folge 113.
+Die Lösungsstrategie folgt der Rangfolge der Qualitätsziele aus Kapitel 1.2: zuerst Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Vertraulichkeit stehen bewusst weiter unten (Folge 111, 41:44 und 58:03). Alle Belege stammen aus den ADRs zu Folge 111 und 112 und dem Miro-Board zum Endstand nach Folge 113.
 
 === Qualitätsziele und Lösungsansätze
 
@@ -37,9 +37,9 @@ a|
 | 2. Änderbarkeit Richtung SaaS für andere Shops
 a|
 * Cloud-Betrieb, damit ohne IT-Experten im Shop betrieben werden kann und weitere Shops ohne neue Hardware dazukommen (Board Seite 6, Maßnahme "Cloud").
-* Fachlicher Schnitt in vier Module entlang der Stories: Terminplanung, Reparatur durchführen, Materialbeschaffung, Bezahlung (Board Seite 7 und 9).
+* Fachlicher Schnitt in vier Module entlang der Stories: Terminplanung, Reparatur durchführen, Materialbeschaffung, Bezahlung (Board Seite 7 und 9; <<{ch09}#adr-009,ADR-009>>, <<{ch09}#adr-010,ADR-010>>). Jedes Modul ist ein eigenes Projekt in der Versionskontrolle mit gerichteten Abhängigkeiten, damit die Module unabhängig gebaut werden können (<<{ch09}#adr-011,ADR-011>>, <<{ch09}#adr-012,ADR-012>>).
 * Mandantenfähigkeit wegen der Betriebskosten; auf dem Board als offene Frage mit `?` markiert, ebenso Skalierbarkeit und der Umgang mit Drittsystemen je Shop.
-| Board Seite 6, 7, 9; Änderungsszenario QS-A-01 (zwei Monate, 20 PT)
+| Board Seite 6, 7, 9; Änderungsszenario QS-A-01 (zwei Monate, 20 PT); Folge 112, 22:24 bis 48:16 und 54:13 bis 58:25
 
 | 3. Verfügbarkeit, differenziert nach Nutzergruppe
 a|
@@ -82,18 +82,22 @@ a|
 | Browser-Anwendung für alle Nutzergruppen
 | "Rechner nutzen das System über den Webbrowser" (Board Seite 10); Kund:innen kommen ohnehin aus dem Webshop.
 | Board Seite 10; <<{ch09}#adr-003,ADR-003>>, <<{ch09}#adr-005,ADR-005>>
+
+| Komponente = eigenes Projekt in der Versionskontrolle: vier Repositories, eines je Modul
+| Boxen im Diagramm brauchen eine Semantik, sonst "rede ich gerade über nichts". Die Alternative "Verzeichnis im Source Code" steht als Legende auf dem Board, ist aber nicht gewählt.
+| Folge 112, 54:13 und 63:39; <<{ch09}#adr-011,ADR-011>>
 |===
 
 === Top-Level-Zerlegung
 
-Das System zerfällt in vier fachliche Module, geschnitten entlang der Stories vom Board (Seite 7):
+Das System zerfällt in vier fachliche Module, geschnitten entlang der Stories vom Board (Seite 7). Eberhard hat den Schnitt in Folge 112 hergeleitet (<<{ch09}#adr-009,ADR-009>>):
 
 * *Terminplanung*: anmelden, Termin berechnen, Status abfragen, einplanen, Tagesplan, nächste Reparatur beginnen.
 * *Reparatur durchführen*: Defekt aufnehmen, Fahrrad abgeben und abholen, protokollieren, Kosten berechnen, Kund:in informieren.
 * *Materialbeschaffung*: Ersatzteile und Werkzeuge bestellen. Das Reparatursystem führt die Teile selbst, ohne Inventarsystem (<<{ch09}#adr-006,ADR-006>>).
 * *Bezahlung*: Reparatur bezahlen, angebunden an Kasse und Online Payment Service.
 
-Die Aufrufrichtung geht vom Webshop in die Module Terminplanung, Reparatur durchführen und Bezahlung; Terminplanung liefert den Termin an Reparatur durchführen, Reparatur durchführen den Preis an Bezahlung und die Materialbestellung an Materialbeschaffung (Board Seite 9). Details stehen in Kapitel 5.
+Die Pfeile auf dem Board bedeuten Informationsfluss, nicht Aufrufrichtung (Folge 112, 58:17; <<{ch09}#adr-012,ADR-012>>). Der Webshop blendet Seiten von Terminplanung, Reparatur durchführen und Bezahlung ein; Terminplanung liefert den Termin an Reparatur durchführen, Reparatur durchführen den Preis an Bezahlung und die Materialbestellung an Materialbeschaffung (Board Seite 9). Die technischen Abhängigkeiten bilden einen gerichteten Graphen in derselben Richtung, damit Bezahlung und Materialbeschaffung zuerst gebaut werden können, dann Reparatur durchführen, dann Terminplanung (Folge 112, 57:09). Details stehen in Kapitel 5.
 
 Für das Deployment liegen zwei Varianten auf dem Board: alle vier Module in einer EC2-Instanz (Deployment Monolith, Seite 10) oder jedes Modul in einem eigenen Container (Microservices, Seite 11). Eine Entscheidung ist nicht getroffen. Kapitel 7 beschreibt beide Varianten.
 
@@ -103,8 +107,8 @@ Der Shop hat drei bis vier Mitarbeitende und keine IT-Experten (Folge 111, 16:51
 
 === Offene Punkte
 
-NOTE: Offen: Die Begründung für den Modulschnitt in genau vier Module stammt aus Folge 112 und ist nur über den Board-Endstand belegt (Seite 7 und 9). Die Herleitung fehlt in dieser Dokumentation, solange das Transkript zu Folge 112 nicht ausgewertet ist.
+Die Zahl vier ist kein Kriterium. Eberhard gruppiert die Stories in Folge 112 induktiv, eine nach der anderen (23:03 bis 48:16); die vier Module sind das Ergebnis, nicht die Vorgabe. Das Kriterium für jeden Schnitt ist ein eigenes Domänenmodell mit eigenen Daten: Terminplanung und Reparatur durchführen haben "zwei unterschiedliche Informationsdichten" (33:21), Bezahlung kennt "nur noch einen Geldbetrag" (45:49). Drei Alternativen hat er erwogen und verworfen: die Aufteilung nach Schichten UI, Logik, Persistenz (22:24), ein fünftes Modul Reparaturstatus (35:03) und Bezahlung als Teil von Reparatur durchführen (45:41). Belege: <<{ch09}#adr-009,ADR-009>>, <<{ch09}#adr-010,ADR-010>>.
 
-NOTE: Offen: Die Entscheidung für Cloud-Betrieb ist in Folge 111 ausdrücklich vertagt (59:33 bis 60:31: "es ergibt sich nicht direkt, welches Betriebsmodell angeraten ist"). Das Board zu Folge 113 setzt Cloud als Maßnahme. Ein ADR zum Betriebsmodell fehlt; die Risiken R-010 und R-022 in Kapitel 11 halten die Spannung zwischen lokaler Kasse und Cloud fest.
+NOTE: Offen: Die Entscheidung für Cloud-Betrieb ist in Folge 111 ausdrücklich vertagt (59:33 bis 60:31: "es ergibt sich nicht direkt, welches Betriebsmodell angeraten ist"). Das Board zu Folge 113 setzt Cloud als Maßnahme. In Folge 112 nicht behandelt; Folge 113 ausstehend. Ein ADR zum Betriebsmodell fehlt; die Risiken R-010 und R-022 in Kapitel 11 halten die Spannung zwischen lokaler Kasse und Cloud fest.
 
-NOTE: Offen: Deployment Monolith oder Microservices ist auf dem Board nicht entschieden (Seite 10 und 11). Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Seite 9) deutet auf einen möglichen fünften Baustein hin.
+NOTE: Offen: Deployment Monolith oder Microservices ist auf dem Board nicht entschieden (Seite 10 und 11). In Folge 112 nicht behandelt; Folge 113 ausstehend. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Seite 9) deutet auf einen möglichen fünften Baustein hin; sie stammt nicht aus Folge 112.

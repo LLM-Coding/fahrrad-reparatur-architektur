@@ -30,9 +30,9 @@ Drei Geschäftsziele treiben den Entwurf:
 * Die Werkstatt organisiert Reparaturen im System: Termine, täglicher Reparaturplan, Protokoll, Bestellung von Ersatzteilen und Werkzeug.
 * Funktioniert das System gut, will der Shop es als SaaS-Lösung anderen Fahrradshops anbieten (42:13).
 
-==== Drei Akteure und vierzehn Stories bilden das Backlog
+==== Drei Akteure und fünfzehn Stories bilden das Backlog
 
-Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder weniger gut strukturiert" und dient dem Architekten als Input (09:38).
+Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder weniger gut strukturiert" und dient dem Architekten als Input (09:38). Eine fünfzehnte Story kam in Folge 112 hinzu und steht nur auf Seite 7.
 
 [cols="1,3" options="header"]
 |===
@@ -45,10 +45,10 @@ Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder wen
 |Reparatur bezahlen; Fahrrad zur Reparatur abgeben
 
 |Fahrrad-Mechaniker:in
-|Kunde über das Ende der Reparatur informieren; Fahrrad-Defekt aufnehmen; Reparatur einplanen; Täglichen Reparaturplan erstellen; Nächste Reparatur beginnen; Reparatur protokollieren; Ersatzteile bestellen; Werkzeuge bestellen
+|Kunde über das Ende der Reparatur informieren; Fahrrad-Defekt aufnehmen; Voraussichtliche Kosten berechnen (seit Folge 112, 27:06; nur Board Seite 7); Reparatur einplanen; Täglichen Reparaturplan erstellen; Nächste Reparatur beginnen; Reparatur protokollieren; Ersatzteile bestellen; Werkzeuge bestellen
 |===
 
-NOTE: Offen: Board Seite 7 nennt zusätzlich die Story "Voraussichtliche Kosten berechnen", die auf Seite 1 fehlt. Wann sie hinzukam, ist nicht belegt. Quelle: Transkript Folge 112/113 ausstehend.
+NOTE: Die Story "Voraussichtliche Kosten berechnen" kam in Folge 112 auf einen Vorschlag aus dem Chat hinzu (27:06) und liegt im Modul Reparatur durchführen. Board Seite 7 führt sie, Seite 1 nicht; das Board ist an dieser Stelle in sich nicht konsistent. Der Akteur ist auf dem Board nicht benannt; die Zuordnung zur Mechaniker:in folgt aus dem Beispiel im Video (28:06: Schaltung ansehen, Teile und Montage kalkulieren).
 
 ==== Das Beispiel ist eine Architektur-Kata mit expliziten Annahmen
 

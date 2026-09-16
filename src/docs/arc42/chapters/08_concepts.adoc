@@ -81,7 +81,7 @@ NOTE: Offen: Werkzeuge für Monitoring und Alarmierung sind nicht gewählt. Sie 
 
 === 8.5 Error Handling
 
-Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recovery.
+Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recovery. Eine Zeile stützt sich auf das Video und ist so gekennzeichnet.
 
 [cols="2,2,2,2",options="header"]
 |===
@@ -92,6 +92,7 @@ Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recove
 | Payment-Redirect bricht ab (R-012) | Buchungsstatus per REST beim Payment Service nachfragen, auch ohne Rückkehr des Browsers. | Der Auftrag bleibt "Zahlung offen"; Kund:in kann erneut bezahlen oder im Laden zahlen. | Ein periodischer Abgleich holt bezahlte, aber nicht bestätigte Zahlungen nach.
 | EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<{ch09}#adr-005,ADR-005>>). SMS ist nicht gebaut (<<{ch09}#adr-007,ADR-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
 | Rechnungswesen aus der Cloud nicht erreichbar (Board Seite 10) | Rechnungselemente in eine Warteschlange, Wiederholung. | Reparatur und Bezahlung laufen weiter; das Rechnungswesen erhält die Elemente später. | Nachlieferung in Reihenfolge, idempotent.
+| Das eigene System im Shop fällt aus (QS-Z-02, QS-Z-03) | Kein Retry im System; der Wiederanlauf liegt beim Provider (EKS / EC2 SLAs, abgeleitet). | Videobeleg, nicht abgeleitet: Eberhard nennt in Folge 112 einen Low-Tech-Fallback (12:52 bis 14:35). Die Annahme von Reparaturen überbrückt der Laden 30 Minuten mit Zettel und Bleistift. Für den Preis bei Abholung schlägt er einen ausgedruckten Zettel am Fahrrad vor ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle. Entschieden ist nichts: "da kann man sich was ausdenken". | Nach dem Wiederanlauf trägt die Werkstatt die Zettel nach (abgeleitet).
 |===
 
-NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung nicht.
+NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung nur an einer Stelle: dem Ausfall des eigenen Systems in Folge 112 (12:52 bis 14:35).

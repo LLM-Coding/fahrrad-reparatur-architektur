@@ -1,0 +1,82 @@
+[[adr-011]]
+== ADR-011: Jede Komponente ist ein eigenes Projekt in der Versionskontrolle
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-11
+| Quelle | software-architektur.tv Folge 112, 54:13, 54:36 und 63:39
+|===
+
+=== Problem
+
+Die Bausteinsicht Level 1 zeigt vier rote Boxen: Terminplanung, Reparatur durchführen, Bezahlung, Materialbeschaffung. Was bedeutet eine Box technisch? Ist eine Komponente ein eigenes Projekt in der Versionskontrolle, oder ein Verzeichnis in einem gemeinsamen Code-Baum?
+
+=== Kontext
+
+Eberhard leitet aus dem Kontextdiagramm von Folge 111 die nächste Ebene ab, die arc42-Bausteinsicht Level 1 (48:42). Bevor er die Drittsysteme anschließt, will er die Boxen definieren (54:13). Er hält sich nicht an einen Standard, notiert aber eine eigene Legende: rote Box, Pfeil, grüne Box haben je eine festgelegte Bedeutung (51:16). Die Alternative "Komponente gleich separiertes Verzeichnis im Source Code" schreibt er ausdrücklich mit auf das Board (54:41).
+
+Das Team ist klein. Folge 111 nennt drei bis vier Personen im Shop und keine IT-Expert:innen; das Szenario QS-U-07 verlangt Betrieb ohne IT.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-07,QS-U-07>> mittelbar, weil vier Repositories mit eigener Build-Kette gepflegt werden müssen und der Shop dafür niemanden hat (R-032); das Video stellt diesen Zusammenhang nicht her. <<{ch10}#qs-a-01,QS-A-01>> berührt die Entscheidung nicht erkennbar.
+
+=== Optionen
+
+*Option A: Verzeichnis im gemeinsamen Code.* Alle vier Module liegen in einem Repository, jedes in einem eigenen Verzeichnis. Vorteil: Ein Checkout, ein Build, Änderungen über Modulgrenzen in einem Commit. Nachteil: Die Modulgrenze ist eine Konvention; nichts hindert daran, quer durch die Verzeichnisse zu greifen.
+
+*Option B: Eigenes Projekt in der Versionskontrolle.* Jedes Modul ist ein eigenes Repository mit eigenem Build. Vorteil: Die Grenze ist technisch erzwungen, jedes Modul lässt sich für sich bauen. Nachteil: Vier Repositories, vier Builds, Änderungen über Modulgrenzen brauchen mehrere Commits.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Verzeichnis | B: Eigenes Repository (Referenz)
+
+| Verbindlichkeit der Modulgrenze | -1 | 0
+| Unabhängige Baubarkeit, Build-Reihenfolge | -1 | 0
+| Aufwand für Pflege der Repositories bei kleinem Team | +1 | 0
+| Änderungen über Modulgrenzen hinweg | +1 | 0
+| Betrieb ohne IT-Expert:innen | ? | 0
+| Änderbarkeit Richtung SaaS | ? | 0
+
+| *Summe* | *0 (2 Zellen offen)* | *0*
+|===
+
+Die ungewichtete Summe endet unentschieden. Den Ausschlag gibt der Zweck des Diagramms: Eberhard will Boxen mit Bedeutung, und er will die Module getrennt bauen können (<<adr-012>>).
+
+=== Entscheidung
+
+Jede der vier Komponenten ist ein eigenes Projekt in der Versionskontrolle: ein Projekt Terminplanung, ein Projekt Reparatur durchführen, ein Projekt Bezahlung, ein Projekt Materialbeschaffung. Die rote Box im Diagramm bedeutet genau das. Die Legende hält die verworfene Alternative fest.
+
+=== Begründung
+
+Eberhard definiert die Box, bevor er weiterzeichnet: "Das sind Komponenten und zwar sind das separierte Projekte in der Versionskontrolle" (54:21). Er zählt auf: "ein Projekt Terminplanung, ein Projekt Reparatur durchführen, ein Projekt Bezahlung und ein Projekt Materialbeschaffung" (54:26). Dann sagt er "Das sind drei Git Repositories" (54:36); ein Versprecher, er meint vier, wie er am Ende bestätigt: "es gibt vier Projekte in der Versionskontrolle" (63:39).
+
+Die Begründung ist methodisch, nicht technisch. Er stellt bei Architekturdiagrammen "die relativ unschuldige Frage" (54:55): "Was sind eigentlich diese Boxen?" (54:58). Oft "stellt sich halt heraus, dass diese Boxen in Wirklichkeit keine Semantik haben" (55:00), und das sei "super gefährlich" (55:05): "wenn diese Diagramme keine Semantik haben, dann rede ich halt gerade über nichts" (55:10).
+
+Die technische Folge benennt er kurz darauf: Materialbeschaffung und Bezahlung sollen gebaut werden können, "Reparatur das irgendwie nutzt und Terminplanung das irgendwie nutzt" (57:21), "dass ich also sozusagen eine Build-Reihenfolge habe" (57:27).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Die Box im Diagramm hat eine prüfbare Bedeutung; wer das Repository sieht, sieht die Komponente.
+* Die Modulgrenze ist technisch erzwungen, kein Modul greift stillschweigend in den Code eines anderen.
+* Jedes Modul lässt sich für sich bauen.
+
+*Negativ*
+
+* Vier Repositories und vier Builds statt einem.
+* Änderungen, die zwei Module betreffen, brauchen abgestimmte Commits.
+* Die Build-Reihenfolge verlangt gerichtete Abhängigkeiten zwischen den Projekten; das regelt <<adr-012>>.
+
+*Risiken*
+
+* R-032: Vier Repositories bei einem Team von drei bis vier Personen ohne IT. Pflege, Zugriffsrechte und Build-Ketten liegen bei niemandem im Shop; das belastet QS-U-07.
+* R-033: Repository-Grenzen fixieren den Modulschnitt früh. Erweist sich ein Schnitt als falsch (R-028), kostet das Zusammenlegen oder Neuschneiden Umzug von Code und Build.
+
+*Folgeentscheidung*
+
+Aus der Build-Reihenfolge folgt <<adr-012>>: Die Abhängigkeiten zwischen den vier Projekten bilden einen gerichteten Graphen.

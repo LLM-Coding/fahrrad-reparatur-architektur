@@ -16,7 +16,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-runtime-view]]
 == Laufzeitsicht
 
-Die Szenarien in diesem Kapitel sind aus den Pfeilen der Bausteinsicht (Board Seite 9) und dem technischen Kontext (Board Seite 3) abgeleitet. Eberhard Wolff beschreibt in den Videos keinen Ablauf Schritt für Schritt. Wo ein Schritt über die Pfeile hinausgeht, stützt er sich auf ein ADR; wo weder Board noch ADR etwas hergeben, steht eine offene Notiz. Die Reihenfolge der Aufrufe innerhalb eines Szenarios ist eine Lesart, keine Aussage des Boards.
+Die Szenarien in diesem Kapitel sind aus den Pfeilen der Bausteinsicht (Board Seite 9) und dem technischen Kontext (Board Seite 3) abgeleitet. Eberhard Wolff beschreibt in den Videos keinen Ablauf Schritt für Schritt. Wo ein Schritt über die Pfeile hinausgeht, stützt er sich auf ein ADR; wo weder Board noch ADR etwas hergeben, steht eine offene Notiz. Die Reihenfolge der Aufrufe innerhalb eines Szenarios ist eine Lesart, keine Aussage des Boards. Die Pfeile auf dem Board bedeuten Informationsfluss, nicht Aufrufrichtung (Folge 112, 58:17); die Sequenzdiagramme zeigen deshalb eine mögliche Aufrufreihenfolge, keine festgelegte.
 
 Jeder Baustein aus Kapitel 5 kommt in mindestens einem Szenario vor: Terminplanung in Szenario 1, Reparatur durchführen und Materialbeschaffung in Szenario 2, Bezahlung in Szenario 2 und 4.
 
@@ -63,7 +63,7 @@ Schritte::
 
 Besonderheiten:: Der Webshop hält keine Reparaturdaten. Den Status sieht die Kund:in später auf einer Seite, die das Reparatur-System selbst rendert (<<{ch09}#adr-005,ADR-005>>). Das Usability-Ziel aus Kapitel 10 gilt für diesen Ablauf: 90 % der Benutzer:innen beauftragen eine Reparatur in zwei Minuten (Board Seite 5).
 
-NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt.
+NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt. Ob die Module sich synchron aufrufen oder Messages austauschen, hat Eberhard in Folge 112 ausdrücklich offen gelassen: "auf dieser Ebene noch nicht" (57:01, <<{ch09}#adr-012,ADR-012>>).
 
 === Reparatur durchführen, abrechnen, bezahlen
 
@@ -122,7 +122,7 @@ Schritte::
 
 Besonderheiten:: Reparatur durchführen ist die Drehscheibe. Alle Pfeile nach außen außer Kasse und Payment Service gehen von ihm aus. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Kapitel 5) zielt auf die Schritte 6 und 7.
 
-NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder je Position fließen, ist nicht entschieden. Ob die Materialbestellung vor oder während der Reparatur ausgelöst wird, zeigt das Board nicht. Welche Quelle gilt, wenn Kasse und Payment Service verschiedene Zahlungsstatus liefern (R-011), ist offen.
+NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder je Position fließen, ist nicht entschieden. Fest steht seit Folge 112, dass die Rechnungselemente aus Reparatur durchführen kommen, weil nur dieses Modul weiß, was repariert wurde; Bezahlung meldet nur "250 Euro bezahlt" (60:13 bis 61:36). Ob Bezahlung dem Rechnungswesen zusätzlich "Rechnung ist bezahlt" meldet, hat Eberhard offen gelassen: "Weiß ich nicht, könnte auch im Hintergrund laufen" (63:16, <<{ch09}#adr-012,ADR-012>>). Ob die Materialbestellung vor oder während der Reparatur ausgelöst wird, zeigt das Board nicht. Welche Quelle gilt, wenn Kasse und Payment Service verschiedene Zahlungsstatus liefern (R-011), ist offen.
 
 === Fehlerszenario: Webshop nicht erreichbar
 

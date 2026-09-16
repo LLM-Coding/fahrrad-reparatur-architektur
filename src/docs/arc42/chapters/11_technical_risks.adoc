@@ -26,31 +26,77 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 | ID | Beschreibung | Quelle | Wahrsch. | Auswirkung | Priorität | Maßnahme
 
 | R-022 | Betriebsmodell offen. On-premise wegen der lokalen Kasse und 99,9 % im Web ohne Betriebsteam ziehen in verschiedene Richtungen. | <<{ch09}#adr-008,ADR-008>> | hoch | hoch | hoch | Cloud-Betrieb mit EKS/EC2-SLAs und eigenem Support (QS-Z-04, Kapitel 4); ADR zum Betriebsmodell nachziehen.
+
 | R-010 | Kasse steht im Laden. Aus der Cloud muss das System die Kasse erreichen. | <<{ch09}#adr-004,ADR-004>> | hoch | hoch | hoch | 8.5 Fehlerfall "Kasse nicht erreichbar"; Spike zur Kassen-Schnittstelle vor der Cloud-Entscheidung.
+
 | R-003 | Feste Kopplung an diesen Webshop steht dem SaaS-Ziel entgegen; andere Läden haben andere oder keine Webshops. | <<{ch09}#adr-001,ADR-001>> | hoch | hoch | hoch | Login und Kundendaten hinter einer Anti-Corruption Layer kapseln; QS-A-01 als Abnahmekriterium.
+
 | R-026 | Mandantenfähigkeit und Skalierbarkeit für SaaS sind offen ("?" auf dem Board). Ohne Mandantenfähigkeit steigen die Betriebskosten je Shop. | Board Seite 6 | hoch | hoch | hoch | Mandantenfähigkeit im Datenmodell vorsehen; QS-A-01 (zwei Monate, 20 PT) als Grenze.
+
+| R-035 | Das Rechnungswesen erfährt von einer Zahlung nur, wenn Kasse, Online-Payment oder Bezahlung sie melden. Die Zuordnung Bezahlung zu Rechnungswesen ist offen (63:16). | <<{ch09}#adr-012,ADR-012>> | hoch | hoch | hoch | Zuordnung entscheiden; bis dahin Zahlungen in Reparatur durchführen protokollieren (8.4 Audit).
+
 | R-002 | Fällt der Webshop aus, funktionieren Login und Adressabfrage nicht. | <<{ch09}#adr-001,ADR-001>> | mittel | hoch | mittel | 8.5 Fehlerfall "Webshop nicht erreichbar"; Werkstatt bleibt unabhängig vom Webshop-Login.
+
 | R-005 | Umleitung vor dem Webshop: wer sie betreibt und ob das Fertigprodukt sie zulässt, ist offen. | <<{ch09}#adr-002,ADR-002>> | mittel | hoch | mittel | Klärung mit dem Webshop-Anbieter vor der Umsetzung; 8.4 Monitoring der Umleitung.
+
 | R-011 | Zahlungsstatus aus zwei Quellen (Payment Service und Kasse) ohne Vorrangregel. | <<{ch09}#adr-004,ADR-004>> | mittel | hoch | mittel | 8.2 "Bezahlstatus nur aus dem Backend"; 8.4 Audit des Zahlungsstatus; Vorrangregel im Modul Bezahlung festlegen.
+
 | R-024 | 5-Minuten-Ziel für Datenverlust setzt eine Persistenzstrategie voraus, die niemand entschieden hat. | <<{ch09}#adr-008,ADR-008>> | mittel | hoch | mittel | RDS-SLAs prüfen (QS-Z-07); Replikation oder Sicherung im Minutentakt.
+
 | R-004 | JWT-Cookie erreicht das System nur in derselben Domain. Geschlossen durch <<{ch09}#adr-002,ADR-002>>. | <<{ch09}#adr-001,ADR-001>> | niedrig | hoch | mittel | 8.2 Same-Origin-Policy und Pfad `/reparatur`.
+
 | R-006 | Beim SaaS-Umbau braucht jeder Laden eine eigene Umleitung unter seiner Domain. | <<{ch09}#adr-002,ADR-002>> | hoch | mittel | mittel | Umleitung als konfigurierbaren Teil des Deployments planen; QS-A-01.
+
 | R-009 | Viele Schnittstellen (Payment, Kasse, Rechnungswesen, User-DB); jede ist ein Ausfallpunkt. | <<{ch09}#adr-003,ADR-003>> | hoch | mittel | mittel | 8.5 je Schnittstelle Retry und Fallback; 8.3 Integrationstests gegen Stubs.
+
 | R-013 | Beim SaaS-Umbau hat jeder Laden eine andere Kasse; die REST-Integration muss je Laden neu gebaut werden. | <<{ch09}#adr-004,ADR-004>> | hoch | mittel | mittel | Kassen-Adapter als Anti-Corruption Layer; QS-A-01.
+
 | R-008 | Zwei Bezahlvorgänge unter einer Domain verwirren Kund:innen. | <<{ch09}#adr-003,ADR-003>> | mittel | mittel | mittel | QS-U-02 und QS-U-03 als Messung; Bezahlvorgang im Reparaturbereich klar kennzeichnen.
+
 | R-012 | Fällt der Rückweg nach dem Payment-Redirect aus, bleibt eine bezahlte Reparatur unbezahlt. | <<{ch09}#adr-004,ADR-004>> | mittel | mittel | mittel | 8.5 Fehlerfall "Payment-Redirect bricht ab".
+
 | R-014 | Die Statusseite wirkt wie ein Fremdkörper im Webshop. | <<{ch09}#adr-005,ADR-005>> | mittel | mittel | mittel | QS-U-03 (4 von 5 Punkten) als Messung; Layout an den Webshop anlehnen.
+
 | R-015 | Kund:innen suchen den Status im Kundenkonto des Webshops und finden ihn nicht. | <<{ch09}#adr-005,ADR-005>> | mittel | mittel | mittel | Verweis vom Webshop auf `/reparatur`; E-Mail mit Link zur Statusseite (<<{ch09}#adr-007,ADR-007>>).
+
 | R-018 | Als SaaS trifft das System auf Läden mit eigenem Inventarsystem. | <<{ch09}#adr-006,ADR-006>> | mittel | mittel | mittel | Materialbeschaffung als eigenes Modul halten (Kapitel 4); QS-A-01.
+
 | R-023 | Lassen sich Werkstatt- und Web-Teil nicht trennen, gilt das strengere Ziel für alles. | <<{ch09}#adr-008,ADR-008>> | mittel | mittel | mittel | 8.4 Metriken getrennt je Teil; Deployment-Variante prüfen (Kapitel 7).
+
 | R-025 | Rechnungswesen aus der Cloud erreichen: offene Frage auf dem Board. | Board Seite 10, 11 | mittel | mittel | mittel | 8.5 Fehlerfall "Rechnungswesen nicht erreichbar"; Schnittstelle vor der Cloud-Entscheidung klären.
+
+| R-031 | Terminänderungen durch Eilaufträge oder Ausfall einer Mechaniker:in müssen in Terminplanung und Reparatur durchführen konsistent ankommen. | <<{ch09}#adr-010,ADR-010>> | hoch | mittel | mittel | Informationsfluss Termin festlegen (<<{ch09}#adr-012,ADR-012>>); 8.5 Fehlerfall.
+
+| R-032 | Vier Repositories bei einem Team von drei bis vier Personen ohne IT. Pflege, Zugriffsrechte und Build-Ketten liegen bei niemandem im Shop. | <<{ch09}#adr-011,ADR-011>> | hoch | mittel | mittel | Eigener Support (QS-U-07); Build-Kette automatisieren.
+
+| R-034 | Terminplanung muss bei Reparatur durchführen nachfragen, ob die Planung noch gilt (57:50). Das läuft gegen die Abhängigkeitsrichtung. | <<{ch09}#adr-012,ADR-012>> | hoch | mittel | mittel | Entscheidung synchron oder Messages nachholen; 8.5.
+
+| R-027 | Das Protokoll enthält Einträge, die nicht kundensichtbar sein sollen (37:03). Ohne Filter erreichen sie die Statusseite. | <<{ch09}#adr-009,ADR-009>> | mittel | mittel | mittel | Filter in Reparatur durchführen; 8.2 (T-004).
+
+| R-029 | Der Schnitt entstand leichtgewichtig entlang der Stories. Komplexe Fachlogik, die Event Storming aufdecken würde, bleibt unentdeckt. | <<{ch09}#adr-009,ADR-009>> | mittel | mittel | mittel | Domänenanalyse nachholen, sobald Fachlogik wächst; 11.2.
+
+| R-030 | Wird die Terminplanung gekauft, passt das Produkt nur ungefähr (44:18). Kompromisse an der Schnittstelle zu Reparatur durchführen. | <<{ch09}#adr-010,ADR-010>> | mittel | mittel | mittel | Spike vor Kaufentscheidung; QS-A-01 als Aufwandsgrenze.
+
+| R-033 | Repository-Grenzen fixieren den Modulschnitt früh. Ein falscher Schnitt kostet Umzug von Code und Historie. | <<{ch09}#adr-011,ADR-011>> | mittel | mittel | mittel | Schnitt vor Anlage der Repositories prüfen (R-028).
+
 | R-001 | Adresse liegt in der User-Datenbank des Webshops, obwohl sie fachlich Kundeninformation ist. | <<{ch09}#adr-001,ADR-001>> | mittel | niedrig | niedrig | 8.2 HTTPS und Zugriff nur über das Backend (T-004); Grenze Nutzerdaten/Kundendaten in Kapitel 5 benennen.
+
 | R-016 | Der Umfang wächst um eine Inventardomäne; die Verantwortung verwässert. | <<{ch09}#adr-006,ADR-006>> | mittel | niedrig | niedrig | Modul Materialbeschaffung klar abgrenzen (Kapitel 5).
+
 | R-019 | Benachrichtigung landet im Spam oder wird nicht gelesen. | <<{ch09}#adr-007,ADR-007>> | mittel | niedrig | niedrig | Statusseite als zweiter Weg (<<{ch09}#adr-005,ADR-005>>); SMS vorsehen; QS-U-03.
+
 | R-021 | Benachrichtigung nicht gekapselt; SMS-Nachrüstung wird teuer. | <<{ch09}#adr-007,ADR-007>> | mittel | niedrig | niedrig | Benachrichtigung als eigene Schnittstelle im Modul Reparatur durchführen.
+
 | R-007 | Geteilter Origin mit dem Webshop: eine Schwachstelle betrifft die Cookies beider Systeme. | <<{ch09}#adr-002,ADR-002>> | niedrig | mittel | niedrig | 8.2 HTTPS, `HttpOnly`; bewusst nachrangig (Security).
+
 | R-017 | Führt der Laden ein Warenwirtschaftssystem ein, entstehen zwei Bestände. | <<{ch09}#adr-006,ADR-006>> | niedrig | mittel | niedrig | Bestandsführung hinter einer Schnittstelle, damit ein Abgleich nachrüstbar ist.
+
 | R-020 | E-Mail-Dienst ist ein Cloud-Dienst; on-premise braucht einen Weg ins Internet. | <<{ch09}#adr-007,ADR-007>> | niedrig | niedrig | niedrig | 8.5 Fehlerfall "EMail-Dienst fällt aus"; entfällt bei Cloud-Betrieb.
+
+| R-028 | Erweist sich das Domänenmodell der Materialbeschaffung als dünn, trägt das Modul den Aufwand eines eigenen Projekts ohne fachlichen Gewinn. | <<{ch09}#adr-009,ADR-009>> | mittel | niedrig | niedrig | Schnitt bei Umsetzung prüfen; 11.2 Technische Schulden.
+
+| R-036 | Wer die Board-Legende liest, versteht die Pfeile als Aufrufrichtung und leitet synchrone Aufrufe ab, die nie entschieden wurden. | <<{ch09}#adr-012,ADR-012>> | mittel | niedrig | niedrig | Legende in Kapitel 5 korrigiert (Informationsfluss).
+
 |===
 
 NOTE: Offen: Die Spalten Wahrscheinlichkeit und Auswirkung sind Schätzungen. Das Team bestätigt oder korrigiert sie; die Priorität folgt dann aus der Regel oben.

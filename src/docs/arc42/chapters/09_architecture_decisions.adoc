@@ -47,7 +47,7 @@ endif::arc42help[]
 
 === Übersicht der Entscheidungen
 
-Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113. Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
+Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112). Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
 
 [cols="1,4,2"]
 |===
@@ -61,6 +61,10 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 | <<adr-006>> | Ersatzteile und Werkzeuge im Reparatursystem selbst führen | Accepted
 | <<adr-007>> | Kundenbenachrichtigung per E-Mail, SMS nur vorgesehen | Accepted
 | <<adr-008>> | Verfügbarkeitsziele nach Nutzergruppe und Tageszeit differenzieren | Accepted
+| <<adr-009>> | Fachlicher Modulschnitt statt technischer Schichten | Accepted
+| <<adr-010>> | Terminplanung und Reparatur durchführen als zwei Module | Accepted
+| <<adr-011>> | Jede Komponente ist ein eigenes Projekt in der Versionskontrolle | Accepted
+| <<adr-012>> | Gerichtete Abhängigkeiten und Zuordnung der externen Systeme | Accepted
 |===
 
 include::../adr/_ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
@@ -78,4 +82,12 @@ include::../adr/_ADR-006-ersatzteile-selbst-buchfuehren.adoc[leveloffset=+1]
 include::../adr/_ADR-007-benachrichtigung-email.adoc[leveloffset=+1]
 
 include::../adr/_ADR-008-verfuegbarkeit-differenziert.adoc[leveloffset=+1]
+
+include::../adr/_ADR-009-fachlicher-schnitt.adoc[leveloffset=+1]
+
+include::../adr/_ADR-010-terminplanung-und-reparatur-getrennt.adoc[leveloffset=+1]
+
+include::../adr/_ADR-011-komponente-eigenes-repository.adoc[leveloffset=+1]
+
+include::../adr/_ADR-012-abhaengigkeitsrichtung-informationsfluss.adoc[leveloffset=+1]
 

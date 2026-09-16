@@ -1,0 +1,80 @@
+[[adr-009]]
+== ADR-009: Fachlicher Modulschnitt statt technischer Schichten
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-11
+| Quelle | software-architektur.tv Folge 112, 22:03, 32:21, 45:16 und 47:23
+|===
+
+=== Problem
+
+Das Reparatursystem soll die Stories aus Folge 111 umsetzen: Fahrrad zur Reparatur anmelden, Termin berechnen, Defekt aufnehmen, Protokoll führen, Kosten berechnen, bezahlen, Ersatzteile und Werkzeuge bestellen. Nach welchem Kriterium teilen wir das System auf oberster Ebene in Module, und wie viele Module ergeben sich daraus?
+
+=== Kontext
+
+Eberhard strukturiert das System live am Board entlang der Stories. Er wählt bewusst einen leichtgewichtigen Weg statt Event Storming oder Domain Storytelling, weil er "konzeptionell da durchführen" will (21:33). Die Stories liegen räumlich sortiert: oben die Kundenperspektive, unten die Sicht der Mechaniker:in (24:33). Die Rangfolge der Qualitätsziele aus Folge 111 gilt weiter: Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit.
+
+Der Schnitt entsteht induktiv beim Gruppieren. Nacheinander entstehen Terminplanung (24:51), Reparatur durchführen (30:14), Bezahlung (45:16) und Materialbeschaffung (47:23). Das Kriterium bleibt jedes Mal dasselbe: Ein Modul bekommt ein eigenes Domänenmodell mit eigenen Daten, die als Beispiel neben die Box geschrieben werden.
+
+*Betroffene Qualitätsszenarien:* Keines direkt. Eberhard begründet den Schnitt mit den fachlichen Anforderungen, nicht mit einem Qualitätsszenario (22:41). <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar betroffen, weil ein Schnitt nach Fachlichkeit die Stelle eingrenzt, an der ein weiterer Laden eigene Regeln mitbringt; das Video stellt diesen Zusammenhang aber nicht her. Die Einarbeitungsszenarien <<{ch10}#qs-u-05,QS-U-05>> und <<{ch10}#qs-u-06,QS-U-06>> nennt Eberhard in diesem Zusammenhang nicht.
+
+=== Optionen
+
+*Option A: Technische Schichten.* Das System teilt sich auf oberster Ebene in UI, Logik und Persistenzschicht. Vorteil: Ein vertrautes Muster, jede Schicht hat eine klare technische Aufgabe. Nachteil: Jede Story zieht sich durch alle drei Schichten; die Fachlichkeit findet auf oberster Ebene keinen Ort.
+
+*Option B: Fachliche Module.* Das System besteht aus vier Modulen, jedes trägt eine Fachlichkeit mit eigenem Domänenmodell: Terminplanung, Reparatur durchführen, Bezahlung, Materialbeschaffung. Vorteil: Jede Story landet in genau einem Modul, die Daten liegen dort, wo sie gebraucht werden. Nachteil: Die Statusseite für Kund:innen braucht Termin und Protokoll aus zwei Modulen.
+
+*Option C: Mehr Module.* Wie B, zusätzlich ein fünftes Modul Reparaturstatus, das die Kundensicht hält und Datum sowie Protokollstand von den beiden anderen Modulen bezieht. Vorteil: Eine Statusseite aus einer Hand. Nachteil: Das Modul hält dieselben Informationen wie Terminplanung und Reparatur durchführen, nur weniger davon.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Schichten | B: Fachliche Module (Referenz) | C: Fünftes Modul Reparaturstatus
+
+| Antwort auf die fachlichen Anforderungen (jede Story hat ein Modul) | -1 | 0 | 0
+| Getrennte Domänenmodelle ohne doppelte Daten | -1 | 0 | -1
+| Eine Statusseite für Kund:innen aus einer Hand | ? | 0 | +1
+| Aufwand für Bau und Betrieb der Module | ? | 0 | -1
+| Änderbarkeit Richtung SaaS | ? | 0 | ?
+
+| *Summe* | *-2 (3 Zellen offen)* | *0* | *-1 (1 Zelle offen)*
+|===
+
+Option A scheitert am Zweck der Aufteilung: Sie gibt keine Antwort auf die fachlichen Anforderungen. Option C gewinnt nur bei der Statusseite und zahlt dafür mit einem Modul, das nichts Eigenes weiß.
+
+=== Entscheidung
+
+Wir schneiden das System auf oberster Ebene fachlich in vier Module: Terminplanung, Reparatur durchführen, Bezahlung und Materialbeschaffung. Ein Modul rechtfertigt sich durch ein eigenes Domänenmodell mit eigenen Daten. Es gibt kein Modul Reparaturstatus; den Status ermitteln Terminplanung und Reparatur durchführen gemeinsam, jedes Modul liefert seinen Teil der Statusseite.
+
+=== Begründung
+
+Die Schichten fallen zuerst. Eberhard sagt: "ich mache bewusst keine technische Aufteilung" (22:11). UI, Logik und Persistenz findet er "auf dieser grob-granularen Ebene nicht hilfreich" (22:33). Das System soll fachliche Anforderungen erfüllen, und "darauf können wir nur eine Antwort geben, wenn wir das Zeug fachlich strukturieren" (22:54).
+
+Das Kriterium für einen Schnitt nennt er bei Terminplanung und Reparatur durchführen: "zwei unterschiedliche Informationsdichten" (33:21). Das gehe "in diese Richtung von Bounded Contexts" (33:34): gleiche Namen wie "die Reparatur", aber "unterschiedliche Informationen, die damit einhergehen" (33:48). Bezahlung folgt demselben Muster: "da geht es halt tatsächlich nur darum, einen Betrag zu bezahlen" (45:23). Die Preise lägen zwar bei Reparatur durchführen, "aber ich würde es halt, glaube ich, tendenziell trennen" (45:45), denn das Modul hat "keine Informationen mehr über die Reparatur" (46:10). Materialbeschaffung begründet er nur über ihr eigenes Datum: "das vielleicht auch was Eigenes ist" (47:36), es kennt "eine Bestellung bei einem Großhändler" (47:40).
+
+Das fünfte Modul Reparaturstatus prüft er und verwirft es: "Ich finde das in diesem Fall nicht sonderlich sinnvoll" (35:43). Die Kundensicht braucht "exakt diese Informationen, die hier drinstehen" (36:54), "die sind so identisch" (37:08), also "schmeißen wir das mal weg" (37:22). Ein eigenes Modul lohnt sich erst bei "einen sehr begrenzten und auch sehr anderen Blick" (36:07), etwa einer Statistik, die nur zählt, wie viele Schaltungen eingebaut wurden (36:18).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Jede Story aus Folge 111 hat genau ein Modul; die Zuordnung steht am Board.
+* Jedes Modul trägt eigene Daten und ein eigenes Domänenmodell; Begriffe dürfen sich gleichen, Inhalte nicht.
+* Der Schnitt bereitet die Folgeentscheidungen <<adr-010>>, <<adr-011>> und <<adr-012>> vor.
+
+*Negativ*
+
+* Die Statusseite für Kund:innen entsteht aus zwei Modulen; wer sie rendert, muss Termin und Protokoll zusammenführen.
+* Die Zahl vier ist nicht begründet, sie ergibt sich aus dem Gruppieren der Stories.
+* Materialbeschaffung steht auf der schwächsten Begründung der vier Module.
+
+*Risiken*
+
+* R-027: Das Protokoll kann Einträge enthalten, "die jetzt eben nicht kundensichtbar sein sollen" (37:03). Ohne Filter in Reparatur durchführen erreichen interne Einträge die Statusseite.
+* R-028: Erweist sich das Domänenmodell der Materialbeschaffung als dünn, trägt das Modul den Aufwand eines eigenen Projekts (<<adr-011>>) ohne fachlichen Gewinn.
+* R-029: Der Schnitt entstand leichtgewichtig entlang der Stories. Komplexe Fachlogik, die Event Storming oder Domain Storytelling aufdecken würden (21:23), kann quer zu den Modulen liegen.

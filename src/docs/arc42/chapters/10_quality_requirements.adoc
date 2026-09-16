@@ -16,7 +16,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-quality-scenarios]]
 == Qualitätsanforderungen
 
-Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlichkeit, 2. Änderbarkeit Richtung SaaS, 3. Verfügbarkeit. Dieses Kapitel deckt alle acht Merkmale der ISO/IEC 25010 ab und markiert je Merkmal, ob es eines der drei Ziele konkretisiert oder abgeleitet ist. Die Szenarien stammen vom Miro-Board zu Folge 113 (Seite 5 und 6). Eberhard hat sie in Folge 111 als Stimulus und Response mit Metrik formuliert, "messbar mit Stoppuhr" (V8, 44:36 und 49:30).
+Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlichkeit, 2. Änderbarkeit Richtung SaaS, 3. Verfügbarkeit. Dieses Kapitel deckt alle acht Merkmale der ISO/IEC 25010 ab und markiert je Merkmal, ob es eines der drei Ziele konkretisiert oder abgeleitet ist. Die Szenarien stammen vom Miro-Board zu Folge 113 (Seite 5 und 6). Eberhard hat sie in Folge 111 als Stimulus und Response mit Metrik formuliert, "messbar mit Stoppuhr" (V8, 44:36 und 49:30). QS-Z-03 kam in Folge 112 hinzu (13:07 bis 14:35).
 
 === 10.1 Qualitätsbaum
 
@@ -180,8 +180,8 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Ladenöffnungszeit, Kund:in wartet an der Kasse
 | Reaktion | Preis einer erfolgten Reparatur ist wieder ermittelbar
 | Maß | Spätestens nach 2 Minuten
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
-| Bezug | konkretisiert Ziel 3
+| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support. Eberhard erwägt in Folge 112 einen Low-Tech-Fallback: einen Zettel am Fahrrad mit dem Preis ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle (14:13 bis 14:35). Entschieden ist nichts: "da kann man sich was ausdenken".
+| Bezug | konkretisiert Ziel 3. Quelle: Folge 112, 13:07 bis 14:35. Das Szenario entsteht dort aus der Frage, was bei Abholung passiert: "muss ich dem Menschen das Geld abknöpfen, dafür brauche ich diese Information"; die Annahme verträgt 30 Minuten, die Preisermittlung nicht. Board Seite 6 hält es fest.
 |===
 
 [[qs-z-04,QS-Z-04]]
@@ -226,7 +226,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Bezug | konkretisiert Ziel 3
 |===
 
-NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<{ch09}#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären.
+NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<{ch09}#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären. Folge 112 klärt das nicht; die Karte "nach 5 Minuten" stammt nicht aus dieser Folge. Folge 113 ausstehend.
 
 [[qs-z-07,QS-Z-07]]
 .QS-Z-07: Datenverlust

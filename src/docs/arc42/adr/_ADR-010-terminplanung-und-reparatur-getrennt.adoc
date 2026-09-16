@@ -1,0 +1,83 @@
+[[adr-010]]
+== ADR-010: Terminplanung und Reparatur durchführen als zwei Module
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-11
+| Quelle | software-architektur.tv Folge 112, 24:51, 33:15, 37:27 und 43:58
+|===
+
+=== Problem
+
+Kund:innen melden ein Fahrrad zur Reparatur an und bekommen einen Termin. Mechaniker:innen nehmen den Defekt auf, bauen Teile ein und führen ein Protokoll. Beides heißt "Reparatur". Gehört alles in ein Modul, oder sind Terminplanung und Reparatur durchführen zwei Module mit eigenem Domänenmodell?
+
+=== Kontext
+
+Der fachliche Schnitt aus <<adr-009>> verlangt je Modul ein eigenes Domänenmodell mit eigenen Daten. Beim Gruppieren der Stories entsteht links die Terminplanung: "wann ich diese Fahrräder halt eigentlich repariere" (24:51), ein großer Kalender. Rechts entsteht Reparatur durchführen mit Defekt, Protokoll, Ersatzteilen und Kosten. Quer dazu liegt die Story "Status der Reparatur abfragen": Kund:innen wollen auf einer Seite sehen, ob die Reparatur eingeplant ist und was schon getan wurde (31:14).
+
+Aus dem Chat kommt die Frage, ob man die Terminplanung nicht einkaufen könne (37:27). Eberhard entscheidet das nicht, hält es aber offen und ordnet den Fall ein: Eine gekaufte Terminplanung wäre eine Generic Subdomain (41:16).
+
+*Betroffene Qualitätsszenarien:* Keines direkt. Der Schnitt zielt auf getrennte Domänenmodelle, nicht auf ein Qualitätsszenario. <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar berührt, weil eine austauschbare Terminplanung (R-030) den Umbau zum SaaS um ein zu bauendes Modul entlastet; das Video stellt diesen Zusammenhang nicht her.
+
+=== Optionen
+
+*Option A: Ein Modul Reparatur.* Termin, Defekt, Protokoll und Kosten liegen in einem Modul mit einem Domänenmodell. Vorteil: Die Statusseite kommt aus einer Hand, keine Schnittstelle zwischen Termin und Durchführung. Nachteil: Ein Modell muss Kalenderlogik und Werkstattwissen zugleich tragen; die Terminplanung lässt sich nicht getrennt ersetzen.
+
+*Option B: Zwei Module.* Terminplanung kennt die Reparatur als Termin. Reparatur durchführen kennt sie als Defekt, Ersatzteile, Einbauzeit und Kosten. Beide Module tragen zur Statusseite bei. Vorteil: Zwei schlanke Domänenmodelle, die Terminplanung bleibt generisch. Nachteil: Die Statusseite wird von zwei Modulen gemeinsam hergestellt.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Ein Modul | B: Zwei Module (Referenz)
+
+| Getrennte Domänenmodelle (Informationsdichte) | -1 | 0
+| Eine Statusseite für Kund:innen aus einer Hand | +1 | 0
+| Terminplanung durch ein Kaufprodukt ersetzbar | -1 | 0
+| Terminplanung als generische Arbeitsplanung nutzbar | -1 | 0
+| Aufwand für die Schnittstelle zwischen Termin und Durchführung | +1 | 0
+| Änderbarkeit Richtung SaaS | ? | 0
+
+| *Summe* | *-1 (1 Zelle offen)* | *0*
+|===
+
+Option A gewinnt bei der Statusseite und der Schnittstelle, verliert aber bei allem, was aus dem getrennten Domänenmodell folgt.
+
+=== Entscheidung
+
+Terminplanung und Reparatur durchführen sind zwei Module. Terminplanung hält den Termin und die Arbeitsplanung, Reparatur durchführen hält Defekt, Protokoll, Ersatzteile und Kosten. Den Status der Reparatur ermitteln beide Module; die Statusseite setzt sich aus beiden Teilen zusammen. Ob die Terminplanung selbst gebaut oder gekauft wird, bleibt offen.
+
+=== Begründung
+
+Das tragende Argument ist die Informationsdichte. Eberhard: "diese fachliche Aufteilung ist trotzdem sinnvoll" (33:15), weil "wir hier zwei unterschiedliche Informationsdichten sozusagen haben" (33:21). Links ist die Reparatur "eigentlich als Termin" (33:53), und das "bedeutet Arbeitsplanung" (34:00), die er "auch für mich als Eberhard Wolff, der Berater, nutzen könnte" (34:04). Rechts steckt das Wissen, "dass ich irgendwie Ersatzteile habe, dass ich die einbaue, dass es Zeit kostet" (34:08). Sein Schluss: "Diese beiden Systeme jetzt zusammenzupacken, macht, glaube ich, keinen Sinn" (34:20).
+
+Er ordnet das Muster ein: "ein bisschen geht das in diese Richtung von Bounded Contexts" (33:34). Beide Modelle haben "Dinge, die gleich benannt sind" (33:46), aber "unterschiedliche Informationen, die damit einhergehen" (33:48).
+
+Die Statusseite löst er, ohne den Schnitt aufzugeben: "diese Webseite wird gemeinsam hergestellt von diesen beiden Systemen" (34:27). Terminplanung sagt, wann die Reparatur begonnen wurde, Reparatur durchführen sagt, "wir haben halt übrigens folgende Dinge gemacht" (34:42).
+
+Den Einkauf der Terminplanung schließt er nicht aus: "Das will ich nicht ausschließen" (40:08) und "es steht, glaube ich, außer Frage, dass man eine Terminplanung kaufen kann" (43:58). Beurteilen könne er das aber nicht: "Ich kann das aber nicht ernsthaft bewerten" (40:26), dafür sieht er "andere Personen" (40:27). Bei Standardsoftware nehme man, "was ungefähr passt" (44:18), und "würge das halt irgendwie in den Rest des Systems rein" (44:38).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Zwei schlanke Domänenmodelle; die Terminplanung bleibt frei von Werkstattwissen.
+* Die Terminplanung ist als generische Arbeitsplanung gedacht und damit ersetzbar.
+* Der Schnitt hält die Option offen, die Terminplanung als Generic Subdomain zu kaufen.
+
+*Negativ*
+
+* Die Statusseite braucht Beiträge aus zwei Modulen; jemand muss sie zusammenführen.
+* Der Übergang vom Termin zur Reparatur (Fahrrad abgeben, 47:05) liegt an der Modulgrenze und braucht eine Schnittstelle.
+
+*Risiken*
+
+* R-030: Wird die Terminplanung gekauft, passt das Produkt nur "ungefähr" (44:18). Kompromisse an der Schnittstelle zu Reparatur durchführen und an der Statusseite sind die Folge. Wer den Kauf beurteilt, ist offen (40:27).
+* R-031: Terminänderungen durch hochpriorisierte Aufträge oder Ausfall einer Mechaniker:in (30:51) müssen in beiden Modulen konsistent ankommen, sonst zeigt die Statusseite zwei Wahrheiten.
+
+*Folgeentscheidung*
+
+Die Richtung der Abhängigkeit zwischen beiden Modulen legt <<adr-012>> fest.

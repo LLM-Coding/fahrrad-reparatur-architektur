@@ -1,0 +1,83 @@
+[[adr-012]]
+== ADR-012: Gerichtete Abhängigkeiten und Zuordnung der externen Systeme
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-11
+| Quelle | software-architektur.tv Folge 112, 55:36, 57:09, 58:17, 60:13 und 62:01
+|===
+
+=== Problem
+
+Vier Projekte (<<adr-011>>) sollen getrennt gebaut werden. Dafür brauchen sie eine Build-Reihenfolge. In welche Richtung dürfen die Module voneinander abhängen, was bedeutet ein Pfeil im Diagramm, und welches Modul spricht mit welchem externen System: Rechnungswesen, SMS und E-Mail, Kasse, Online-Payment, Webshop?
+
+=== Kontext
+
+Eberhard zeichnet die Pfeile zunächst als Aufrufrichtung mit der ausgetauschten Information (50:58): Termin von Terminplanung zu Reparatur durchführen, Preis von Reparatur durchführen zu Bezahlung, Materialbestellung von Reparatur durchführen zu Materialbeschaffung. Der Chat fragt, ob damit synchrone Aufrufe festgelegt und Messages ausgeschlossen seien (55:59). Er verschiebt die Frage auf die technische Ebene und deutet die Pfeile um: Sie zeigen den Informationsfluss (58:17).
+
+Dann schließt er die externen Systeme aus dem Kontextdiagramm an. Bei Rechnungswesen liegt die Wahl zwischen Bezahlung, das den Geldbetrag kennt, und Reparatur durchführen, das die Positionen kennt (<<adr-009>>). Der Chat schlägt zusätzlich "Bezahlung, Rechnungswesen, Rechnung ist bezahlt" vor (63:16).
+
+*Betroffene Qualitätsszenarien:* Keines direkt. Die Richtung der Abhängigkeiten dient der Baubarkeit, nicht einem Qualitätsszenario. Die spätere Wahl zwischen synchronen Aufrufen und Messages (R-034) wird die Zuverlässigkeitsszenarien berühren; welche, entscheidet erst diese Folgeentscheidung.
+
+=== Optionen
+
+*Option A: Ungerichtet, Zyklen erlaubt.* Jedes Modul darf jedes andere nutzen. Vorteil: Rückfragen wie "ist die Planung noch okay?" sind ohne Umweg möglich. Nachteil: Keine Build-Reihenfolge; die Module lassen sich nur gemeinsam bauen.
+
+*Option B: Gerichteter Graph.* Terminplanung nutzt Reparatur durchführen, Reparatur durchführen nutzt Bezahlung und Materialbeschaffung. Rechnungswesen hängt an Reparatur durchführen, SMS und E-Mail an Reparatur durchführen, Kasse und Online-Payment an Bezahlung. Vorteil: Bezahlung und Materialbeschaffung bauen zuerst, dann Reparatur durchführen, dann Terminplanung. Nachteil: Rückfragen gegen die Richtung brauchen einen anderen Mechanismus.
+
+*Option C: Gerichteter Graph, Rechnungswesen an Bezahlung.* Wie B, aber das Rechnungswesen bekommt seine Daten von Bezahlung, weil dort die Zahlung stattfindet. Vorteil: Rechnung und Zahlung liegen an einer Stelle. Nachteil: Bezahlung kennt nur den Geldbetrag, die Rechnung braucht die Positionen.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Ungerichtet | B: Gerichtet (Referenz) | C: Rechnungswesen an Bezahlung
+
+| Build-Reihenfolge möglich | -1 | 0 | 0
+| Rückfragen gegen die Richtung (Terminplanung fragt Reparatur) | +1 | 0 | 0
+| Rechnung enthält die reparierten Positionen | 0 | 0 | -1
+| Zahlungsstatus erreicht das Rechnungswesen | 0 | 0 | +1
+| Verständlichkeit des Diagramms | -1 | 0 | 0
+| Freiheit bei synchron oder Messages | ? | 0 | 0
+
+| *Summe* | *-1 (1 Zelle offen)* | *0* | *0*
+|===
+
+B und C enden gleich. Den Ausschlag gibt der Informationsgehalt: Nur Reparatur durchführen weiß, was repariert wurde, und das gehört in die Rechnung. Ob die Zahlung das Rechnungswesen erreichen muss, bleibt offen.
+
+=== Entscheidung
+
+Die Abhängigkeiten bilden einen gerichteten Graphen: Terminplanung nutzt Reparatur durchführen, Reparatur durchführen nutzt Bezahlung und Materialbeschaffung. Ein Pfeil bedeutet Informationsfluss mit der ausgetauschten Information, nicht Aufrufrichtung. Extern gilt: Rechnungswesen bekommt Rechnungselemente von Reparatur durchführen; SMS und E-Mail bekommen Informationen über Updates von Reparatur durchführen; Kasse und Online-Payment hängen an Bezahlung. Terminplanung, Reparatur durchführen und Bezahlung liefern je eigene Seiten in den Webshop; Webshop und User-Datenbank gelten dabei als eine Einheit. Materialbeschaffung hat keine Seite im Webshop. Ob Bezahlung dem Rechnungswesen die Zahlung meldet, ist nicht entschieden.
+
+=== Begründung
+
+Die Richtung dient dem Bauen. Eberhard: "ich möchte gerne, dass tatsächlich Materialbeschaffung und Bezahlung gebaut werden können" (57:15), "Reparatur das irgendwie nutzt und Terminplanung das irgendwie nutzt" (57:21). Eine Build-Reihenfolge "kann ich ja nur dann haben, wenn eben die technischen Abhängigkeiten in diese eine Richtung gehen" (57:30). Er sieht sofort den Preis: "dass die Terminplanung vielleicht bei der Reparatur nachfragen muss, ob die aktuelle Planung noch okay ist" (57:50).
+
+Die Pfeilsemantik ändert er auf Nachfrage. Er gibt zu: "Tatsächlich ist es so, dass ich über synchrone Calls nachgedacht hatte" (56:12), "ein bisschen war da ein synchrones Denken bei" (56:51). Messages seien ebenso möglich (56:38). Er entscheidet das nicht: "Wir sind auf der konzeptionellen Ebene" (57:07). Den Vorschlag, die Pfeile als Informationsfluss zu lesen, nimmt er an: "Ja, vielleicht ist das besser" (58:21), "Lass uns sagen, es gibt einen Informationsfluss" (58:25).
+
+Bei den externen Systemen entscheidet der Informationsgehalt. SMS und E-Mail dienen dazu, "dass ich Updates schicke über den Zustand der Reparatur" (60:13), also nutzt sie Reparatur durchführen. Kasse und Online-Payment werden "offensichtlich genutzt von der Bezahlung" (60:44). Das Rechnungswesen hängt er an Reparatur durchführen, "weil ich hier ja eben die Information habe, was genau repariert worden ist" (61:17), "und das will ich in der Rechnung drin haben" (61:25). Bezahlung weiß nur: "ich habe irgendwie 250 Euro bezahlt" (61:30). "Deswegen sind das eben unterschiedliche Informationen" (61:33). Für den Webshop gilt: Seiten einblenden, "die es mir zum Beispiel ermöglichen, Reparaturen zu schedulen" (62:23), den Reparaturstand zu sehen und zu bezahlen, also aus drei Modulen (62:46).
+
+Jans Vorschlag "Rechnung ist bezahlt" lässt er offen: "Weiß ich nicht. Ist das so?" (63:23). Das könne "auch eher im Hintergrund laufen zwischen Kasse, Online-Payment und dem Rechnungswesen" (63:25).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Die Build-Reihenfolge steht fest: Bezahlung und Materialbeschaffung, dann Reparatur durchführen, dann Terminplanung.
+* Jeder Pfeil trägt die ausgetauschte Information; die Legende ist am Board notiert.
+* Jedes externe System hat genau ein Modul als Gegenüber.
+
+*Negativ*
+
+* Ob die Module synchron aufrufen oder Messages austauschen, bleibt ausdrücklich offen. Die Entscheidung fällt auf der technischen Ebene.
+* Die Board-Legende sagt noch "Aufrufrichtung"; das Transkript sagt "Informationsfluss". Zwei Lesarten stehen nebeneinander.
+* Bezahlung meldet dem Rechnungswesen nichts; ob Kasse und Online-Payment das übernehmen, ist ungeklärt.
+
+*Risiken*
+
+* R-034: Terminplanung muss bei Reparatur durchführen nachfragen, ob die Planung noch gilt (57:50). Das läuft gegen die Abhängigkeitsrichtung. Eberhard vermutet, dass dies eher für einen Message Bus spricht (58:05); die Formulierung im Video ist unklar.
+* R-035: Das Rechnungswesen erfährt von der Zahlung nur, wenn Kasse, Online-Payment oder Bezahlung sie melden. Solange das offen ist (63:23), können Rechnungen unbezahlt erscheinen.
+* R-036: Wer die Board-Legende liest, versteht die Pfeile als Aufrufrichtung und leitet daraus synchrone Aufrufe ab, die nie entschieden wurden.
