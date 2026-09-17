@@ -5,4 +5,4 @@ transcription/chunks/
 transcription/out/
 transcription/logs/
 .env
-contest/build/
+contest/
