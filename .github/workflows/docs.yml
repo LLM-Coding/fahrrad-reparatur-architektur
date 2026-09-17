@@ -1,0 +1,109 @@
+# Builds the arc42 microsite with docToolchain 4.0.0 and deploys it to GitHub Pages.
+#
+# docToolchain 4.0.0 has no release zip, so ./dtcw cannot download it. The
+# install step clones branch main-4.x, runs the Gradle task packageLibs and
+# copies the runtime JARs into lib/. ./dtcw detects a v4 installation by that
+# lib/ directory under ~/.doctoolchain/docToolchain-4.0.0 and runs the Groovy
+# launcher directly, no Gradle at build time.
+#
+# The finished installation is cached, keyed on the pinned commit, so the
+# Gradle build only runs when the pin changes or the cache expired.
+#
+# Repository settings: Pages must use the source "GitHub Actions".
+
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  DTC_VERSION: 4.0.0
+  DTC_HEADLESS: "true"
+  DTC_HOME: /home/runner/.doctoolchain/docToolchain-4.0.0
+  # Pinned commit of branch main-4.x, same as the local installation
+  DTC_REV: a3104b7964817f0762d94715e296fe634d28c0a4
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cache docToolchain installation
+        id: dtc-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.DTC_HOME }}
+          key: doctoolchain-${{ env.DTC_VERSION }}-${{ env.DTC_REV }}
+
+      - name: Cache Gradle dependencies
+        if: steps.dtc-cache.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-doctoolchain-${{ env.DTC_REV }}
+          restore-keys: |
+            gradle-doctoolchain-
+
+      - name: Install docToolchain from source
+        if: steps.dtc-cache.outputs.cache-hit != 'true'
+        run: |
+          rm -rf "$DTC_HOME"
+          mkdir -p "$DTC_HOME" && cd "$DTC_HOME"
+          git init -q
+          git fetch -q --depth 1 https://github.com/docToolchain/docToolchain.git "$DTC_REV"
+          git checkout -q FETCH_HEAD
+          ./gradlew packageLibs --no-daemon --warning-mode=none -q
+          mkdir -p lib
+          cp build/lib/*.jar lib/
+          rm -rf build .gradle
+          echo "Installed $(ls lib/*.jar | wc -l) JARs into $DTC_HOME/lib"
+
+      - name: Show versions
+        run: ./dtcw --version
+
+      - name: Build microsite
+        run: |
+          rm -rf build/microsite/output build/microsite/tmp
+          ./dtcw local generateSite
+          test -f build/microsite/output/index.html
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/microsite/output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
