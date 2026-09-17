@@ -35,7 +35,7 @@ microsite.with {
     /** start:microsite **/
     contextPath = '/'
     /** end:microsite **/
-    title = 'Wir bauen eine Software-Architektur \u2013 ADRs'
+    title = 'Fahrrad-Reparatur-System: Architektur und ADRs'
     siteTitle = 'Wir bauen eine Software-Architektur \u2013 ADRs'
     // Landing page, relative to inputPath (src/docs). Static HTML fragment, no JS.
     landingPage = 'landingpage.gsp'
