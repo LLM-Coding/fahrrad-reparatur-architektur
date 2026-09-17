@@ -45,6 +45,112 @@ Dort finden Sie Links und Beispiele zum Thema ADR.
 ****
 endif::arc42help[]
 
+=== Entscheidungslandkarte
+
+Die Entscheidungen hängen voneinander ab. Die Karte zeigt, welche Grundentscheidungen gefallen sind (grün), welche bewusst vertagt ist (gelb) und wo die Front verläuft: offene Entscheidungen, deren Voraussetzungen jetzt feststehen (rot). Kleinere offene Punkte sind grau. Die Karte ist eine Auswertung dieser Dokumentation, keine Quelle.
+
+[plantuml, "09-entscheidungslandkarte", svg]
+----
+skinparam rectangle {
+  BorderColor #555
+  FontSize 12
+}
+skinparam packageStyle rectangle
+left to right direction
+
+rectangle "Qualitätsziele\nUsability > SaaS > Verfügbarkeit\nSecurity nachrangig" as ziele #EEEEEE
+rectangle "Randbedingungen\nWebshop vorhanden, keine IT im Shop,\nKasse im Laden" as rb #EEEEEE
+
+package "A  Kundenzugang über den Webshop" {
+  rectangle "ADR-001\nLogin über Webshop" as a1 #C8E6C9
+  rectangle "ADR-002\nPfad /reparatur" as a2 #C8E6C9
+  rectangle "ADR-003\nEigener Bereich" as a3 #C8E6C9
+  rectangle "ADR-005\nStatusseite" as a5 #C8E6C9
+  rectangle "<b>Login für Mitarbeitende\nund Mechaniker:innen (P1)" as f1 #FFCDD2
+  rectangle "<b>Verfügbarkeit bei\nWebshop-Ausfall (P3)" as f6 #FFCDD2
+}
+
+package "B  Fachliche Struktur" {
+  rectangle "ADR-009\nFachlicher Schnitt" as b9 #C8E6C9
+  rectangle "ADR-010\nTerminplanung getrennt" as b10 #C8E6C9
+  rectangle "ADR-011\nRepository je Komponente" as b11 #C8E6C9
+  rectangle "ADR-012\nInformationsfluss, gerichtet" as b12 #C8E6C9
+  rectangle "<b>Synchron oder Messages" as f4 #FFCDD2
+  rectangle "Terminplanung kaufen?" as o1 #E0E0E0
+  rectangle "Bezahlung an Rechnungswesen?" as o2 #E0E0E0
+  rectangle "Finanziellen Aspekt separieren?" as o3 #E0E0E0
+}
+
+package "C  Integration nach außen" {
+  rectangle "ADR-004\nPayment Service + Kasse" as c4 #C8E6C9
+  rectangle "ADR-006\nErsatzteile selbst" as c6 #C8E6C9
+  rectangle "ADR-007\nE-Mail" as c7 #C8E6C9
+  rectangle "<b>Kasse aus der Cloud\nerreichen (P2)" as f2 #FFCDD2
+  rectangle "Bestellweg Großhändler?" as o4 #E0E0E0
+}
+
+package "D  Betrieb und Verteilung" {
+  rectangle "ADR-008\nVerfügbarkeit differenziert" as d8 #C8E6C9
+  rectangle "ADR-013\nCloud bei AWS" as d13 #C8E6C9
+  rectangle "ADR-015\nZwei Instanzen, Multi-AZ" as d15 #C8E6C9
+  rectangle "ADR-016\nRDS" as d16 #C8E6C9
+  rectangle "ADR-017\nRufbereitschaft" as d17 #C8E6C9
+  rectangle "ADR-018\nNetzausfall akzeptiert" as d18 #C8E6C9
+  rectangle "ADR-014\nMonolith oder Microservices\n(vertagt)" as d14 #FFF9C4
+  rectangle "<b>Monolith oder Microservices\nentscheiden" as f3 #FFCDD2
+  rectangle "<b>Mandantenfähigkeit gegen\nWebshop-Kopplung (P4)" as f5 #FFCDD2
+  rectangle "Datenhaltung je Modul,\nRPO 5 Minuten?" as o5 #E0E0E0
+}
+
+ziele --> a1
+ziele --> b9
+ziele --> d8
+rb --> a1
+rb --> c4
+rb --> d13
+a1 --> a2
+a1 --> a3
+a1 --> a5
+a1 --> f1
+a1 --> f6
+b9 --> b10
+b9 --> b11
+b9 --> b12
+b10 --> o1
+b12 --> f4
+b12 --> o2
+b9 --> o3
+c4 --> f2
+d13 --> f2
+c6 --> o4
+d8 --> d13
+d13 --> d15
+d13 --> d16
+d13 --> d17
+d13 --> d18
+d13 --> d14
+d14 --> f3
+d15 --> f3
+d16 --> f3
+b11 --> f3
+d16 --> o5
+d13 --> f5
+a1 --> f5
+----
+
+.Die Front: offene Entscheidungen mit feststehenden Voraussetzungen
+[cols="3,3,1,2"]
+|===
+| Entscheidung | Voraussetzungen (gefallen) | Contest | Stand
+
+| Login für Mitarbeitende und Mechaniker:innen | ADR-001 | P1 | offen, im Video nicht behandelt
+| Kasse aus der Cloud erreichen | ADR-004, ADR-013 | P2 | offen, in Folge 113 als Risiko benannt, Kassenproxy als Option
+| Monolith oder Microservices | ADR-011, ADR-013, ADR-015, ADR-016 | neu | ADR-014 vertagt, "relativ irrelevant" für die Szenarien
+| Synchron oder Messages | ADR-012 | neu | offen, in Folge 112 ausdrücklich vertagt
+| Mandantenfähigkeit gegen Webshop-Kopplung | ADR-001, ADR-013, Mandantenfähigkeit beschlossen | P4 | Kopplung im Video nicht behandelt
+| Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P3 | offen, im Video nicht behandelt
+|===
+
 === Übersicht der Entscheidungen
 
 Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112, ADR-013 bis 018 aus Folge 113). Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
