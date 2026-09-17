@@ -15,16 +15,8 @@
                 </p>
             </div>
             <div class="col-lg-6 text-center">
-                <!-- Hero-Bild: sobald images/landingpage-hero.png existiert, hier einbinden.
-                     Bis dahin zeigt die Seite die Entscheidungslandkarte aus Kapitel 9. -->
-                <a href="arc42/chapters/09_architecture_decisions.html" title="Entscheidungslandkarte, Kapitel 9">
-                    <img src="images/09-entscheidungslandkarte.svg" alt="Entscheidungslandkarte der Architekturentscheidungen" class="img-fluid rounded border">
-                </a>
-                <p class="small text-muted mt-2 mb-0">
-                    <span style="display:inline-block;width:.9em;height:.9em;background:#c8e6c9;border:1px solid #2e7d32;vertical-align:middle"></span> gefallen &nbsp;
-                    <span style="display:inline-block;width:.9em;height:.9em;background:#fff59d;border:1px solid #f9a825;vertical-align:middle"></span> vertagt &nbsp;
-                    <span style="display:inline-block;width:.9em;height:.9em;background:#ffcdd2;border:1px solid #c62828;vertical-align:middle"></span> offen
-                </p>
+                <!-- Hero-Bild, generiert (flache Illustration, keine Lizenzbindung) -->
+                <img src="images/landingpage-hero.png" alt="Fahrradwerkstatt mit Montagest&auml;nder, Zahnr&auml;dern und Bausteinen" class="img-fluid rounded" width="1536" height="576">
             </div>
         </section>
 
@@ -103,6 +95,25 @@
                 </div>
             </div>
 
+        </section>
+
+        <!-- Entscheidungslandkarte -->
+        <section class="row mt-4 mb-4">
+            <div class="col-12">
+                <h2 class="h3">Die Entscheidungslandkarte</h2>
+                <p>
+                    17 Entscheidungen sind gefallen, eine ist vertagt, sechs sind offen. Die Karte zeigt, welche
+                    Entscheidung auf welcher beruht und wo die Front der offenen Entscheidungen verl&auml;uft.
+                </p>
+                <a href="arc42/chapters/09_architecture_decisions.html" title="Entscheidungslandkarte, Kapitel 9">
+                    <img src="images/09-entscheidungslandkarte.svg" alt="Entscheidungslandkarte der Architekturentscheidungen" class="img-fluid rounded border">
+                </a>
+                <p class="small text-muted mt-2 mb-0">
+                    <span style="display:inline-block;width:.9em;height:.9em;background:#c8e6c9;border:1px solid #2e7d32;vertical-align:middle"></span> gefallen &nbsp;
+                    <span style="display:inline-block;width:.9em;height:.9em;background:#fff59d;border:1px solid #f9a825;vertical-align:middle"></span> vertagt &nbsp;
+                    <span style="display:inline-block;width:.9em;height:.9em;background:#ffcdd2;border:1px solid #c62828;vertical-align:middle"></span> offen
+                </p>
+            </div>
         </section>
 
         <!-- Quellen -->
