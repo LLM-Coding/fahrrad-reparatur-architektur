@@ -53,10 +53,11 @@ Die Entscheidungen hängen voneinander ab. Die Karte zeigt, welche Grundentschei
 ----
 skinparam rectangle {
   BorderColor #555
-  FontSize 12
+  FontSize 14
 }
 skinparam packageStyle rectangle
-left to right direction
+skinparam nodesep 12
+skinparam ranksep 40
 
 rectangle "Qualitätsziele\nUsability > SaaS > Verfügbarkeit\nSecurity nachrangig" as ziele #EEEEEE
 rectangle "Randbedingungen\nWebshop vorhanden, keine IT im Shop,\nKasse im Laden" as rb #EEEEEE
@@ -136,6 +137,10 @@ b11 --> f3
 d16 --> o5
 d13 --> f5
 a1 --> f5
+f6 -[hidden]down- c4
+o1 -[hidden]down- d8
+d15 -[hidden]down- d17
+d16 -[hidden]down- d18
 ----
 
 .Die Front: offene Entscheidungen mit feststehenden Voraussetzungen
