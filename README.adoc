@@ -1,0 +1,31 @@
+= Fahrrad-Reparatur-System: Architekturdokumentation
+
+Architekturdokumentation nach arc42 zu Eberhard Wolffs Live-Architektur-Kata
+"Wir bauen eine Software-Architektur" (software-architektur.tv, Folgen 111 bis 113, Februar und März 2022).
+Die Dokumentation rekonstruiert die Entscheidungen aus den Folgen als ADRs (Nygard-Format mit Pugh-Matrix),
+ergänzt Qualitätsszenarien, Risiken und eine Entscheidungslandkarte, und benennt die offenen Entscheidungen.
+
+Quellen: die Transkripte der drei Folgen und das Miro-Board zu Folge 113.
+Begründungen tragen Zeitstempel aus den Folgen. Was die Folgen nicht hergeben, steht als offen markiert.
+
+== Aufbau
+
+* `src/docs/arc42/` arc42-Kapitel 1 bis 12, deutsch, mit C4-Diagrammen in PlantUML
+* `src/docs/arc42/adr/` ADR-001 bis ADR-018, eingebunden in Kapitel 9
+* Kapitel 9 enthält die Entscheidungslandkarte mit den offenen Entscheidungen ("die Front")
+
+== Bauen
+
+Die Doku wird mit docToolchain v4 gebaut:
+
+----
+./dtcw generateSite
+----
+
+Das Ergebnis liegt unter `build/microsite/output/`.
+
+== Folgen
+
+* https://software-architektur.tv/2022/02/25/folge111.html[Folge 111]
+* https://software-architektur.tv/2022/03/11/folge112.html[Folge 112]
+* https://software-architektur.tv/2022/03/25/folge113.html[Folge 113]
