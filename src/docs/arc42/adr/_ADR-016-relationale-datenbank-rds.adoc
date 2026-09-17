@@ -1,0 +1,79 @@
+[[adr-016]]
+== ADR-016: Relationale Datenbank als Managed Service (RDS)
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-25
+| Quelle | software-architektur.tv Folge 113, 40:59 bis 42:09
+|===
+
+=== Problem
+
+Das Datenverlust-Szenario verlangt, dass nach einem Ausfall höchstens 5 Minuten an Daten fehlen, in 99,9 % der Fälle. Welche Datenbank erfüllt das, und wer betreibt sie: das Team selbst auf einer virtuellen Maschine oder der Cloud-Anbieter als Managed Service? Relational oder NoSQL?
+
+=== Kontext
+
+Die Entscheidung ist die kürzeste der Folge. Eberhard liest die Karte als "dass Daten nicht verloren gehen sollen" (40:59), nennt die Zahlen 5 Minuten und 99,9 % nicht und antwortet mit einem Dienst: "im Amazon-Universum gibt es da RDS" (41:14), "der Datenbank-Service von denen" (41:22). Auf dem Board steht die Maßnahmen-Karte "RDS SLAs?" mit Fragezeichen.
+
+Die Entscheidung setzt <<adr-013>> voraus und ergänzt <<adr-015>>: Was für die Anwendungsinstanzen gilt, muss für die Datenbank ebenfalls gelten, sonst nützt Multi-AZ nichts. Ob jedes Modul aus <<adr-009>> eine eigene Datenbank bekommt oder alle eine teilen, sagt das Video nicht.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-07,QS-Z-07>> ist der einzige Auslöser. Die Verfügbarkeitsszenarien <<{ch10}#qs-z-01,QS-Z-01>> und <<{ch10}#qs-z-04,QS-Z-04>> sind mittelbar betroffen, weil eine ausgefallene Datenbank das System mitnimmt; Eberhard stellt diesen Zusammenhang nicht her.
+
+=== Optionen
+
+*Option A: Selbst betriebene Datenbank auf EC2.* Das Team installiert MySQL oder PostgreSQL auf eigenen Instanzen, richtet Replikation und Backups ein. Vorteil: Volle Kontrolle über Sicherung und Wiederherstellung, damit auch über das Datenverlust-Maß. Nachteil: Genau der Betriebsaufwand, den <<adr-013>> und <<adr-017>> vermeiden wollen.
+
+*Option B: RDS, relational.* Amazon betreibt die Datenbank, wahlweise Oracle oder MySQL, mit Multi-AZ, automatischen Backups und Verfügbarkeitsgarantie. Vorteil: Kein eigener Datenbankbetrieb, SLA des Anbieters, vertraute Technik. Nachteil: Das SLA garantiert Verfügbarkeit, nicht den Datenverlust; das Maß von 5 Minuten muss das Team über Backup-Intervalle und Replikation selbst herstellen.
+
+*Option C: NoSQL-Dienst.* DynamoDB oder ein vergleichbarer Dienst. Vorteil: Ebenfalls managed, horizontal skalierbar. Nachteil: Ungewohntes Modell für ein Team, das relationale Datenbanken kennt; das Domänenmodell mit Terminen, Protokollen und Rechnungen ist relational gut abbildbar.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Selbst auf EC2 | B: RDS relational (Referenz) | C: NoSQL-Dienst
+
+| Datenverlust höchstens 5 Minuten (QS-Z-07) | +1 | 0 | ?
+| Betrieb ohne eigenen Datenbankbetrieb (QS-U-07) | -1 | 0 | 0
+| Verfügbarkeitsgarantie des Anbieters | -1 | 0 | 0
+| Vertrautheit des Teams | 0 | 0 | -1
+| Eignung für das Domänenmodell | 0 | 0 | ?
+
+| *Summe* | *-1* | *0* | *-1 (2 Zellen offen)*
+|===
+
+Option A gewinnt nur beim Datenverlust-Maß und zahlt mit dem Betrieb. Option C bringt keinen Vorteil, den ein Szenario verlangt.
+
+=== Entscheidung
+
+Die Daten des Reparatursystems liegen in einer relationalen Datenbank, die AWS als RDS betreibt. Die Engine ist Oracle oder MySQL; das Team wählt nach Gewohnheit. Die Datenbank läuft Multi-AZ, passend zu <<adr-015>>. Die RDS-SLAs sind vor dem ersten Inkrement gegen QS-Z-07 zu prüfen; die Karte behält bis dahin ihr Fragezeichen.
+
+=== Begründung
+
+Eberhard wählt bewusst das Gewohnte: "einen Oracle oder MySQL, also ich bin da jetzt mal konservativ unterwegs" (41:24). NoSQL verwirft er in einem Satz: "ich will jetzt nicht irgendwie eine NoSQL-Datenbank oder sowas aufbauen" (41:29), sondern "einfach eine relationale Datenbank, so wie die meisten Projekte" (41:36). Ein Argument aus den Szenarien gibt er dafür nicht; die Wahl folgt demselben Muster wie Java und AWS (53:05 bis 53:19): das, womit das Team am besten umgeht.
+
+Den Managed Service begründet er mit dem SLA, das er nur teilweise kennt: "muss man nochmal in die RDS-SLAs reingucken" (41:40). Nach seiner Recherche garantiere RDS "eine entsprechende Verfügbarkeit" (41:53), "so dass ich erwarten würde, dass das halt einfach funktioniert" (41:59). Dann die Einschränkung, die das Fragezeichen auf der Karte erklärt: "ich glaube aber, dass sie den Datenverlust eben tatsächlich nicht getrennt nochmal garantieren" (42:01).
+
+Diese Lücke ist der Kern des ADR. Das Szenario misst Datenverlust, das SLA misst Verfügbarkeit. Der Weg von RDS zu höchstens 5 Minuten Verlust führt über synchrone Replikation in eine zweite Zone und über Backup-Intervalle, die das Team einstellt. Das Video benennt diesen Weg nicht; es benennt nur, dass er fehlt.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Kein eigener Datenbankbetrieb: keine Patches, keine Backup-Skripte, keine Replikation von Hand.
+* Relationale Datenbanken sind dem Team vertraut; Einarbeitung und Werkzeuge sind vorhanden.
+* Die Multi-AZ-Konfiguration von RDS passt zu <<adr-015>> und schließt die Lücke, die eine einzelne Datenbankinstanz dort reißen würde.
+
+*Negativ*
+
+* Das Datenverlust-Maß von 5 Minuten ist durch das SLA nicht gedeckt; das Team muss es selbst konfigurieren und messen.
+* Die Wahl Oracle oder MySQL ist offen; Oracle kostet Lizenz, MySQL nicht.
+* Ob jedes Modul eine eigene Datenbank hält oder alle eine teilen, bleibt unentschieden; bei Containern je Modul (<<adr-014>>) wird das zur Frage.
+
+*Risiken*
+
+* R-044: QS-Z-07 fordert höchstens 5 Minuten Datenverlust in 99,9 % der Fälle. Kein Beleg im Video zeigt, dass RDS dieses Maß liefert; Eberhard vermutet das Gegenteil (42:01). Bleibt das Maß unbelegt, ist das Szenario nicht erfüllt, ohne dass es jemand merkt.
+* R-045: Eine gemeinsame Datenbank für vier Module unterläuft den fachlichen Schnitt aus <<adr-009>>: Module greifen auf fremde Tabellen zu, und aus getrennten Domänenmodellen wird ein gemeinsames Schema.

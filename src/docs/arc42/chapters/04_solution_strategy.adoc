@@ -16,7 +16,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-solution-strategy]]
 == Lösungsstrategie
 
-Die Lösungsstrategie folgt der Rangfolge der Qualitätsziele aus Kapitel 1.2: zuerst Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Vertraulichkeit stehen bewusst weiter unten (Folge 111, 41:44 und 58:03). Alle Belege stammen aus den ADRs zu Folge 111 und 112 und dem Miro-Board zum Endstand nach Folge 113.
+Die Lösungsstrategie folgt der Rangfolge der Qualitätsziele aus Kapitel 1.2: zuerst Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Vertraulichkeit stehen bewusst weiter unten (Folge 111, 41:44 und 58:03). Alle Belege stammen aus den ADRs zu Folge 111 bis 113 und dem Miro-Board zum Endstand nach Folge 113. Folge 113 setzt die Qualitätsszenarien in Maßnahmen um: Für jedes Szenario soll es eine Antwort geben, "die ich geben kann, ohne rot zu werden" (58:04 bis 58:22).
 
 === Qualitätsziele und Lösungsansätze
 
@@ -36,17 +36,19 @@ a|
 
 | 2. Änderbarkeit Richtung SaaS für andere Shops
 a|
-* Cloud-Betrieb, damit ohne IT-Experten im Shop betrieben werden kann und weitere Shops ohne neue Hardware dazukommen (Board Seite 6, Maßnahme "Cloud").
+* Cloud-Betrieb, damit ohne IT-Experten im Shop betrieben werden kann und weitere Shops ohne neue Hardware dazukommen (Board Seite 6, Maßnahme "Cloud"; <<{ch09}#adr-013,ADR-013>>). Für das SaaS-Szenario allein ist Cloud "extrem profan" und reicht nicht (Folge 113, 44:18).
 * Fachlicher Schnitt in vier Module entlang der Stories: Terminplanung, Reparatur durchführen, Materialbeschaffung, Bezahlung (Board Seite 7 und 9; <<{ch09}#adr-009,ADR-009>>, <<{ch09}#adr-010,ADR-010>>). Jedes Modul ist ein eigenes Projekt in der Versionskontrolle mit gerichteten Abhängigkeiten, damit die Module unabhängig gebaut werden können (<<{ch09}#adr-011,ADR-011>>, <<{ch09}#adr-012,ADR-012>>).
-* Mandantenfähigkeit wegen der Betriebskosten; auf dem Board als offene Frage mit `?` markiert, ebenso Skalierbarkeit und der Umgang mit Drittsystemen je Shop.
-| Board Seite 6, 7, 9; Änderungsszenario QS-A-01 (zwei Monate, 20 PT); Folge 112, 22:24 bis 48:16 und 54:13 bis 58:25
+* Mandantenfähigkeit von Anfang an, in Folge 113 entschieden (44:10 bis 47:02, 56:33 bis 57:43): Ein System ohne Rücksicht auf Mandanten in zwei Monaten mit 20 PT umzubauen hält Eberhard für "sehr unsicher" (44:50). Erwogene Alternativen: eine Instanz je Shop (Vorschlag von Zuschauer Jan, 50:09) und Serverless, damit die Instanz je Shop günstig wird (50:49). Den Trade-off Betriebskosten gegen Entwicklungskosten legt er dem Kunden vor (50:31 bis 50:47); der Breakeven hängt an der Mandantenzahl (57:33).
+* Skalierbarkeit auf zwei, drei oder zehn Shops sieht Eberhard als unkritisch, "nichts, worauf ich fokussieren würde" (47:02 bis 47:47). Offen bleibt der Umgang mit Kassen- und Rechnungssystemen anderer Shops (47:50 bis 48:44); erwartet ist eine Einschränkung auf bestimmte Systeme.
+| Board Seite 6, 7, 9; Änderungsszenario QS-A-01 (zwei Monate, 20 PT); Folge 112, 22:24 bis 48:16 und 54:13 bis 58:25; Folge 113, 44:10 bis 48:44 und 50:09 bis 57:43
 
 | 3. Verfügbarkeit, differenziert nach Nutzergruppe
 a|
 * Differenzierte Ziele: Werkstatt 99 % zwischen 9 und 18 Uhr mit Wiederanlauf in 30 Minuten; Web 99,9 % zwischen 7 und 24 Uhr, nachts 99 %; Datenverlust höchstens 5 Minuten.
-* Provider-SLAs von EKS/EC2 für Rechenleistung und RDS für die Datenbank statt eigenem Betriebsteam.
-* Eigener Support von außen, für das nächtliche Web-Ziel als 24/7-Support.
-| <<{ch09}#adr-008,ADR-008>>; Board Seite 6 (Maßnahmen-Karten "EKS / EC2 SLAs", "RDS SLAs?", "Eigener Support")
+* Betrieb bei AWS mit mindestens zwei Instanzen über mehrere Availability Zones hinter einem Elastic Load Balancer (<<{ch09}#adr-015,ADR-015>>): Der AWS-SLA zählt einen Ausfall erst, wenn mehr als eine Availability Zone ausfällt (Folge 113, 32:30 bis 33:39). EKS verteilt Container automatisch, EC2 braucht dafür ELB und zwei Instanzen.
+* Relationale Datenbank als RDS mit Oracle oder MySQL (<<{ch09}#adr-016,ADR-016>>) statt eigenem Datenbankbetrieb oder NoSQL; ob RDS den Datenverlust getrennt garantiert, bleibt das Fragezeichen auf der Karte (42:01).
+* Eigener Support mit Rufbereitschaft (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten eine Entwicklerin, für das Web-System rund um die Uhr (40:16 bis 40:59). Cloud allein reicht nicht, weil Ausfälle und Security-Updates jemanden brauchen, "der angerufen werden kann" (28:42 bis 29:24).
+| <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-016,ADR-016>>, <<{ch09}#adr-017,ADR-017>>; Board Seite 6 (Maßnahmen-Karten "EKS / EC2 SLAs", "RDS SLAs?", "Eigener Support"); Folge 113, 28:42 bis 42:09
 |===
 
 === Technologieentscheidungen
@@ -76,8 +78,8 @@ a|
 | <<{ch09}#adr-007,ADR-007>>
 
 | AWS als Cloud-Anbieter: EC2 oder EKS für Rechenleistung, RDS für die Datenbank
-| Annahme aus den Maßnahmen-Karten des Boards. Die SLAs des Anbieters tragen die Verfügbarkeitsziele, weil der Shop keine IT-Experten hat.
-| Board Seite 6, 10, 11; <<{ch09}#adr-008,ADR-008>>
+| In Folge 113 entschieden. AWS nur aus Vertrautheit: "ich kenne irgendwie Amazon", Google "wäre auch fein" (53:12 bis 53:19); Google und Microsoft haben "ein ähnliches ökonomisches Modell" (37:40). Die SLAs des Anbieters tragen die Verfügbarkeitsziele, weil der Shop keine IT-Experten hat.
+| Board Seite 6, 10, 11; <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-013,ADR-013>>, <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-016,ADR-016>>
 
 | Browser-Anwendung für alle Nutzergruppen
 | "Rechner nutzen das System über den Webbrowser" (Board Seite 10); Kund:innen kommen ohnehin aus dem Webshop.
@@ -99,16 +101,22 @@ Das System zerfällt in vier fachliche Module, geschnitten entlang der Stories v
 
 Die Pfeile auf dem Board bedeuten Informationsfluss, nicht Aufrufrichtung (Folge 112, 58:17; <<{ch09}#adr-012,ADR-012>>). Der Webshop blendet Seiten von Terminplanung, Reparatur durchführen und Bezahlung ein; Terminplanung liefert den Termin an Reparatur durchführen, Reparatur durchführen den Preis an Bezahlung und die Materialbestellung an Materialbeschaffung (Board Seite 9). Die technischen Abhängigkeiten bilden einen gerichteten Graphen in derselben Richtung, damit Bezahlung und Materialbeschaffung zuerst gebaut werden können, dann Reparatur durchführen, dann Terminplanung (Folge 112, 57:09). Details stehen in Kapitel 5.
 
-Für das Deployment liegen zwei Varianten auf dem Board: alle vier Module in einer EC2-Instanz (Deployment Monolith, Seite 10) oder jedes Modul in einem eigenen Container (Microservices, Seite 11). Eine Entscheidung ist nicht getroffen. Kapitel 7 beschreibt beide Varianten.
+Für das Deployment liegen zwei Varianten auf dem Board: alle vier Module in einem Artefakt auf EC2 (Deployment Monolith, Seite 10) oder jedes Modul in einem eigenen Container (Microservices, Seite 11). Die Entscheidung bleibt bewusst offen (<<{ch09}#adr-014,ADR-014>>, Status Deferred): Für die Qualitätsziele hält Eberhard die Frage für "relativ irrelevant", beide Varianten bekommt er "genauso verfügbar" (Folge 113, 20:29 bis 21:37). Seit Folge 113 gilt für beide: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>). Kapitel 7 beschreibt beide Varianten.
 
 === Organisatorische Leitlinie: kaufen statt bauen
 
 Der Shop hat drei bis vier Mitarbeitende und keine IT-Experten (Folge 111, 16:51 und 54:06). Daraus folgt eine durchgängige Leitlinie: Bezahlung, E-Mail-Versand, Rechenleistung und Datenbank werden als Dienst gekauft, nicht selbst betrieben (<<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-007,ADR-007>>, Board Seite 5 und 6). Was das System selbst verantwortet, ist die Reparaturfachlichkeit einschließlich der Ersatzteile (<<{ch09}#adr-006,ADR-006>>).
 
+=== Eberhards Einwand zum ADR-Format
+
+Zuschauer Jan fragt in Folge 113, ob die Abwägung Server gegen Cloud als ADR festzuhalten sei (42:09). Eberhard würde sie in der Lösungsstrategie festhalten, nicht als ADR: "Das sind so zentrale, die Kernentscheidung des Systems, das wäre für mich eher eine Solution Strategy" (43:02). Sein Vorbehalt gegen das Format: ADRs haben "das Potenzial, unstrukturiert irgendwelche Entscheidungen zu enthalten" (42:41). Die Abwägung selbst hält er für "sehr, sehr wichtig": Steht fest, was ihn zu seiner Meinung bewegt, "dann kann man darüber diskutieren" (43:26). Dieses Dokument nimmt beide Seiten des Einwands auf. Die Cloud-Abwägung steht hier in Kapitel 4 als Kernentscheidung und zugleich als <<{ch09}#adr-013,ADR-013>> mit Optionen und Pugh-Matrix, damit Kapitel 9 sie neben den übrigen Entscheidungen auffindbar und vergleichbar hält.
+
 === Offene Punkte
 
 Die Zahl vier ist kein Kriterium. Eberhard gruppiert die Stories in Folge 112 induktiv, eine nach der anderen (23:03 bis 48:16); die vier Module sind das Ergebnis, nicht die Vorgabe. Das Kriterium für jeden Schnitt ist ein eigenes Domänenmodell mit eigenen Daten: Terminplanung und Reparatur durchführen haben "zwei unterschiedliche Informationsdichten" (33:21), Bezahlung kennt "nur noch einen Geldbetrag" (45:49). Drei Alternativen hat er erwogen und verworfen: die Aufteilung nach Schichten UI, Logik, Persistenz (22:24), ein fünftes Modul Reparaturstatus (35:03) und Bezahlung als Teil von Reparatur durchführen (45:41). Belege: <<{ch09}#adr-009,ADR-009>>, <<{ch09}#adr-010,ADR-010>>.
 
-NOTE: Offen: Die Entscheidung für Cloud-Betrieb ist in Folge 111 ausdrücklich vertagt (59:33 bis 60:31: "es ergibt sich nicht direkt, welches Betriebsmodell angeraten ist"). Das Board zu Folge 113 setzt Cloud als Maßnahme. In Folge 112 nicht behandelt; Folge 113 ausstehend. Ein ADR zum Betriebsmodell fehlt; die Risiken R-010 und R-022 in Kapitel 11 halten die Spannung zwischen lokaler Kasse und Cloud fest.
+Die Entscheidung für den Cloud-Betrieb war in Folge 111 vertagt (59:33 bis 60:31: "es ergibt sich nicht direkt, welches Betriebsmodell angeraten ist"). Folge 113 trifft sie (06:01, 08:38, 38:25; <<{ch09}#adr-013,ADR-013>>). Begründung: Der Shop hat keine IT-Experten, denen man einen Server im Laden anvertrauen könnte, und einen Wiederanlauf in 30 Minuten vor Ort "schaffe ich nicht" (06:30 bis 06:44). Eigenes Rechenzentrum und Server beim Händler wären teurer und nicht verfügbarer (38:04 bis 38:15); DSGVO in AWS ist "machbar, kein Killer-Argument" (43:39). Das Restrisiko eines Regionsausfalls nimmt Eberhard auf kommerzieller Basis in Kauf (35:03 bis 36:53, 38:39). Die Risiken R-010 und R-022 in Kapitel 11 bleiben: Die Anbindung von Kasse und Rechnungswesen aus der Cloud ist nicht entschieden und "kann im Extremfall die Lösungsstrategie zerstören" (24:38 bis 27:23; Kapitel 7).
 
-NOTE: Offen: Deployment Monolith oder Microservices ist auf dem Board nicht entschieden (Seite 10 und 11). In Folge 112 nicht behandelt; Folge 113 ausstehend. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Seite 9) deutet auf einen möglichen fünften Baustein hin; sie stammt nicht aus Folge 112.
+Deployment Monolith oder Microservices bleibt bewusst offen (<<{ch09}#adr-014,ADR-014>>, Status Deferred). Eberhard nennt die Frage in Folge 113 für die Qualitätsziele "relativ irrelevant" (20:29 bis 21:37). Ein eigener Container für Bezahlung könnte höher redundant laufen, "fünf Instanzen, die anderen nur zwei" (22:20); das hilft gegen Ausfall, nicht beim Wiederanlauf, "was das wesentliche Kriterium ist" (22:31 bis 22:45).
+
+NOTE: Offen: Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Seite 9) deutet auf einen möglichen fünften Baustein hin. Sie fällt weder in Folge 112 noch in Folge 113, auch nicht sinngemäß; ihre Herkunft ist Vorbereitung oder Folge 114.

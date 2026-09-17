@@ -36,7 +36,7 @@ NOTE: Die folgende Liste ist abgeleitet aus Kontext und ADRs, nicht aus dem Vide
 
 === 8.2 Security
 
-Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleitet; keine ist im Video entschieden.
+Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleitet; zwei Zeilen stützen sich auf Folge 113 und sind als Videobeleg gekennzeichnet.
 
 [cols="2,3,1",options="header"]
 |===
@@ -48,7 +48,9 @@ Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleite
 | Bezahlstatus nur aus dem Backend | Das Modul Bezahlung übernimmt den Zahlungsstatus ausschließlich per REST-Abfrage beim Payment Service oder bei der Kasse, nie aus dem Redirect des Browsers (<<{ch09}#adr-004,ADR-004>>). | T-002
 | Rollen aus dem Kontext | Drei Rollen: Kund:in, Shop-Mitarbeiter:in, Fahrrad-Mechaniker:in (Board Seite 1). Werkstattfunktionen sind für Kund:innen nicht erreichbar. | T-006
 | Nachvollziehbares Protokoll | Jede Protokollposition trägt Zeitstempel und Urheber:in (siehe 8.4 Audit). | T-003
-| Provider-Schutz gegen Überlast | Der Cloud-Betrieb (Board Seite 6) bringt Lastverteilung und Schutz des Anbieters mit; Details hängen am offenen Betriebsmodell. | T-005 (teilweise)
+| Provider-Schutz gegen Überlast | Der Cloud-Betrieb bei AWS (<<{ch09}#adr-013,ADR-013>>) bringt Schutz des Anbieters mit; der Elastic Load Balancer vor mindestens zwei Instanzen (<<{ch09}#adr-015,ADR-015>>) verteilt die Last. | T-005 (teilweise)
+| Security-Updates durch eigenen Support | Videobeleg, nicht abgeleitet: Cloud allein reicht nicht, weil jemand "Updates installieren" muss, "weil es Security-Probleme gibt" (Folge 113, 29:05; <<{ch09}#adr-017,ADR-017>>). Security ist damit ein Grund für den eigenen Support, nicht Gegenstand eines Szenarios. | keine T-ID; hält die übrigen Maßnahmen aktuell
+| DSGVO in AWS | Videobeleg, nicht abgeleitet: Eberhard prüft die DSGVO für den Cloud-Betrieb und hält sie für "machbar, kein Killer-Argument" (Folge 113, 43:39; <<{ch09}#adr-013,ADR-013>>). | T-004 (rechtlicher Rahmen, keine technische Maßnahme)
 |===
 
 NOTE: Offen: Wie das Reparatursystem Rollen aus dem JWT des Webshops ableitet, ist nicht entschieden. Der Webshop kennt nur Kund:innen; Mitarbeitende und Mechaniker:innen brauchen einen eigenen Login oder eine Zuordnung. Das Video behandelt das nicht.
@@ -69,7 +71,7 @@ NOTE: Offen: kein Code, keine Tests. Testframework, Testdaten und Abdeckungsziel
 
 === 8.4 Observability
 
-Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6).
+Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6). Folge 113 macht daraus eine Betriebsannahme (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten "eine Entwicklerin, die sich um das Thema kümmert", für das Web-System eine Rufbereitschaft rund um die Uhr, die "nachts um zwei" klingelt (40:16 bis 40:59).
 
 * *Logs*: Jede Anfrage unter `/reparatur` und jeder REST-Aufruf nach außen mit Zeitstempel, Modul und Ergebnis. Fehler der Schnittstellen aus 8.5 sind eigene Log-Ereignisse.
 * *Metriken*: Verfügbarkeit getrennt für Werkstatt- und Web-Teil, weil die Ziele verschieden sind (<<{ch09}#adr-008,ADR-008>>): 99 % zwischen 9 und 18 Uhr, 99,9 % zwischen 7 und 24 Uhr, 99 % nachts. Dazu Antwortzeit der Statusseite und Zeit bis zur Preisermittlung (QS-Z-03, 2 Minuten).
@@ -77,22 +79,23 @@ Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anl
 * *Alarmierung*: Ausfall des Web-Systems und der Werkstatt alarmiert den eigenen Support; nachts den 24/7-Support (QS-Z-05).
 * *Audit*: Protokollpositionen und Zahlungsstatus sind unveränderlich mit Urheber:in und Zeitstempel gespeichert. Das schließt T-003 und macht Übergaben an das Rechnungswesen nachvollziehbar.
 
-NOTE: Offen: Werkzeuge für Monitoring und Alarmierung sind nicht gewählt. Sie hängen am offenen Betriebsmodell und an der Wahl EKS oder EC2.
+NOTE: Offen: Werkzeuge für Monitoring und Alarmierung sind nicht gewählt. Das Betriebsmodell ist seit Folge 113 Cloud bei AWS (<<{ch09}#adr-013,ADR-013>>); die Wahl EKS oder EC2 bleibt vertagt (<<{ch09}#adr-014,ADR-014>>). Wer die Alarme entgegennimmt, ist entschieden: der eigene Support mit Rufbereitschaft (<<{ch09}#adr-017,ADR-017>>).
 
 === 8.5 Error Handling
 
-Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recovery. Eine Zeile stützt sich auf das Video und ist so gekennzeichnet.
+Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recovery. Zwei Zeilen stützen sich auf das Video und sind so gekennzeichnet; eine dritte enthält einen Videobeleg im Fallback.
 
 [cols="2,2,2,2",options="header"]
 |===
 | Fehlerfall | Retry | Fallback | Recovery
 
 | Webshop oder Webshop User Database nicht erreichbar (R-002) | Adressabfrage per REST zweimal wiederholen, kurzer Timeout. | Login schlägt fehl; die Statusseite zeigt eine Wartungsmeldung. Werkstattfunktionen laufen weiter, weil sie kein Webshop-Login brauchen. | Sobald der Webshop antwortet, funktioniert der Login ohne Eingriff.
-| Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
+| Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10; in Folge 113 als Risiko benannt, 24:38 bis 27:23) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". Videobeleg, nicht entschieden: Zuschauer Jan schlägt in Folge 113 einen Kassenproxy im Laden vor, für Eberhard "eine mögliche Lösung" (29:27; <<{ch09}#adr-004,ADR-004>>, Kapitel 7). | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
 | Payment-Redirect bricht ab (R-012) | Buchungsstatus per REST beim Payment Service nachfragen, auch ohne Rückkehr des Browsers. | Der Auftrag bleibt "Zahlung offen"; Kund:in kann erneut bezahlen oder im Laden zahlen. | Ein periodischer Abgleich holt bezahlte, aber nicht bestätigte Zahlungen nach.
 | EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<{ch09}#adr-005,ADR-005>>). SMS ist nicht gebaut (<<{ch09}#adr-007,ADR-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
 | Rechnungswesen aus der Cloud nicht erreichbar (Board Seite 10) | Rechnungselemente in eine Warteschlange, Wiederholung. | Reparatur und Bezahlung laufen weiter; das Rechnungswesen erhält die Elemente später. | Nachlieferung in Reihenfolge, idempotent.
 | Das eigene System im Shop fällt aus (QS-Z-02, QS-Z-03) | Kein Retry im System; der Wiederanlauf liegt beim Provider (EKS / EC2 SLAs, abgeleitet). | Videobeleg, nicht abgeleitet: Eberhard nennt in Folge 112 einen Low-Tech-Fallback (12:52 bis 14:35). Die Annahme von Reparaturen überbrückt der Laden 30 Minuten mit Zettel und Bleistift. Für den Preis bei Abholung schlägt er einen ausgedruckten Zettel am Fahrrad vor ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle. Entschieden ist nichts: "da kann man sich was ausdenken". | Nach dem Wiederanlauf trägt die Werkstatt die Zettel nach (abgeleitet).
+| Netzausfall im Laden: Router oder Provider fällt aus (Folge 113, 08:24 bis 14:13) | Kein Retry im System; die Cloud läuft weiter, der Laden erreicht sie nicht (abgeleitet). | Videobeleg, nicht abgeleitet: akzeptiertes Risiko, mit dem Kunden zu besprechen. Als Reserve ein mobiler LTE/5G-Router mit automatischem Failover, "kostet einen Router und Netzwerktricks" (12:52 bis 13:02). Ein Cache-Server im Laden ist verworfen, weil er Wartung braucht und "deutlich mehr Geld" kostet (13:10 bis 13:21). <<{ch09}#adr-018,ADR-018>> | Sobald das Netz steht, arbeitet der Laden ohne Eingriff weiter; die Daten liegen in der Cloud (abgeleitet).
 |===
 
-NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung nur an einer Stelle: dem Ausfall des eigenen Systems in Folge 112 (12:52 bis 14:35).
+NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung an zwei Stellen: dem Ausfall des eigenen Systems in Folge 112 (12:52 bis 14:35) und dem Netzausfall im Laden in Folge 113 (08:24 bis 14:13).

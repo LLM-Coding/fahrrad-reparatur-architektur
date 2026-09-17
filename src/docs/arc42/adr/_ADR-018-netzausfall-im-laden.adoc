@@ -1,0 +1,79 @@
+[[adr-018]]
+== ADR-018: Netzausfall im Laden wird als Risiko akzeptiert
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-25
+| Quelle | software-architektur.tv Folge 113, 08:24 bis 14:13
+|===
+
+=== Problem
+
+Das System läuft in der Cloud (<<adr-013>>). Fällt im Laden der Router oder beim Provider die Leitung aus, ist das System für die Werkstatt weg, obwohl es in der Cloud läuft. Das Szenario "Preis nach spätestens 2 Minuten" gilt trotzdem. Was tun wir gegen einen Ausfall, den wir nicht verursachen und nicht beheben können?
+
+=== Kontext
+
+Jan stellt die Frage im Chat, kurz nachdem Eberhard die Cloud gewählt hat: Fällt der Router im Laden aus, "eben das gesamte System ausfällt" (08:54) aus Sicht des Kunden. Eberhard nennt die Frage "eine spannende Sache" (09:28) und nutzt sie, um zu zeigen, wie man ein Qualitätsszenario liest, dessen Ursache außerhalb des eigenen Einflusses liegt. Betroffen sind "Ausfall eines Routers" (10:23) und Ausfall "des Internet-Providers" (10:25).
+
+Das Szenario mit dem Preis ist "das aggressivste Wiederanlauf Kriterium, was wir irgendwie haben" (07:55). Aus Folge 112 gibt es dafür schon einen Low-Tech-Fallback: Preise auf Zettel oder in einer Tabelle, festgehalten in <<adr-004>> und in Kapitel 8.5. Diese Entscheidung ergänzt ihn um die Frage, ob Technik im Laden den Ausfall abfangen soll.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-03,QS-Z-03>> (Preis nach 2 Minuten) ist der Auslöser; Eberhard liest es bei 10:06 vor. <<{ch10}#qs-z-02,QS-Z-02>> (Wiederanlauf 30 Minuten) ist betroffen, weil ein Cache-Server im Laden genau diese Frist nicht halten könnte (13:14).
+
+=== Optionen
+
+*Option A: Cache- oder Ersatzserver im Laden.* Ein Rechner im Shop hält die Preise der Reparaturen vor und liefert sie bei Netzausfall. Vorteil: Der Preis ist auch ohne Internet abrufbar. Nachteil: Der Server muss gewartet werden, und ein Ausfall vor Ort bringt das 30-Minuten-Problem aus <<adr-013>> zurück.
+
+*Option B: Mobiler Router als Reserve.* Neben dem festen Router steht ein LTE- oder 5G-Router, auf den das Netz im Laden automatisch umschaltet. Vorteil: Billig, keine Software, deckt den Ausfall des Festnetzanschlusses. Nachteil: Hilft nicht, wenn beide Wege oder der Provider im Stadtteil ausfallen.
+
+*Option C: Risiko akzeptieren.* Der Shop nimmt in Kauf, dass bei Netzausfall im Laden das System nicht erreichbar ist, und greift auf den Low-Tech-Fallback zurück. Vorteil: Kostet nichts. Nachteil: QS-Z-03 ist in diesem Fall technisch nicht erfüllt; die Erfüllung hängt am Fallback aus <<adr-004>>.
+
+=== Bewertung
+
+Option C ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Cache-Server im Laden | B: Mobiler Router | C: Risiko akzeptieren (Referenz)
+
+| Preis nach 2 Minuten bei Netzausfall (QS-Z-03) | +1 | +1 | 0
+| Wiederanlauf 30 Minuten ohne Techniker vor Ort (QS-Z-02) | -1 | 0 | 0
+| Betrieb ohne IT-Experten im Shop (QS-U-07) | -1 | 0 | 0
+| Kosten für Anschaffung und Wartung | -1 | 0 | 0
+| Deckt Provider-Ausfall im Stadtteil | +1 | ? | 0
+
+| *Summe* | *-1* | *+1 (1 Zelle offen)* | *0*
+|===
+
+Option A kauft den Preis-Vorteil mit genau den Problemen, die die Cloud lösen sollte. Option B ist die einzige Verbesserung, die nichts zurückholt; sie ist die erwartete Ergänzung, keine Alternative zur Akzeptanz.
+
+=== Entscheidung
+
+Der Netzausfall im Laden wird als Risiko akzeptiert. Es steht kein Cache- oder Ersatzserver im Shop. Das Team legt dem Kunden das Risiko mit Preisen für die Gegenmaßnahmen vor; erwartet wird, dass der Shop es akzeptiert und höchstens einen mobilen Router als Reserve einbaut. Für die Preisermittlung während eines Ausfalls gilt der Low-Tech-Fallback aus <<adr-004>>.
+
+=== Begründung
+
+Eberhard verwirft zuerst die bequeme Lesart: "Ist nicht mein Problem, was soll's" (09:42). "Das finde ich nicht wirklich hilfreich" (09:45). Ein Qualitätsszenario sei "die Erwartungshaltung, die ein Kunde hat" (09:55); die Ursache des Ausfalls ändert daran nichts. Seine Aufgabe sei, "technisch zu bewerten, wie ich das umsetzen kann" (12:25), und "die variable Größe dabei ist Preis" (12:32).
+
+Dann bepreist er die Optionen. Der mobile Router: "einen mobilen Router, der über LTE oder über 5G" (11:08) die Verbindung redundant hält, "kostet halt irgendwie einen Router und irgendwelche Netzwerktricks" (12:55), also "nicht so wahnsinnig teuer" (13:02). Der Cache-Server: Software "in deinem Server, den du nicht hast" (12:00), die die Preise cacht. "Das würde bedeuten, wir müssen den irgendwie warten" (13:12), und "wir müssen innerhalb von 30 Minuten da sein, sagst du" (13:14). "Das kostet also deutlich mehr Geld" (13:19). Selbst mit zwei Routern bleibt ein Rest: "wenn irgendwo in dem Stadtteil das Internet insgesamt von einem Provider ausfällt" (11:33).
+
+Die Entscheidung überlässt er dem Kunden, mit einer klaren Erwartung: "das wäre jetzt etwas, was ich diskutieren würde, glaube ich, offen mit dem Kunden" (11:46). Die Frage "Wollen wir das tun?" (12:17) sei "ein valides Feedback" (12:19). Für einen Fahrradshop erwartet er, "dieses Risiko, dass die Verbindung zur Cloud abbricht, ist irgendwie akzeptabel" (13:36), "und vielleicht bauen wir dann noch einen mobilen Router als Fallback ein" (13:43). Anders wäre es bei "der Maschinensteuerung eines Atomkraftwerks" (13:47).
+
+=== Konsequenzen
+
+*Positiv*
+
+* Kein Server im Laden; <<adr-013>> und <<adr-017>> bleiben ohne Ausnahme.
+* Das Risiko ist benannt, bepreist und beim Kunden, nicht still im Team.
+* Der mobile Router ist eine Maßnahme des Shops, keine Software; das Team baut nichts dafür.
+
+*Negativ*
+
+* QS-Z-03 ist bei Netzausfall im Laden technisch nicht erfüllt; die Erfüllung hängt am Low-Tech-Fallback aus <<adr-004>>.
+* Die Entscheidung ist noch nicht mit dem Kunden gesprochen; das Video hält nur Eberhards Erwartung fest.
+* Der Provider-Ausfall im Stadtteil bleibt auch mit mobilem Router ungedeckt.
+
+*Risiken*
+
+* R-049: Der Kunde akzeptiert das Risiko nicht und verlangt den Cache-Server. Dann kehren Wartung vor Ort und das 30-Minuten-Problem zurück, die <<adr-013>> ausgeschlossen hat.
+* R-050: Der Low-Tech-Fallback aus <<adr-004>> setzt voraus, dass die Preise im Laden auf Papier oder in einer Tabelle aktuell sind. Niemand ist dafür benannt; veraltet die Liste, fällt bei Netzausfall auch der Fallback.

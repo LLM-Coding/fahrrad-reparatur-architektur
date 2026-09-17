@@ -1,0 +1,81 @@
+[[adr-017]]
+== ADR-017: Eigener Support mit Rufbereitschaft statt Betrieb durch den Shop
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-25
+| Quelle | software-architektur.tv Folge 113, 28:42 bis 29:24, 38:50 und 40:10 bis 40:59
+|===
+
+=== Problem
+
+Die Cloud (<<adr-013>>) nimmt dem Shop den Server ab, aber nicht den Betrieb. Wer installiert Updates, wer reagiert auf einen Ausfall, wer ist um zwei Uhr nachts erreichbar, wenn das Web-System steht? Der Shop hat keine IT-Experten; das Entwicklungsteam ist klein.
+
+=== Kontext
+
+Eberhard kommt beim Sanity Check auf das Szenario "keine IT-Experten" zurück. Seine bisherige Antwort: "ich benutze die Cloud" (28:21), der Shop hat "nur eine Webadresse" (28:28). Dann fragt er nach: "reicht das eigentlich?" (28:42). Die Antwort ist nein, und daraus entstehen zwei Maßnahmen-Karten: "Eigener Support" bei den Werkstatt-Szenarien und "Eigener Support 24/7" beim Web-Szenario nachts.
+
+Die Szenarien haben verschiedene Zeitfenster. Werkstatt: 9 bis 18 Uhr. Web: 7 bis 24 Uhr mit 99,9 % und 24 bis 7 Uhr mit 99 %. Die beiden Web-Fenster ergeben zusammen den ganzen Tag. Das bestimmt, wer den Support leisten kann.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-07,QS-U-07>> ist der Auslöser. <<{ch10}#qs-z-01,QS-Z-01>>, <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-03,QS-Z-03>> tragen die Karte "Eigener Support"; Eberhard nennt sie bei 38:59 bis 39:26 als seine Antwort auf Ausfall, 30 Minuten und 2 Minuten. <<{ch10}#qs-z-04,QS-Z-04>>, <<{ch10}#qs-z-05,QS-Z-05>> und <<{ch10}#qs-z-06,QS-Z-06>> verlangen Rufbereitschaft rund um die Uhr (39:40 bis 39:49, 40:26).
+
+=== Optionen
+
+*Option A: Der Shop betreibt selbst.* Das Team übergibt das System, der Shop kümmert sich um Updates und Störungen. Vorteil: Keine laufenden Kosten für das Team. Nachteil: Widerspricht QS-U-07 direkt; niemand im Shop kann das.
+
+*Option B: Support durch das Entwicklungsteam zu Bürozeiten.* Eine Entwicklerin ist tagsüber erreichbar, installiert Updates und behebt Störungen. Vorteil: Deckt die Werkstatt-Szenarien 9 bis 18 Uhr mit vorhandenen Leuten. Nachteil: Nachts und am Wochenende ist niemand erreichbar; das Web-Szenario nachts bleibt ungedeckt.
+
+*Option C: Rufbereitschaft rund um die Uhr.* Zusätzlich zu B ist jemand jederzeit erreichbar, der das System wieder in Gang bringt. Vorteil: Deckt alle Verfügbarkeits- und Wiederanlauf-Szenarien, auch das Web nachts. Nachteil: Rufbereitschaft kostet, und "das wird wahrscheinlich keine Entwicklerin sein" (40:54); es braucht Betriebspersonal oder einen Dienstleister.
+
+=== Bewertung
+
+Option C ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | A: Shop betreibt selbst | B: Team tagsüber | C: Rufbereitschaft 24/7 (Referenz)
+
+| Betrieb ohne IT-Experten im Shop (QS-U-07) | -1 | 0 | 0
+| Werkstatt 9 bis 18 Uhr, Wiederanlauf 30 und 2 Minuten (QS-Z-01 bis QS-Z-03) | -1 | 0 | 0
+| Web tagsüber 99,9 % (QS-Z-04) | -1 | -1 | 0
+| Web nachts 99 % (QS-Z-05) | -1 | -1 | 0
+| Laufende Kosten | +1 | +1 | 0
+| Security-Updates zeitnah | -1 | 0 | 0
+
+| *Summe* | *-4* | *-1* | *0*
+|===
+
+Option A scheitert an fast allem. Option B reicht für die Werkstatt und fällt beim Web. Option C ist die einzige, die alle Szenarien deckt; ihr Preis ist der offene Punkt.
+
+=== Entscheidung
+
+Das Entwicklungsteam leistet den Support, nicht der Shop. Tagsüber kümmert sich eine Entwicklerin um Updates, Störungen und Wiederanlauf; das deckt die Werkstatt-Szenarien. Für das Web-System gilt Rufbereitschaft rund um die Uhr durch eine Person, die kein Entwickler sein muss. Der Support muss telefonisch erreichbar sein.
+
+=== Begründung
+
+Die Cloud allein reicht nicht, "weil es kann sein, dass irgendwelche Dinge ausfallen" (28:46). Außerdem muss jemand "Updates vielleicht installieren von irgendwelchen Dingen, weil es Security-Probleme gibt" (28:59). Also: "ich brauche schon irgendwie einen eigenen Support" (29:05). Eine neue Version einzuspielen sei etwas, "was man wahrscheinlich irgendwie EntwicklerInnen noch mit aufzwingen kann" (29:15); das ist "noch nicht so ein großes Problem" (29:24).
+
+Bei 38:50 wird der Support zur Antwort auf die Verfügbarkeit: "ich brauche halt einen eigenen Support", der angerufen werden kann (38:54; Whisper transkribiert "daraus telefoniert werden kann"). "Die 30 Minuten sollten wir hoffentlich erreichen" (38:59). Dieselbe Antwort gilt "in Bezug auf die zwei Minuten" (39:18), "für die Verfügbarkeit im Web" (39:40) und "für den Wiederanlauf" (39:49).
+
+Die Zeitfenster trennen die Besetzung. Für 9 bis 18 Uhr reicht "eine Entwicklerin, die sich um das Thema im Wesentlichen kümmern kann" (40:19). Beim Web "wird es dann schwierig" (40:26): 7 bis 24 und 24 bis 7 Uhr, "das ist also ein 24-7-Support" (40:35). "Ich brauche jemanden, der in Rufbereitschaft ist" (40:44), und das ist "ein ganz anderes Thema" (40:44): jemand, der "nachts um zwei sich rausklingeln lässt und das wird wahrscheinlich keine Entwicklerin sein" (40:49).
+
+=== Konsequenzen
+
+*Positiv*
+
+* QS-U-07 ist erfüllt: Der Shop braucht keine IT-Kenntnisse, er braucht eine Telefonnummer.
+* Security-Updates und neue Versionen haben einen Verantwortlichen.
+* Die Rufbereitschaft macht die Wiederanlaufzeiten zu einem Versprechen mit Adressat.
+
+*Negativ*
+
+* Rufbereitschaft rund um die Uhr ist ein Betriebsvertrag, kein Entwicklungsauftrag; das Team muss ihn organisieren oder einkaufen.
+* Die Entwicklerin tagsüber ist während des Supports nicht verfügbar für Entwicklung.
+* Auf dem Board steht "24/7" nur beim Nacht-Szenario; die Karte beim Tag-Web-Szenario meint denselben Support mit, was das Board nicht sagt.
+
+*Risiken*
+
+* R-046: Ein Fahrradshop mit drei bis vier Mitarbeitenden trägt die Kosten einer Rufbereitschaft rund um die Uhr. Das Video nennt keine Zahl. Übersteigen die Kosten den Nutzen des Web-Systems nachts, kippt QS-Z-05 oder der ganze Betrieb.
+* R-047: Rufbereitschaft ohne Entwicklerin setzt Runbooks voraus: Was tut die Person um zwei Uhr nachts? Fehlen sie, ist die Erreichbarkeit da, der Wiederanlauf nicht.
+* R-048: Die Werkstatt-Szenarien gelten 9 bis 18 Uhr, auch samstags, wenn der Laden geöffnet hat. Eine Entwicklerin zu Bürozeiten deckt Samstage nicht; das Video übergeht das.

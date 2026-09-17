@@ -1,0 +1,80 @@
+[[adr-015]]
+== ADR-015: Mindestens zwei Instanzen über mehrere Availability Zones
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-25
+| Quelle | software-architektur.tv Folge 113, 18:12, 31:18 bis 34:38 und 35:03
+|===
+
+=== Problem
+
+Das System läuft bei AWS (<<adr-013>>). Reicht eine Instanz, wie das erste Deployment-Diagramm sie zeigt, um 99 % Verfügbarkeit zwischen 9 und 18 Uhr und 99,9 % im Web zu erreichen? Oder verlangt das SLA des Anbieters mehr Instanzen?
+
+=== Kontext
+
+Eberhard rechnet das Werkstatt-Szenario zuerst grob durch: 99 % von 9 Stunden sind "3 Minuten" (30:53) Ausfall am Tag, "prinzipiell erstmal machbar" (30:55). Weil Verfügbarkeit "eines der wenigen Qualitätsszenarien, was ich habe" (31:00) ist, liest er die AWS-SLAs für EC2 und EKS nach. Er sagt Amazon, "weil das irgendwie die Cloud ist, über die ich am meisten weiß" (31:31), und nimmt an, dass es "in anderen Clouds ähnlich sein wird" (31:39).
+
+Das Board zeigt auf Seite 10 noch "einer EC2-Instanz". Das Transkript ist weiter: Schon bei 18:12 kündigt Eberhard an, "dazu kommen wir gleich irgendwie mehrere". Diese Entscheidung gilt für beide Deployment-Varianten aus <<adr-014>>.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-01,QS-Z-01>> (99 % Werkstatt) ist der Auslöser der SLA-Lektüre. <<{ch10}#qs-z-04,QS-Z-04>> (99,9 % Web) verlangt das Zehnfache und setzt die Maßnahme erst recht voraus. <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-05,QS-Z-05>> tragen dieselbe Maßnahmen-Karte "EKS / EC2 SLAs" auf dem Board; Eberhard nennt sie bei 39:18 bis 39:49 als seine Antwort auf alle Verfügbarkeits- und Wiederanlauf-Szenarien.
+
+=== Optionen
+
+*Option A: Eine EC2-Instanz.* Der Monolith läuft auf einer einzigen virtuellen Maschine, wie auf Board Seite 10 gezeichnet. Vorteil: Billigste und einfachste Konfiguration. Nachteil: Der Ausfall einer Availability Zone nimmt das System mit, und dieser Ausfall zählt laut SLA nicht einmal als Ausfall.
+
+*Option B: Mindestens zwei Instanzen über mehrere Availability Zones.* Bei EC2 stehen mindestens zwei Instanzen in verschiedenen Zonen hinter einem Elastic Load Balancer; bei EKS laufen mehrere Container-Instanzen, die der Cluster selbst verteilt. Vorteil: Erst diese Konfiguration bringt das System in den Geltungsbereich des SLA. Nachteil: Doppelte Instanzkosten, ein Load Balancer, und der Zustand darf nicht auf einer Instanz liegen.
+
+=== Bewertung
+
+Option B ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1"]
+|===
+| Kriterium | A: Eine Instanz | B: Multi-AZ, mindestens zwei (Referenz)
+
+| Verfügbarkeit Werkstatt 99 % (QS-Z-01) | -1 | 0
+| Verfügbarkeit Web 99,9 % (QS-Z-04) | -1 | 0
+| Ausfall einer Availability Zone überstehen | -1 | 0
+| Betriebskosten | +1 | 0
+| Aufwand der Konfiguration bei EC2 | +1 | 0
+| Aufwand der Konfiguration bei EKS | 0 | 0
+
+| *Summe* | *-1* | *0*
+|===
+
+Option A gewinnt bei Kosten und Aufwand und verliert bei allem, was die Szenarien verlangen. Bei EKS entfällt sogar der Aufwandsvorteil.
+
+=== Entscheidung
+
+Das System läuft auf mindestens zwei Instanzen, verteilt über mehrere Availability Zones einer Region. Bei EC2 heißt das: ein Elastic Load Balancer vor mindestens zwei Instanzen. Bei EKS heißt das: mehrere Container-Instanzen je Modul; die Verteilung übernimmt der Cluster. Das Deployment-Diagramm auf Board Seite 10 ist in diesem Punkt überholt.
+
+=== Begründung
+
+Die Entscheidung folgt aus dem SLA-Text, nicht aus einer Vermutung. AWS garantiert "eine Verfügbarkeit von 99,99% im Monat" (31:54), "hört sich ja erstmal super an" (32:02). Die Definition dahinter ist der Punkt: "ein Ausfall einer Availability-Zone ist noch kein Ausfall" (32:21), "das ist ein juristischer Text" (32:25). Ein Ausfall liegt erst vor, wenn "mehr als eine Availability-Zone in der Region ausgefallen ist" (32:30).
+
+Daraus liest Eberhard eine Anweisung des Anbieters: "du musst darauf vorbereitet sein, dass eine Availability-Zone ausfällt" (33:03). Also "müssen wir irgendwie unser System verteilen auf mehrere Availability-Zones" (33:19). Für EKS gilt: "macht das offensichtlich automatisch" (33:25), man braucht nur "mehrere Container-Instanzen" (33:31). Für EC2: "Elastic Load Balancer davor stecken" (33:35) und "mindestens zwei EC2-Instanzen" (33:39). Sein Fazit: "etwas sehr Konkretes, was sich ableitet aus unserer Verfügbarkeitsanforderung" (33:43).
+
+Für die einzelne EC2-Instanz nennt er eine zweite Zahl aus dem SLA: "90 % Verfügbarkeit pro Stunde" (34:28). Diese Zahl ist Eberhards Lesart des SLA-Texts und in diesem Projekt unverifiziert; sie trägt die Entscheidung nicht, nur der Hinweis dahinter: "nimm mal mindestens zwei EC2-Instanzen" (34:38).
+
+Was das SLA nicht leistet, benennt er ebenfalls: Bei Unterschreitung gibt es "eine Gutschrift" (35:03), der Ausfall wird "trotzdem einen ökonomischen Schaden erzeugen" (35:19). Multi-AZ senkt die Wahrscheinlichkeit, ersetzt aber keine Haftung.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Das System liegt im Geltungsbereich des AWS-SLA; der Ausfall einer Zone ist eingeplant.
+* Die Maßnahme gilt für beide Deployment-Varianten und präjudiziert <<adr-014>> nicht.
+* Der Load Balancer bei EC2 ist zugleich der Ansatzpunkt für Rolling Updates ohne Ausfall.
+
+*Negativ*
+
+* Mindestens doppelte Instanzkosten, dazu ein Load Balancer.
+* Sitzungszustand und Caches dürfen nicht an eine Instanz gebunden sein; die Datenbank muss ebenfalls Multi-AZ laufen (<<adr-016>>).
+* Das Board auf Seite 10 zeigt den Stand vor der SLA-Analyse und muss nachgezogen werden.
+
+*Risiken*
+
+* R-042: Ein Ausfall der ganzen Region bleibt ungedeckt. Eberhard würde "sinnvollerweise auf eine andere Region ausweichen" (32:38 bis 36:53, sinngemäß), plant das aber nicht.
+* R-043: Die SLA-Zahlen stammen aus Eberhards Lektüre im März 2022. Ändert AWS die Definition von Ausfall oder die Garantie je Instanz, gilt die Ableitung nicht mehr; das Team prüft den Text vor dem ersten Inkrement.

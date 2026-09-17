@@ -47,7 +47,7 @@ endif::arc42help[]
 
 === Übersicht der Entscheidungen
 
-Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112). Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
+Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112, ADR-013 bis 018 aus Folge 113). Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
 
 [cols="1,4,2"]
 |===
@@ -65,6 +65,12 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 | <<adr-010>> | Terminplanung und Reparatur durchführen als zwei Module | Accepted
 | <<adr-011>> | Jede Komponente ist ein eigenes Projekt in der Versionskontrolle | Accepted
 | <<adr-012>> | Gerichtete Abhängigkeiten und Zuordnung der externen Systeme | Accepted
+| <<adr-013>> | Betrieb in der Cloud bei AWS statt Server im Laden | Accepted
+| <<adr-014>> | Monolith oder Microservices bleibt offen | Deferred
+| <<adr-015>> | Mindestens zwei Instanzen über mehrere Availability Zones | Accepted
+| <<adr-016>> | Relationale Datenbank als Managed Service (RDS) | Accepted
+| <<adr-017>> | Eigener Support mit Rufbereitschaft statt Betrieb durch den Shop | Accepted
+| <<adr-018>> | Netzausfall im Laden wird als Risiko akzeptiert | Accepted
 |===
 
 include::../adr/_ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
@@ -90,4 +96,16 @@ include::../adr/_ADR-010-terminplanung-und-reparatur-getrennt.adoc[leveloffset=+
 include::../adr/_ADR-011-komponente-eigenes-repository.adoc[leveloffset=+1]
 
 include::../adr/_ADR-012-abhaengigkeitsrichtung-informationsfluss.adoc[leveloffset=+1]
+
+include::../adr/_ADR-013-betrieb-in-der-cloud.adoc[leveloffset=+1]
+
+include::../adr/_ADR-014-monolith-oder-microservices-vertagt.adoc[leveloffset=+1]
+
+include::../adr/_ADR-015-mehrere-instanzen-multi-az.adoc[leveloffset=+1]
+
+include::../adr/_ADR-016-relationale-datenbank-rds.adoc[leveloffset=+1]
+
+include::../adr/_ADR-017-eigener-support-rufbereitschaft.adoc[leveloffset=+1]
+
+include::../adr/_ADR-018-netzausfall-im-laden.adoc[leveloffset=+1]
 

@@ -16,7 +16,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-quality-scenarios]]
 == Qualitätsanforderungen
 
-Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlichkeit, 2. Änderbarkeit Richtung SaaS, 3. Verfügbarkeit. Dieses Kapitel deckt alle acht Merkmale der ISO/IEC 25010 ab und markiert je Merkmal, ob es eines der drei Ziele konkretisiert oder abgeleitet ist. Die Szenarien stammen vom Miro-Board zu Folge 113 (Seite 5 und 6). Eberhard hat sie in Folge 111 als Stimulus und Response mit Metrik formuliert, "messbar mit Stoppuhr" (V8, 44:36 und 49:30). QS-Z-03 kam in Folge 112 hinzu (13:07 bis 14:35).
+Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlichkeit, 2. Änderbarkeit Richtung SaaS, 3. Verfügbarkeit. Dieses Kapitel deckt alle acht Merkmale der ISO/IEC 25010 ab und markiert je Merkmal, ob es eines der drei Ziele konkretisiert oder abgeleitet ist. Die Szenarien stammen vom Miro-Board zu Folge 113 (Seite 5 und 6). Eberhard hat sie in Folge 111 als Stimulus und Response mit Metrik formuliert, "messbar mit Stoppuhr" (V8, 44:36 und 49:30). QS-Z-03 kam in Folge 112 hinzu (13:07 bis 14:35). Folge 113 setzt die Szenarien in Maßnahmen um, Szenario für Szenario als Sanity Check (27:34 bis 49:00), und vertagt die Usability-Szenarien auf Folge 114.
 
 === 10.1 Qualitätsbaum
 
@@ -31,16 +31,18 @@ Kapitel 1.2 nennt drei Qualitätsziele in fester Rangfolge: 1. Benutzerfreundlic
 | Performance (Performance Efficiency) | abgeleitet | Einzige Zahl: Preisermittlung in 2 Minuten nach Ausfall (QS-Z-03); Skalierbarkeit auf dem Board mit `?` markiert
 | Kompatibilität (Compatibility) | abgeleitet | Sieben REST-Schnittstellen und JWT-Cookie (Kapitel 3); Same-Origin-Policy (<<{ch09}#adr-002,ADR-002>>)
 | Funktionale Eignung (Functional Suitability) | abgeleitet | Stories auf Board Seite 1; Reparatur als eigener Ablauf statt Webshop-Produkt (<<{ch09}#adr-003,ADR-003>>)
-| Übertragbarkeit (Portability) | abgeleitet | Betriebsmodell offen: Cloud, Monolith oder Microservices (Board Seite 10 und 11)
+| Übertragbarkeit (Portability) | abgeleitet | Cloud bei AWS entschieden (<<{ch09}#adr-013,ADR-013>>); Monolith oder Microservices vertagt (<<{ch09}#adr-014,ADR-014>>); Board Seite 10 und 11
 |===
 
-NOTE: Offen: Für Sicherheit, Performance, Kompatibilität, funktionale Eignung und Übertragbarkeit nennt das Board keine Szenarien mit Zahl. Die Zeilen sind abgeleitet und ohne Maß.
+NOTE: Offen: Für Sicherheit, Performance, Kompatibilität, funktionale Eignung und Übertragbarkeit nennt das Board keine Szenarien mit Zahl. Die Zeilen sind abgeleitet und ohne Maß. Eberhard kündigt in Folge 113 den ISO-25010-Baum als Prüfliste an, "ob ich alle wesentlichen Informationen abgefragt habe" (62:43 bis 63:00), führt die Prüfung aber nicht durch. Security fällt dort nur als Grund für Updates (29:05) und als DSGVO-Prüfung für AWS (43:39); Performance nur als Latenz-Hinweis von Jan (21:50); Kompatibilität sachlich bei fremden Kassen- und Rechnungssystemen anderer Shops (47:50 bis 48:44).
 
 === 10.2 Qualitätsszenarien
 
 Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Board. "Antwort der Architektur" nennt die Maßnahmen-Karte vom Board.
 
 ==== Benutzbarkeit
+
+NOTE: Offen: Folge 113 vertagt alle Usability-Szenarien ausdrücklich auf die Folge mit der UX-Expertin Aminata: "die werden dann keine Rolle spielen" (03:21), "da werden wir Aminata nächstes Mal nerven" (05:22), "Benutzerfreundlichkeit diskutieren wir beim nächsten Mal" (54:20). Keine der Zahlen in QS-U-01 bis QS-U-06 ist im Video begründet, keine Maßnahme genannt; die rote Karte "nicht erfüllbar" zu QS-U-01 wird nicht erwähnt.
 
 [[qs-u-01,QS-U-01]]
 .QS-U-01: Registrierung in einer Minute
@@ -136,7 +138,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Dauerbetrieb
 | Reaktion | Das System läuft dennoch
 | Maß | Kein IT-Experte beschäftigt (Board nennt keine Zahl)
-| Antwort der Architektur | Cloud; Eigener Support
+| Antwort der Architektur | Cloud (<<{ch09}#adr-013,ADR-013>>); Eigener Support mit Rufbereitschaft (<<{ch09}#adr-017,ADR-017>>). Folge 113: Ohne IT-Experten kann niemand einen Server im Laden betreiben (05:47 bis 05:57), und Cloud allein reicht nicht, weil Ausfälle und Security-Updates jemanden brauchen, "der angerufen werden kann" (28:42 bis 29:24)
 | Bezug | konkretisiert Ziel 1 (Mitarbeitende); stützt zugleich Ziel 3
 |===
 
@@ -152,7 +154,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Ladenöffnungszeit
 | Reaktion | System steht zur Verfügung
 | Maß | 99 % Verfügbarkeit
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Antwort der Architektur | EKS / EC2 SLAs: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>); Eigener Support (<<{ch09}#adr-017,ADR-017>>). Folge 113: 99 % zwischen 9 und 18 Uhr sind "3 Minuten am Tag", profan machbar (30:36 bis 30:55)
 | Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>)
 |===
 
@@ -166,7 +168,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Ladenöffnungszeit
 | Reaktion | System steht wieder zur Verfügung
 | Maß | Spätestens nach 30 Minuten
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Antwort der Architektur | EKS / EC2 SLAs: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>); Eigener Support (<<{ch09}#adr-017,ADR-017>>); Netzausfall im Laden als akzeptiertes Risiko mit mobilem Router als Reserve (<<{ch09}#adr-018,ADR-018>>). Folge 113: Ein Wiederanlauf in 30 Minuten vor Ort ist ohne IT-Experten nicht machbar, deshalb Cloud (06:30 bis 06:44)
 | Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>: "30 Minuten Zettel und Bleistift")
 |===
 
@@ -180,7 +182,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Ladenöffnungszeit, Kund:in wartet an der Kasse
 | Reaktion | Preis einer erfolgten Reparatur ist wieder ermittelbar
 | Maß | Spätestens nach 2 Minuten
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support. Eberhard erwägt in Folge 112 einen Low-Tech-Fallback: einen Zettel am Fahrrad mit dem Preis ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle (14:13 bis 14:35). Entschieden ist nichts: "da kann man sich was ausdenken".
+| Antwort der Architektur | EKS / EC2 SLAs (<<{ch09}#adr-015,ADR-015>>); Eigener Support (<<{ch09}#adr-017,ADR-017>>); Netzausfall im Laden als akzeptiertes Risiko mit mobilem Router, Cache-Server im Laden verworfen (<<{ch09}#adr-018,ADR-018>>). Folge 113 nennt dieses Szenario "das aggressivste Wiederanlauf-Kriterium, was wir haben" (07:55 bis 08:20). Eberhard erwägt in Folge 112 einen Low-Tech-Fallback: einen Zettel am Fahrrad mit dem Preis ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle (14:13 bis 14:35). Entschieden ist nichts: "da kann man sich was ausdenken".
 | Bezug | konkretisiert Ziel 3. Quelle: Folge 112, 13:07 bis 14:35. Das Szenario entsteht dort aus der Frage, was bei Abholung passiert: "muss ich dem Menschen das Geld abknöpfen, dafür brauche ich diese Information"; die Annahme verträgt 30 Minuten, die Preisermittlung nicht. Board Seite 6 hält es fest.
 |===
 
@@ -194,7 +196,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Tag und Abend
 | Reaktion | System steht zur Verfügung
 | Maß | 99,9 % Verfügbarkeit
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
+| Antwort der Architektur | EKS / EC2 SLAs: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>); Eigener Support (<<{ch09}#adr-017,ADR-017>>)
 | Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>: "jede Minute Umsatzausfall")
 |===
 
@@ -208,7 +210,7 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Nacht
 | Reaktion | System steht zur Verfügung
 | Maß | 99 % Verfügbarkeit
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support 24/7
+| Antwort der Architektur | EKS / EC2 SLAs: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>); Eigener Support 24/7 (<<{ch09}#adr-017,ADR-017>>). Folge 113 leitet die Rufbereitschaft rund um die Uhr aus 7 bis 24 Uhr und 24 bis 7 Uhr zusammen ab, "wahrscheinlich keine Entwicklerin" (40:26 bis 40:59)
 | Bezug | konkretisiert Ziel 3
 |===
 
@@ -222,11 +224,11 @@ Jedes Szenario steht in der sechsteiligen Form. Das Maß trägt die Zahl vom Boa
 | Umgebung | Nicht benannt
 | Reaktion | System steht wieder zur Verfügung
 | Maß | Spätestens nach 5 Minuten
-| Antwort der Architektur | EKS / EC2 SLAs; Eigener Support
-| Bezug | konkretisiert Ziel 3
+| Antwort der Architektur | EKS / EC2 SLAs (<<{ch09}#adr-015,ADR-015>>); Eigener Support (<<{ch09}#adr-017,ADR-017>>)
+| Bezug | konkretisiert Ziel 3; Board-Artefakt, im Video nicht belegt (siehe Note)
 |===
 
-NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<{ch09}#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Welche Zuordnung gilt, muss das Team klären. Folge 112 klärt das nicht; die Karte "nach 5 Minuten" stammt nicht aus dieser Folge. Folge 113 ausstehend.
+NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 Minuten. <<{ch09}#adr-008,ADR-008>> ordnet den schnelleren Wiederanlauf dem Web-System nachts zu (Folge 111, 56:07). Die 5-Minuten-Karte fällt in keiner der drei Folgen. In Folge 113 nennt Eberhard bei 08:20 die 2-Minuten-Preisermittlung (QS-Z-03) "das aggressivste Wiederanlauf-Kriterium, was wir haben"; eine 5-Minuten-Karte für den Shop widerspräche dem. QS-Z-06 gilt deshalb als Board-Artefakt, im Video nicht belegt, vermutlich aus der Vorbereitung des Boards (26:05, 53:24). Es bleibt im Bestand, weil es auf dem Board steht; welche Zuordnung gilt, muss das Team klären.
 
 [[qs-z-07,QS-Z-07]]
 .QS-Z-07: Datenverlust
@@ -238,8 +240,8 @@ NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 
 | Umgebung | Beliebig
 | Reaktion | Daten, die älter als 5 Minuten sind, stehen wieder zur Verfügung
 | Maß | Mit 99,9 % Sicherheit; Datenverlust höchstens 5 Minuten
-| Antwort der Architektur | RDS SLAs (auf dem Board mit `?` markiert)
-| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>, R-024)
+| Antwort der Architektur | RDS, relational mit Oracle oder MySQL, kein NoSQL (<<{ch09}#adr-016,ADR-016>>). Das Fragezeichen auf dem Board bleibt: RDS garantiert Verfügbarkeit, "den Datenverlust aber nicht getrennt" (Folge 113, 42:01)
+| Bezug | konkretisiert Ziel 3 (<<{ch09}#adr-008,ADR-008>>, R-024). Die Zahlen 5 Minuten und 99,9 % fallen im Video nicht; Eberhard liest das Szenario in Folge 113 nur als "Daten nicht verloren gehen" (40:59)
 |===
 
 ==== Änderbarkeit
@@ -254,15 +256,15 @@ NOTE: Offen: QS-Z-02 und QS-Z-06 nennen beide "das System im Shop" mit 30 und 5 
 | Umgebung | Entwicklungszeit, System ist im Betrieb
 | Reaktion | Die Änderung ist umgesetzt
 | Maß | Höchstens 2 Monate und nicht mehr als 20 PT
-| Antwort der Architektur | Cloud; Mandantenfähigkeit wegen Betriebskosten; Skalierbarkeit (`?`); Drittsysteme je Shop (R-003, R-006, R-013, R-018, R-026)
+| Antwort der Architektur | Cloud (<<{ch09}#adr-013,ADR-013>>), die allein "extrem profan" ist und nicht reicht (Folge 113, 44:18); Mandantenfähigkeit von Anfang an, entschieden (44:10 bis 47:02, 56:33 bis 57:43), mit offen benanntem Trade-off zur Instanz je Shop und zu Serverless; Skalierbarkeit auf zwei, drei oder zehn Shops nicht fokussiert (47:02 bis 47:47); Drittsysteme je Shop offen, erwartete Einschränkung auf bestimmte Kassen- und Rechnungssysteme (47:50 bis 48:44) (R-003, R-006, R-013, R-018, R-026)
 | Bezug | konkretisiert Ziel 2
 |===
 
-NOTE: Offen: Das Board nennt keine Szenarien für Security, Performance oder Kompatibilität. Die Zahl "Skalierbarkeit?" bleibt ohne Maß.
+NOTE: Offen: Das Board nennt keine Szenarien für Security, Performance oder Kompatibilität. Die Karte "Skalierbarkeit?" bleibt ohne Maß; Folge 113 sagt dazu nur, "zwei, drei oder zehn" Shops seien kein Problem (47:02 bis 47:47).
 
 === 10.3 Welche Entscheidungen auf welche Szenarien antworten
 
-NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in Abschnitt 10.2 und in den ADRs aus Kapitel 9 schon steht. Er ergänzt nichts vom Board und nichts aus Folge 111.
+NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in Abschnitt 10.2 und in den ADRs aus Kapitel 9 schon steht. Er ergänzt nichts vom Board und nichts aus den Folgen 111 bis 113.
 
 .Szenario zu Entscheidung
 [cols="2,2,3,3",options="header"]
@@ -275,15 +277,15 @@ NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in A
 | <<qs-u-04>> Empfehlung durch Mitarbeitende | 85 % | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
 | <<qs-u-05>> Einarbeitung Shop-Mitarbeiter:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
 | <<qs-u-06>> Einarbeitung Fahrrad-Mechaniker:in | 1 Stunde | keine Entscheidung dokumentiert | Keine Maßnahmen-Karte
-| <<qs-u-07>> Betrieb ohne IT-Experten | Keine Zahl | <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-006,ADR-006>>, <<{ch09}#adr-008,ADR-008>> (betroffen; die Maßnahme Cloud ist nicht entschieden, A1) | Cloud; Eigener Support
-| <<qs-z-01>> Verfügbarkeit Werkstatt | 99 %, 9 bis 18 Uhr | <<{ch09}#adr-008,ADR-008>> (setzt das Ziel; die Maßnahme ist nicht entschieden) | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-02>> Wiederanlauf Werkstatt | 30 Minuten | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-03>> Preisermittlung nach Ausfall | 2 Minuten | <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-04>> Verfügbarkeit Web tagsüber | 99,9 %, 7 bis 24 Uhr | <<{ch09}#adr-008,ADR-008>>; <<{ch09}#adr-001,ADR-001>> (betroffen, R-002) | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-05>> Verfügbarkeit Web nachts | 99 %, 24 bis 7 Uhr | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support 24/7
-| <<qs-z-06>> Schneller Wiederanlauf | 5 Minuten | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
-| <<qs-z-07>> Datenverlust | 99,9 %, höchstens 5 Minuten | <<{ch09}#adr-008,ADR-008>> (R-024; Persistenz nicht entschieden) | RDS SLAs (`?`)
-| <<qs-a-01>> SaaS für andere Fahrrad-Shops | 2 Monate, 20 PT | <<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-005,ADR-005>>, <<{ch09}#adr-006,ADR-006>> (betroffen über R-003, R-006, R-013, R-018) | Cloud; Mandantenfähigkeit; Skalierbarkeit (`?`); Drittsysteme je Shop
+| <<qs-u-07>> Betrieb ohne IT-Experten | Keine Zahl | <<{ch09}#adr-013,ADR-013>>, <<{ch09}#adr-017,ADR-017>>; betroffen: <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-006,ADR-006>>, <<{ch09}#adr-008,ADR-008>> | Cloud; Eigener Support
+| <<qs-z-01>> Verfügbarkeit Werkstatt | 99 %, 9 bis 18 Uhr | <<{ch09}#adr-008,ADR-008>> (setzt das Ziel), <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-017,ADR-017>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-02>> Wiederanlauf Werkstatt | 30 Minuten | <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-017,ADR-017>>, <<{ch09}#adr-018,ADR-018>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-03>> Preisermittlung nach Ausfall | 2 Minuten | <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-018,ADR-018>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-04>> Verfügbarkeit Web tagsüber | 99,9 %, 7 bis 24 Uhr | <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-017,ADR-017>>; <<{ch09}#adr-001,ADR-001>> (betroffen, R-002) | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-05>> Verfügbarkeit Web nachts | 99 %, 24 bis 7 Uhr | <<{ch09}#adr-008,ADR-008>>, <<{ch09}#adr-015,ADR-015>>, <<{ch09}#adr-017,ADR-017>> | EKS / EC2 SLAs; Eigener Support 24/7
+| <<qs-z-06>> Schneller Wiederanlauf | 5 Minuten (Board-Artefakt, im Video nicht belegt) | <<{ch09}#adr-008,ADR-008>> | EKS / EC2 SLAs; Eigener Support
+| <<qs-z-07>> Datenverlust | 99,9 %, höchstens 5 Minuten (Zahlen im Video nicht genannt) | <<{ch09}#adr-008,ADR-008>> (R-024), <<{ch09}#adr-016,ADR-016>> | RDS SLAs (`?`)
+| <<qs-a-01>> SaaS für andere Fahrrad-Shops | 2 Monate, 20 PT | <<{ch09}#adr-013,ADR-013>>; Mandantenfähigkeit von Anfang an (Folge 113, 44:10 bis 47:02); <<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-004,ADR-004>>, <<{ch09}#adr-005,ADR-005>>, <<{ch09}#adr-006,ADR-006>> (betroffen über R-003, R-006, R-013, R-018) | Cloud; Mandantenfähigkeit; Skalierbarkeit (`?`); Drittsysteme je Shop
 |===
 
 .Entscheidung zu Szenario
@@ -298,9 +300,15 @@ NOTE: Dieser Abschnitt ist eine Auswertung, keine Quelle. Er ordnet zu, was in A
 | <<{ch09}#adr-005,ADR-005>> Eigene Statusseite | <<qs-u-03>>, <<qs-a-01>> | Die Statusseite ist die Kundensicht nach der Reparatur; ein Datenort hilft QS-A-01
 | <<{ch09}#adr-006,ADR-006>> Ersatzteile selbst führen | <<qs-u-07>>, <<qs-a-01>> | Ein System weniger für den Laden; R-018 belastet QS-A-01
 | <<{ch09}#adr-007,ADR-007>> Benachrichtigung per E-Mail | keine Szenario-Basis, folgt aus Randbedingung | QS-U-03 nennt die E-Mail als Antwort; die Kanalwahl selbst folgt aus "Dienste kaufen statt betreiben"
-| <<{ch09}#adr-008,ADR-008>> Verfügbarkeit differenziert | <<qs-z-01>> bis <<qs-z-07>>, <<qs-u-07>> | Setzt die Maße aller QS-Z-Szenarien; die Maßnahmen Betriebsmodell und Persistenz sind offen (R-022 bis R-024)
+| <<{ch09}#adr-008,ADR-008>> Verfügbarkeit differenziert | <<qs-z-01>> bis <<qs-z-07>>, <<qs-u-07>> | Setzt die Maße aller QS-Z-Szenarien; Betriebsmodell und Persistenz sind seit Folge 113 entschieden (ADR-013, ADR-016); R-022 bleibt, weil die Kasse aus der Cloud nicht entschieden ist
+| <<{ch09}#adr-013,ADR-013>> Betrieb in der Cloud bei AWS | <<qs-u-07>>, <<qs-a-01>>, <<qs-z-01>> bis <<qs-z-05>> | Antwort auf "keine IT-Experten" und Voraussetzung für SaaS; Restrisiko Regionsausfall akzeptiert; die Kasse aus der Cloud bleibt Risiko (R-010)
+| <<{ch09}#adr-014,ADR-014>> Monolith oder Microservices, vertagt | keine Szenario-Basis | Für die Qualitätsziele "relativ irrelevant" (Folge 113, 20:29); beide Varianten "genauso verfügbar"
+| <<{ch09}#adr-015,ADR-015>> Mindestens zwei Instanzen über mehrere Availability Zones | <<qs-z-01>>, <<qs-z-02>>, <<qs-z-04>>, <<qs-z-05>> | Leitet sich aus dem AWS-SLA ab: Ausfall zählt erst ab mehr als einer Availability Zone
+| <<{ch09}#adr-016,ADR-016>> Relationale Datenbank als RDS | <<qs-z-07>> | RDS garantiert Verfügbarkeit, den Datenverlust nicht getrennt; Fragezeichen bleibt
+| <<{ch09}#adr-017,ADR-017>> Eigener Support mit Rufbereitschaft | <<qs-u-07>>, <<qs-z-01>> bis <<qs-z-05>> | Cloud allein reicht nicht; tagsüber Entwicklerin, nachts Rufbereitschaft
+| <<{ch09}#adr-018,ADR-018>> Netzausfall im Laden als akzeptiertes Risiko | <<qs-z-02>>, <<qs-z-03>> | Mobiler Router als Reserve; Cache-Server im Laden verworfen
 |===
 
-Drei Szenarien stehen ohne Entscheidung und ohne Maßnahmen-Karte da: <<qs-u-04>>, <<qs-u-05>> und <<qs-u-06>>. Neun weitere haben ein Ziel, aber keine entschiedene Maßnahme: Für <<qs-u-07>>, <<qs-z-01>> bis <<qs-z-07>> und <<qs-a-01>> nennt das Board Cloud, Provider-SLAs, eigenen Support und Mandantenfähigkeit, doch kein ADR hat das festgelegt. Daraus folgen die Kandidaten für kommende ADRs: das Betriebsmodell Cloud (A1, vertagt), die Persistenzstrategie für höchstens fünf Minuten Datenverlust (R-024), der Support von außen und die Mandantenfähigkeit.
+Drei Szenarien stehen ohne Entscheidung und ohne Maßnahmen-Karte da: <<qs-u-04>>, <<qs-u-05>> und <<qs-u-06>>; Folge 113 vertagt sie auf Folge 114. Seit Folge 113 haben sieben Szenarien eine entschiedene Maßnahme: <<qs-u-07>> (ADR-013, ADR-017), <<qs-z-01>>, <<qs-z-02>>, <<qs-z-04>> und <<qs-z-05>> (ADR-015, ADR-017), <<qs-z-03>> (ADR-018) und <<qs-z-07>> (ADR-016, mit Fragezeichen beim Datenverlust). <<qs-a-01>> hat die Mandantenfähigkeit entschieden; die Drittsysteme je Shop bleiben offen. <<qs-z-06>> bleibt ohne Videobeleg. Offen für kommende ADRs: die Anbindung von Kasse und Rechnungswesen aus der Cloud (R-010, R-022) und die Drittsysteme bei SaaS.
 
 Eine Entscheidung steht ohne Szenario da: <<{ch09}#adr-007,ADR-007>>. Die Wahl des Kanals folgt aus der Randbedingung, dass der Laden Dienste kauft statt betreibt, nicht aus einem Maß. Alle anderen ADRs treiben mindestens ein Szenario oder werden von einem belastet.

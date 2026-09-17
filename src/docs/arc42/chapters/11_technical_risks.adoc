@@ -35,6 +35,10 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 
 | R-035 | Das Rechnungswesen erfährt von einer Zahlung nur, wenn Kasse, Online-Payment oder Bezahlung sie melden. Die Zuordnung Bezahlung zu Rechnungswesen ist offen (63:16). | <<{ch09}#adr-012,ADR-012>> | hoch | hoch | hoch | Zuordnung entscheiden; bis dahin Zahlungen in Reparatur durchführen protokollieren (8.4 Audit).
 
+| R-039 | Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie (26:14, "kaputt machen"). | <<{ch09}#adr-013,ADR-013>> | mittel | hoch | hoch | Kassenanbindung vor dem ersten Inkrement klären; Kassenproxy als Option (Kapitel 7, 8.5).
+
+| R-044 | QS-Z-07 fordert höchstens 5 Minuten Datenverlust; kein Beleg, dass RDS das liefert. | <<{ch09}#adr-016,ADR-016>> | mittel | hoch | hoch | RDS-Replikation und Backup-Intervall festlegen; QS-Z-07 messbar machen.
+
 | R-002 | Fällt der Webshop aus, funktionieren Login und Adressabfrage nicht. | <<{ch09}#adr-001,ADR-001>> | mittel | hoch | mittel | 8.5 Fehlerfall "Webshop nicht erreichbar"; Werkstatt bleibt unabhängig vom Webshop-Login.
 
 | R-005 | Umleitung vor dem Webshop: wer sie betreibt und ob das Fertigprodukt sie zulässt, ist offen. | <<{ch09}#adr-002,ADR-002>> | mittel | hoch | mittel | Klärung mit dem Webshop-Anbieter vor der Umsetzung; 8.4 Monitoring der Umleitung.
@@ -79,6 +83,20 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 
 | R-033 | Repository-Grenzen fixieren den Modulschnitt früh. Ein falscher Schnitt kostet Umzug von Code und Historie. | <<{ch09}#adr-011,ADR-011>> | mittel | mittel | mittel | Schnitt vor Anlage der Repositories prüfen (R-028).
 
+| R-046 | Rufbereitschaft rund um die Uhr für einen Shop mit drei bis vier Mitarbeitenden; Kosten ungenannt. | <<{ch09}#adr-017,ADR-017>> | hoch | mittel | mittel | Kosten beziffern; nächtliches Ziel QS-Z-05 gegen Kosten prüfen.
+
+| R-047 | Rufbereitschaft ohne Entwicklerin braucht Runbooks; sonst Erreichbarkeit ohne Wiederanlauf. | <<{ch09}#adr-017,ADR-017>> | hoch | mittel | mittel | Runbooks je Fehlerfall aus 8.5; Monitoring 8.4.
+
+| R-040 | Bleibt Monolith oder Microservices offen, entsteht implizit ein Monolith ohne Entscheidung. | <<{ch09}#adr-014,ADR-014>> | hoch | mittel | mittel | Entscheidung mit dem ersten Inkrement treffen (ADR-014 Deferred).
+
+| R-045 | Eine gemeinsame Datenbank für vier Module unterläuft den fachlichen Schnitt. | <<{ch09}#adr-016,ADR-016>> | mittel | mittel | mittel | Schema je Modul trennen; Zugriff nur über das eigene Modul (ADR-009).
+
+| R-049 | Der Kunde akzeptiert den Netzausfall nicht und verlangt den Cache-Server; Wartung vor Ort kehrt zurück. | <<{ch09}#adr-018,ADR-018>> | mittel | mittel | mittel | Risiko mit dem Kunden besprechen; mobiler Router als Reserve.
+
+| R-050 | Der Low-Tech-Fallback braucht aktuelle Preise auf Papier oder in einer Tabelle; niemand ist benannt. | <<{ch09}#adr-018,ADR-018>> | mittel | mittel | mittel | Verantwortliche benennen; 8.5 Fehlerfall Netzausfall.
+
+| R-041 | Die Gleichwertigkeit von Monolith und Microservices gilt nur für die vorhandenen Szenarien; Performance und Security fehlen. | <<{ch09}#adr-014,ADR-014>> | mittel | mittel | mittel | Szenarien für Performance und Security ergänzen (Kapitel 10).
+
 | R-001 | Adresse liegt in der User-Datenbank des Webshops, obwohl sie fachlich Kundeninformation ist. | <<{ch09}#adr-001,ADR-001>> | mittel | niedrig | niedrig | 8.2 HTTPS und Zugriff nur über das Backend (T-004); Grenze Nutzerdaten/Kundendaten in Kapitel 5 benennen.
 
 | R-016 | Der Umfang wächst um eine Inventardomäne; die Verantwortung verwässert. | <<{ch09}#adr-006,ADR-006>> | mittel | niedrig | niedrig | Modul Materialbeschaffung klar abgrenzen (Kapitel 5).
@@ -96,6 +114,16 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 | R-028 | Erweist sich das Domänenmodell der Materialbeschaffung als dünn, trägt das Modul den Aufwand eines eigenen Projekts ohne fachlichen Gewinn. | <<{ch09}#adr-009,ADR-009>> | mittel | niedrig | niedrig | Schnitt bei Umsetzung prüfen; 11.2 Technische Schulden.
 
 | R-036 | Wer die Board-Legende liest, versteht die Pfeile als Aufrufrichtung und leitet synchrone Aufrufe ab, die nie entschieden wurden. | <<{ch09}#adr-012,ADR-012>> | mittel | niedrig | niedrig | Legende in Kapitel 5 korrigiert (Informationsfluss).
+
+| R-038 | Die Wahl von AWS beruht auf der Erfahrung des Autors; ein Team ohne AWS-Erfahrung trägt Einarbeitung. | <<{ch09}#adr-013,ADR-013>> | mittel | niedrig | niedrig | Einarbeitung einplanen; Managed Services bevorzugen.
+
+| R-043 | Die SLA-Ableitung stammt aus der Lektüre im März 2022; ändert AWS die Definition, gilt sie nicht mehr. | <<{ch09}#adr-015,ADR-015>> | niedrig | mittel | niedrig | SLA-Texte bei Umsetzung erneut prüfen.
+
+| R-048 | Werkstatt-Szenarien gelten auch samstags; eine Entwicklerin zu Bürozeiten deckt das nicht. | <<{ch09}#adr-017,ADR-017>> | mittel | niedrig | niedrig | Öffnungszeiten mit dem Support-Fenster abgleichen (QS-Z-01).
+
+| R-037 | Ein Ausfall der AWS-Region trifft alle Szenarien zugleich; kein Ausweichen auf eine zweite Region geplant. | <<{ch09}#adr-013,ADR-013>> | niedrig | hoch | niedrig | Akzeptiert; Backup außerhalb der Region prüfen (ADR-016).
+
+| R-042 | Ein Ausfall der ganzen Region bleibt ungedeckt. | <<{ch09}#adr-015,ADR-015>> | niedrig | hoch | niedrig | Wie R-037; Multi-Region nur bei SaaS-Wachstum.
 
 |===
 

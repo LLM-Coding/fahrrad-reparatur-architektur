@@ -1,0 +1,85 @@
+[[adr-013]]
+== ADR-013: Betrieb in der Cloud bei AWS statt Server im Laden
+
+[cols="1,3"]
+|===
+| Status | Accepted
+| Datum | 2022-03-25
+| Quelle | software-architektur.tv Folge 113, 06:01, 08:38, 09:14, 37:34 bis 38:25 und 43:39
+|===
+
+=== Problem
+
+Das Reparatursystem muss irgendwo laufen. Der Fahrradshop beschäftigt keine IT-Experten, verlangt aber 99 % Verfügbarkeit zwischen 9 und 18 Uhr und einen Wiederanlauf in 30 Minuten. Wo betreiben wir das System: im Laden, in einem Rechenzentrum oder in der Cloud, und bei welchem Anbieter?
+
+=== Kontext
+
+Folge 113 setzt die Qualitätsszenarien aus Folge 111 in Maßnahmen um. Eberhard liest die Szenarien der Reihe nach vom Board und fragt bei jedem, ob er eine Antwort hat. Das Szenario "Im Shop sind keine IT-Experten beschäftigt" (05:36) ist das erste, das eine Infrastrukturentscheidung erzwingt. Es hängt "mit ein paar anderen Szenarien zusammen" (06:13): Verfügbarkeit und Wiederanlauf.
+
+Die Wahl fällt früh und zieht die restliche Folge nach sich: das Deployment (<<adr-014>>, <<adr-015>>), die Datenbank (<<adr-016>>) und der Support (<<adr-017>>) setzen alle die Cloud voraus. Bei 37:34 prüft Eberhard die Entscheidung noch einmal gegen die Alternativen, nachdem er die AWS-SLAs gelesen hat.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-07,QS-U-07>> ist der Auslöser: kein Betrieb ohne IT-Experten mit einem Server vor Ort. <<{ch10}#qs-z-01,QS-Z-01>>, <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-04,QS-Z-04>> liefern die Zahlen, an denen ein Server im Laden scheitert. <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar betroffen: Eine SaaS-Lösung setzt einen zentralen Betrieb voraus, den ein Server je Laden nicht bietet.
+
+=== Optionen
+
+*Option A: Server im Laden.* Ein Rechner steht im Fahrradshop, das Team installiert und wartet ihn. Vorteil: Keine Abhängigkeit vom Internet für den Betrieb im Laden. Nachteil: Niemand vor Ort kann den Server betreuen; ein Wiederanlauf in 30 Minuten setzt voraus, dass jemand hinfährt.
+
+*Option B: Externes Rechenzentrum oder Hosting.* Das System läuft auf gemieteter oder eigener Hardware in einem Rechenzentrum. Vorteil: Volle Kontrolle über die Umgebung. Nachteil: Eberhard erwartet höhere Kosten ohne Gewinn an Verfügbarkeit.
+
+*Option C: Cloud bei AWS.* Das System läuft auf Amazon Web Services, mit EC2 oder EKS, RDS und weiteren Managed Services. Vorteil: Verfügbarkeitsgarantien im SLA, kein eigener Betrieb der Hardware, dem Autor vertraut. Nachteil: Bei SLA-Verletzung gibt es nur eine Gutschrift, der wirtschaftliche Schaden bleibt beim Shop.
+
+*Option D: Andere Cloud.* Google Cloud oder Microsoft Azure statt AWS. Vorteil: Ein Team mit anderer Erfahrung arbeitet dort schneller. Nachteil: Nach Eberhards Einschätzung dasselbe ökonomische Modell wie AWS; kein Anbieter haftet für Ausfälle.
+
+=== Bewertung
+
+Option C ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams; das Video belegt sie nicht.
+
+[cols="3,1,1,1,1"]
+|===
+| Kriterium | A: Server im Laden | B: Rechenzentrum | C: AWS (Referenz) | D: Andere Cloud
+
+| Betrieb ohne IT-Experten im Shop (QS-U-07) | -1 | 0 | 0 | 0
+| Wiederanlauf in 30 Minuten (QS-Z-02) | -1 | 0 | 0 | 0
+| Verfügbarkeit mit Garantie des Anbieters (QS-Z-01, QS-Z-04) | -1 | ? | 0 | 0
+| Betriebskosten | -1 | -1 | 0 | ?
+| Vertrautheit des Teams | ? | ? | 0 | ?
+| DSGVO umsetzbar | 0 | 0 | 0 | ?
+
+| *Summe* | *-4 (1 Zelle offen)* | *-1 (2 Zellen offen)* | *0* | *0 (3 Zellen offen)*
+|===
+
+Option A scheitert an drei Szenarien zugleich. Option B verliert bei den Kosten und gewinnt nirgends. Option D ist gleichwertig; die Wahl zwischen C und D ist Gewohnheit, keine Architektur.
+
+=== Entscheidung
+
+Wir betreiben das Reparatursystem in der Cloud bei AWS. Es steht kein Server im Laden. Der Anbieter AWS ist eine Wahl aus Vertrautheit; ein Team, das Google oder Microsoft besser kennt, darf tauschen, solange das Betriebsmodell gleich bleibt.
+
+=== Begründung
+
+Der Server im Laden fällt zuerst. Eberhard leitet aus dem Szenario ab, "dass wir eigentlich nicht ernsthaft einen Server unterstellen können" (06:01). Der Wiederanlauf macht es endgültig: "Ich schaffe es nicht, innerhalb von 30 Minuten vor Ort zu sein" (06:36), also "das können wir eigentlich schon mal irgendwie ausschließen" (06:44). Bei 09:14 wiederholt er: "einen Server in dem Laden selber ausschließen können".
+
+Die Cloud ist die Antwort, nicht die einzige denkbare: "meine Lösungsstrategie wäre halt irgendwie Cloud" (08:38), aber "es könnte ja auch sein, dass wir in einem externen Rechenzentrum das machen" (09:10). Er verfolgt das Rechenzentrum nicht weiter. Bei 38:04 nennt er es "wahrscheinlich teurer" und ist "nicht sicher, ob das wirklich eine höhere Verfügbarkeit erzeugt" (38:10). Für den Server beim Händler gilt dasselbe (38:15).
+
+Die anderen Clouds prüft er nach der SLA-Lektüre: "ich benutze Google und Microsoft, wäre eine Alternative" (37:40). Ein Modell, in dem der Anbieter "für Schadensersatz gerade steht, kann eigentlich nicht funktionieren" (37:55); die Alternativen helfen also nicht. Das Fazit: "vielleicht ist das hier tatsächlich die beste Lösung" (38:21). AWS bleibt Gewohnheit: "ich kenne irgendwie Amazon" (53:15), Google wäre "irgendwie auch fein" (53:19). Die Wahl ist kommerziell begründet: "wenn sozusagen mein Leben davon abhängt" (38:30), würde er "vielleicht etwas anders vorgehen" (38:39). DSGVO ist geprüft: "in der Amazon Cloud irgendwie machbar" (43:45), "kein Killer-Argument" (43:48).
+
+*Eberhards Einwand zum Format.* Jan fragt im Chat, ob die Abwägung Server gegen Cloud als ADR festzuhalten wäre (42:09). Eberhard findet ADRs "prinzipiell auch eine gute Idee" (42:39), würde sie hier aber nicht nehmen: Sein Problem sei, "dass die das Potenzial haben, einfach unstrukturiert irgendwelche Entscheidungen zu enthalten" (42:48). Hier gehe es um "die Kernentscheidung des Systems" (42:57), "das wäre für mich eher eine Solution Strategy" (43:02). Die Abwägung selbst hält er für unverzichtbar: "nochmal die Abwägung hinzuschreiben, das ist, glaube ich, eine sehr, sehr wichtige" (43:05). Wenn festgehalten ist, "was mich zu dieser Meinung bewegt, dann kann man darüber diskutieren" (43:34). Dieses ADR widerspricht ihm im Format und folgt ihm in der Sache: Die Abwägung steht hier, Kapitel 4 verweist darauf.
+
+=== Konsequenzen
+
+*Positiv*
+
+* Der Shop braucht keinen Server, keine Wartung vor Ort und keine IT-Kenntnisse; er braucht nur "eine Webadresse" (28:28).
+* Verfügbarkeit und Wiederanlauf stützen sich auf die SLAs des Anbieters (<<adr-015>>) und auf Managed Services (<<adr-016>>).
+* Ein zentraler Betrieb ist die Voraussetzung für SaaS und Mandantenfähigkeit.
+
+*Negativ*
+
+* Jede Funktion im Laden hängt an der Internetverbindung (<<adr-018>>).
+* Die Anbindung von Kasse und Rechnungswesen muss aus der Cloud heraus gelingen; ob das Kassensystem das erlaubt, ist offen.
+* Der Anbieter haftet bei Ausfall nur mit einer Gutschrift.
+
+*Risiken*
+
+* R-037: Ein Ausfall der AWS-Region trifft alle Szenarien zugleich. Eberhard hält ihn für hinreichend unwahrscheinlich und plant kein Ausweichen auf eine zweite Region.
+* R-038: Die Wahl von AWS beruht auf der Erfahrung des Autors. Ein Team ohne AWS-Erfahrung trägt Einarbeitung, die das Video nicht einplant.
+* R-039: Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie. Eberhard nennt das bei 26:14 ein Risiko, das seinen Ansatz "kaputt machen kann".
