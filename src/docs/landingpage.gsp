@@ -87,7 +87,7 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <!-- Icon: risiken -->
-                        <img src="images/icons/risiken.svg" alt="" width="56" height="56" class="mb-2">
+                        <img src="images/icons/risiken.png" alt="" width="56" height="56" class="mb-2">
                         <h2 class="h5 card-title">Risiken</h2>
                         <p class="card-text">Offene Risiken und technische Schulden, priorisiert nach Wahrscheinlichkeit und Auswirkung.</p>
                         <a href="arc42/chapters/11_technical_risks.html" class="stretched-link">Kapitel 11</a>
@@ -126,7 +126,7 @@
                 sowie das Repository
                 <a href="https://github.com/LLM-Coding/fahrrad-reparatur-architektur">LLM-Coding/fahrrad-reparatur-architektur</a>.
             </p>
-            <p class="mb-0">Titelbild und Icons: generiert (gpt-image-2), Risiken-Icon von Hand als SVG.</p>
+            <p class="mb-0">Titelbild und Icons: generiert mit gpt-image-2.</p>
         </footer>
 
     </main>
