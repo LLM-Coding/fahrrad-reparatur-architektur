@@ -126,6 +126,7 @@
                 sowie das Repository
                 <a href="https://github.com/LLM-Coding/fahrrad-reparatur-architektur">LLM-Coding/fahrrad-reparatur-architektur</a>.
             </p>
+            <p class="mb-1">Diese Dokumentation wurde automatisch mit KI (Claude) aus den Transkripten der Folgen erstellt und kann Fehler enthalten.</p>
             <p class="mb-0">Titelbild und Icons: generiert mit gpt-image-2.</p>
         </footer>
 

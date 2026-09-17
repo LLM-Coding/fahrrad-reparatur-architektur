@@ -6,6 +6,7 @@ Die Dokumentation rekonstruiert die Entscheidungen aus den Folgen als ADRs (Nyga
 ergänzt Qualitätsszenarien, Risiken und eine Entscheidungslandkarte, und benennt die offenen Entscheidungen.
 
 Quellen: die Transkripte der drei Folgen und das Miro-Board zu Folge 113.
+Die Dokumentation wurde automatisch mit KI (Claude) aus den Transkripten erstellt und kann Fehler enthalten.
 Begründungen tragen Zeitstempel aus den Folgen. Was die Folgen nicht hergeben, steht als offen markiert.
 
 == Aufbau
