@@ -35,11 +35,23 @@ DELIMITERS = ("----", "++++", "....", "====", "|===")
 BAD_CHARS_RE = re.compile(r"[*_`^~{}#\\]")
 
 
+# Hoerfehler von whisper-1, die im Auszug sinnentstellend waeren. Die Rohdaten bleiben unveraendert.
+KORREKTUREN = {
+    "112": [("Feinde", "Pfeile")],  # 58:21 "sind die Pfeile eher als Richtung des Informationsflusses"
+}
+
+
+def korrigiert(ep: str, text: str) -> str:
+    for falsch, richtig in KORREKTUREN.get(ep, []):
+        text = text.replace(falsch, richtig)
+    return text
+
+
 def load_segments():
     segs = {}
     for ep, path in TRANSCRIPTS.items():
         data = json.loads(path.read_text(encoding="utf-8"))
-        segs[ep] = [(float(s["start"]), float(s["end"]), s["text"]) for s in data["segments"]]
+        segs[ep] = [(float(s["start"]), float(s["end"]), korrigiert(ep, s["text"])) for s in data["segments"]]
     return segs
 
 
