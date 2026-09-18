@@ -37,7 +37,10 @@ BAD_CHARS_RE = re.compile(r"[*_`^~{}#\\]")
 
 # Hoerfehler von whisper-1, die im Auszug sinnentstellend waeren. Die Rohdaten bleiben unveraendert.
 KORREKTUREN = {
-    "112": [("Feinde", "Pfeile")],  # 58:21 "sind die Pfeile eher als Richtung des Informationsflusses"
+    "112": [
+        ("Feinde", "Pfeile"),  # 58:21 "sind die Pfeile eher als Richtung des Informationsflusses"
+        ("verbaut die Frage", "beantwortet die Frage"),  # 58:21 und kurz davor, zweimal gleich verhoert
+    ],
 }
 
 
