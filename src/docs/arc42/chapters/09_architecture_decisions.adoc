@@ -68,7 +68,8 @@ package "A  Kundenzugang über den Webshop" {
   rectangle "ADR-003\nEigener Bereich" as a3 #C8E6C9
   rectangle "ADR-005\nStatusseite" as a5 #C8E6C9
   rectangle "<b>Login für Mitarbeitende\nund Mechaniker:innen (P1)" as f1 #FFCDD2
-  rectangle "<b>Verfügbarkeit bei\nWebshop-Ausfall (P3)" as f6 #FFCDD2
+  rectangle "<b>Verfügbarkeit bei\nWebshop-Ausfall (P5, Reserve)" as f6 #FFCDD2
+  rectangle "<b>Frontendtechnologie (P3)" as f7 #FFCDD2
 }
 
 package "B  Fachliche Struktur" {
@@ -98,7 +99,7 @@ package "D  Betrieb und Verteilung" {
   rectangle "ADR-017\nRufbereitschaft" as d17 #C8E6C9
   rectangle "ADR-018\nNetzausfall akzeptiert" as d18 #C8E6C9
   rectangle "ADR-014\nMonolith oder Microservices\n(vertagt)" as d14 #FFF9C4
-  rectangle "<b>Monolith oder Microservices\nentscheiden" as f3 #FFCDD2
+  rectangle "<b>Monolith oder Microservices\nentscheiden (Reserve)" as f3 #FFCDD2
   rectangle "<b>Mandantenfähigkeit gegen\nWebshop-Kopplung (P4)" as f5 #FFCDD2
   rectangle "Datenhaltung je Modul,\nRPO 5 Minuten?" as o5 #E0E0E0
 }
@@ -114,6 +115,8 @@ a1 --> a3
 a1 --> a5
 a1 --> f1
 a1 --> f6
+a2 --> f7
+a3 --> f7
 b9 --> b10
 b9 --> b11
 b9 --> b12
@@ -150,10 +153,11 @@ d16 -[hidden]down- d18
 
 | Login für Mitarbeitende und Mechaniker:innen | ADR-001 | P1 | offen, im Video nicht behandelt
 | Kasse aus der Cloud erreichen | ADR-004, ADR-013 | P2 | offen, in Folge 113 als Risiko benannt, Kassenproxy als Option
-| Monolith oder Microservices | ADR-011, ADR-013, ADR-015, ADR-016 | neu | ADR-014 vertagt, "relativ irrelevant" für die Szenarien
+| Monolith oder Microservices | ADR-011, ADR-013, ADR-015, ADR-016 | Reserve | ADR-014 vertagt, "relativ irrelevant" für die Szenarien
 | Synchron oder Messages | ADR-012 | neu | offen, in Folge 112 ausdrücklich vertagt
 | Mandantenfähigkeit gegen Webshop-Kopplung | ADR-001, ADR-013, Mandantenfähigkeit beschlossen | P4 | Kopplung im Video nicht behandelt
-| Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P3 | offen, im Video nicht behandelt
+| Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P5, Reserve | offen, im Video nicht behandelt
+| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (51:55), nicht entschieden
 |===
 
 === Übersicht der Entscheidungen
