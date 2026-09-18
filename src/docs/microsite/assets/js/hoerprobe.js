@@ -4,6 +4,7 @@
 (function () {
   if (window.hoerprobeInstalled) { return; }
   window.hoerprobeInstalled = true;
+  var active = null;
 
   function findPlayer(link, src) {
     var audios = document.querySelectorAll('audio');
@@ -26,11 +27,31 @@
     if (!player) { return; }
     ev.preventDefault();
     var t = parseFloat(m[2]);
-    var seek = function () { player.currentTime = t; player.play(); };
+    // Zweiter Klick auf dieselbe Zeitmarke pausiert, der Player kann außer Sicht sein.
+    if (!player.paused && player.dataset.hoerprobeAt === m[2]) { player.pause(); return; }
+    pauseOthers(player);
+    active = player;
+    player.dataset.hoerprobeAt = m[2];
+    // Bei preload="none" kommen die Metadaten erst nach dem Klick. Hat der Hörer inzwischen
+    // einen anderen Player gestartet, verfällt der alte Sprung.
+    var seek = function () {
+      if (active !== player || player.dataset.hoerprobeAt !== m[2]) { return; }
+      player.currentTime = t; player.play();
+    };
     if (player.readyState >= 1) { seek(); } else {
       player.addEventListener('loadedmetadata', seek, { once: true });
       player.load();
     }
-    player.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   });
+
+  // Nur ein Player läuft: startet einer (per Klick oder Controls), pausieren die anderen.
+  function pauseOthers(current) {
+    var audios = document.querySelectorAll('audio');
+    for (var i = 0; i < audios.length; i++) {
+      if (audios[i] !== current && !audios[i].paused) { audios[i].pause(); }
+    }
+  }
+  document.addEventListener('play', function (ev) {
+    if (ev.target && ev.target.tagName === 'AUDIO') { active = ev.target; pauseOthers(ev.target); }
+  }, true);
 })();
