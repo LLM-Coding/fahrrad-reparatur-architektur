@@ -21,6 +21,12 @@
     'background:#F59E0B;color:#1a2a3a;font-weight:600;font-size:.9rem}' +
     '.hoerprobe-bar button.stop{background:transparent;color:#fff;font-size:1.1rem;padding:.1rem .4rem}' +
     'a.ts.ts-active{background:#FDE68A;border-radius:.2rem;padding:0 .2rem}' +
+    /* Eigener Tooltip mit fester Breite; der native title-Tooltip wird beim Laden dorthin verschoben. */
+    'a.ts[data-tip]{position:relative}' +
+    'a.ts[data-tip]:hover::after,a.ts[data-tip]:focus::after{content:attr(data-tip);position:absolute;' +
+    'left:0;top:1.5em;z-index:1040;width:22rem;max-width:80vw;padding:.5rem .7rem;' +
+    'background:#334E68;color:#fff;font-size:.85rem;line-height:1.35;font-weight:400;' +
+    'white-space:normal;text-align:left;border-radius:.4rem;box-shadow:0 .25rem .75rem rgba(0,0,0,.3)}' +
     '@media print{.hoerprobe-bar{display:none}}';
 
   function episode(el) {
@@ -35,11 +41,23 @@
     return h ? h + ':' + ms : ms;
   }
 
-  function ensureBar() {
-    if (bar) { return; }
+  function installStyle() {
     var style = document.createElement('style');
     style.textContent = css;
     document.head.appendChild(style);
+  }
+
+  // title -> data-tip: gleicher Text, aber als CSS-Tooltip mit fester Breite statt nativ.
+  function moveTooltips() {
+    var links = document.querySelectorAll('a.ts[title]');
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute('data-tip', links[i].getAttribute('title'));
+      links[i].removeAttribute('title');
+    }
+  }
+
+  function ensureBar() {
+    if (bar) { return; }
     bar = document.createElement('div');
     bar.className = 'hoerprobe-bar';
     bar.setAttribute('role', 'status');
@@ -156,6 +174,9 @@
   document.addEventListener('ended', function (ev) {
     if (ev.target === active) { stopAll(); }
   }, true);
+
+  installStyle();
+  moveTooltips();
 
   document.addEventListener('timeupdate', function (ev) {
     if (ev.target !== active) { return; }
