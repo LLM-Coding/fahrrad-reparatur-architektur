@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-02-25
-| Quelle | software-architektur.tv Folge 111, 19:12, 21:03 und 30:16
+| Quelle | software-architektur.tv Folge 111, link:{mp3-111}#t=1152[19:12,role=ts f111], link:{mp3-111}#t=1263[21:03,role=ts f111] und link:{mp3-111}#t=1816[30:16,role=ts f111]
 |===
 
 === Problem
@@ -14,13 +14,13 @@ Das Reparatursystem hat einen eigenen Bezahlvorgang (<<adr-003>>). Wie wickeln w
 
 === Kontext
 
-Der Fahrradladen ist ein lokaler Shop in Kaiserslautern mit drei bis vier Mitarbeiter:innen und ohne IT-Expert:innen (16:51). Eine eigene Zahlungsabwicklung mit Kreditkarten und Konten würde ein Team für Betrieb und Compliance verlangen, das es nicht gibt.
+Der Fahrradladen ist ein lokaler Shop in Kaiserslautern mit drei bis vier Mitarbeiter:innen und ohne IT-Expert:innen (link:{mp3-111}#t=1011[16:51,role=ts f111]). Eine eigene Zahlungsabwicklung mit Kreditkarten und Konten würde ein Team für Betrieb und Compliance verlangen, das es nicht gibt.
 
-Kund:innen bezahlen eine Reparatur typischerweise bei der Abholung im Laden. Mitarbeiter:innen oder Mechaniker:innen kassieren dort an einem Kassensystem, "letztendlich so eine Art PC" (21:09). Online-Bezahlung ist der zweite Weg, etwa für Anzahlung oder Vorkasse.
+Kund:innen bezahlen eine Reparatur typischerweise bei der Abholung im Laden. Mitarbeiter:innen oder Mechaniker:innen kassieren dort an einem Kassensystem, "letztendlich so eine Art PC" (link:{mp3-111}#t=1269[21:09,role=ts f111]). Online-Bezahlung ist der zweite Weg, etwa für Anzahlung oder Vorkasse.
 
-Das Betriebsmodell des Reparatursystems ist offen: Cloud oder on-premise ist "eine Architekturentscheidung, die müssen wir treffen", aber "nicht die erste" (09:49).
+Das Betriebsmodell des Reparatursystems ist offen: Cloud oder on-premise ist "eine Architekturentscheidung, die müssen wir treffen", aber "nicht die erste" (link:{mp3-111}#t=589[09:49,role=ts f111]).
 
-Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
+Die Qualitätsziele setzen die Rangfolge (link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=3483[58:03,role=ts f111]): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-03,QS-Z-03>>, weil die Kund:in an der Kasse wartet und der Preis der erfolgten Reparatur dort in zwei Minuten vorliegen muss; <<{ch10}#qs-u-07,QS-U-07>>, weil ein Laden ohne IT-Experten keine eigene Zahlungsabwicklung betreiben kann; <<{ch10}#qs-a-01,QS-A-01>>, weil jeder Laden eine andere Kasse hat und die Integration je Laden neu entsteht (R-013).
 
@@ -58,11 +58,11 @@ Wir bauen keine eigene Zahlungsabwicklung. Online zahlen Kund:innen über einen 
 
 === Begründung
 
-Der eigene Bezahlvorgang aus <<adr-003>> "bedeutet, dass wir tatsächlich irgendwie so einen Payment Service brauchen" (19:01). Eberhard denkt "ehrlich gesagt in erster Linie an so ein PayPal" (19:12): "wir werden so einen Button haben, wo wir sagen, bezahlen mit PayPal" (19:22), mit PayPal-Konto oder Kreditkarte (19:26). Eine eigene Abwicklung erwägt er nicht; sie widerspricht der Randbedingung "keine IT-Expert:innen".
+Der eigene Bezahlvorgang aus <<adr-003>> "bedeutet, dass wir tatsächlich irgendwie so einen Payment Service brauchen" (link:{mp3-111}#t=1141[19:01,role=ts f111]). Eberhard denkt "ehrlich gesagt in erster Linie an so ein PayPal" (link:{mp3-111}#t=1152[19:12,role=ts f111]): "wir werden so einen Button haben, wo wir sagen, bezahlen mit PayPal" (link:{mp3-111}#t=1162[19:22,role=ts f111]), mit PayPal-Konto oder Kreditkarte (link:{mp3-111}#t=1166[19:26,role=ts f111]). Eine eigene Abwicklung erwägt er nicht; sie widerspricht der Randbedingung "keine IT-Expert:innen".
 
-Die technische Form beschreibt er im technischen Kontext (30:16): "auf der einen Seite eine Integration hinten über REST, worüber ich abfragen kann, ob das wirklich funktioniert hat" (30:22), und "die UI-Integration, sprich ich habe so einen Button, bezahle per PayPal, der leitet um zu PayPal" (30:32). Sein Urteil: "solche Sachen sind häufig einfach zu integrieren" (30:47).
+Die technische Form beschreibt er im technischen Kontext (link:{mp3-111}#t=1816[30:16,role=ts f111]): "auf der einen Seite eine Integration hinten über REST, worüber ich abfragen kann, ob das wirklich funktioniert hat" (link:{mp3-111}#t=1822[30:22,role=ts f111]), und "die UI-Integration, sprich ich habe so einen Button, bezahle per PayPal, der leitet um zu PayPal" (link:{mp3-111}#t=1832[30:32,role=ts f111]). Sein Urteil: "solche Sachen sind häufig einfach zu integrieren" (link:{mp3-111}#t=1847[30:47,role=ts f111]).
 
-Die Kasse kommt als zweiter Weg dazu: "es gibt ein Kassensystem, letztendlich so eine Art PC, ein weiteres System, mit dem wir uns integrieren müssen" (21:09). Ausdrücklich: "wir werden nicht nur Online-Payments machen, sondern uns auch mit der Kasse integrieren müssen" (21:23). Als Protokoll trägt er "ein REST-Protokoll Richtung Kasse" ein (30:52).
+Die Kasse kommt als zweiter Weg dazu: "es gibt ein Kassensystem, letztendlich so eine Art PC, ein weiteres System, mit dem wir uns integrieren müssen" (link:{mp3-111}#t=1269[21:09,role=ts f111]). Ausdrücklich: "wir werden nicht nur Online-Payments machen, sondern uns auch mit der Kasse integrieren müssen" (link:{mp3-111}#t=1283[21:23,role=ts f111]). Als Protokoll trägt er "ein REST-Protokoll Richtung Kasse" ein (link:{mp3-111}#t=1852[30:52,role=ts f111]).
 
 === Konsequenzen
 
@@ -80,7 +80,7 @@ Die Kasse kommt als zweiter Weg dazu: "es gibt ein Kassensystem, letztendlich so
 
 *Risiken*
 
-* R-010: Die Kasse steht im Laden. Läuft das Reparatursystem in der Cloud, muss es die Kasse im Laden erreichen. Eberhard: "Integration mit lokalen Systemen, zum Beispiel mit der Kasse, vielleicht in der Cloud schwierig" (59:46). Dieses Risiko wird ein eigenes ADR zum Betriebsmodell.
+* R-010: Die Kasse steht im Laden. Läuft das Reparatursystem in der Cloud, muss es die Kasse im Laden erreichen. Eberhard: "Integration mit lokalen Systemen, zum Beispiel mit der Kasse, vielleicht in der Cloud schwierig" (link:{mp3-111}#t=3586[59:46,role=ts f111]). Dieses Risiko wird ein eigenes ADR zum Betriebsmodell.
 * R-011: Der Zahlungsstatus kommt aus zwei Quellen, PayPal und Kasse. Ohne klare Regel, welche Quelle gilt, entstehen widersprüchliche Zustände in einem Reparaturauftrag.
 * R-012: Der Buchungsstatus vom Payment Service kommt nur per REST-Abfrage. Fällt der Rückweg nach dem Redirect aus, bleibt eine bezahlte Reparatur im System unbezahlt.
 * R-013: Beim Umbau zum SaaS hat jeder Fahrradladen eine andere Kasse. Die REST-Integration ist auf ein Kassensystem zugeschnitten und muss je Laden neu gebaut werden.
@@ -88,3 +88,16 @@ Die Kasse kommt als zweiter Weg dazu: "es gibt ein Kassensystem, letztendlich so
 *Bezug*
 
 Die Bezahlung ist die Folge von <<adr-003>>. Die Bezahlart der Kund:innen kommt aus dem Webshop (<<adr-001>>). R-010 verbindet diese Entscheidung mit dem noch offenen Betriebsmodell.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

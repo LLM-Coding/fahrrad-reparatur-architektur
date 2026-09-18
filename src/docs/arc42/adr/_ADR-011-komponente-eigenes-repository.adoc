@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-11
-| Quelle | software-architektur.tv Folge 112, 54:13, 54:36 und 63:39
+| Quelle | software-architektur.tv Folge 112, link:{mp3-112}#t=3253[54:13,role=ts f112], link:{mp3-112}#t=3276[54:36,role=ts f112] und link:{mp3-112}#t=3819[63:39,role=ts f112]
 |===
 
 === Problem
@@ -14,7 +14,7 @@ Die Bausteinsicht Level 1 zeigt vier rote Boxen: Terminplanung, Reparatur durchf
 
 === Kontext
 
-Eberhard leitet aus dem Kontextdiagramm von Folge 111 die nächste Ebene ab, die arc42-Bausteinsicht Level 1 (48:42). Bevor er die Drittsysteme anschließt, will er die Boxen definieren (54:13). Er hält sich nicht an einen Standard, notiert aber eine eigene Legende: rote Box, Pfeil, grüne Box haben je eine festgelegte Bedeutung (51:16). Die Alternative "Komponente gleich separiertes Verzeichnis im Source Code" schreibt er ausdrücklich mit auf das Board (54:41).
+Eberhard leitet aus dem Kontextdiagramm von Folge 111 die nächste Ebene ab, die arc42-Bausteinsicht Level 1 (link:{mp3-111}#t=2922[48:42,role=ts f111]). Bevor er die Drittsysteme anschließt, will er die Boxen definieren (link:{mp3-112}#t=3253[54:13,role=ts f112]). Er hält sich nicht an einen Standard, notiert aber eine eigene Legende: rote Box, Pfeil, grüne Box haben je eine festgelegte Bedeutung (link:{mp3-112}#t=3076[51:16,role=ts f112]). Die Alternative "Komponente gleich separiertes Verzeichnis im Source Code" schreibt er ausdrücklich mit auf das Board (link:{mp3-112}#t=3281[54:41,role=ts f112]).
 
 Das Team ist klein. Folge 111 nennt drei bis vier Personen im Shop und keine IT-Expert:innen; das Szenario QS-U-07 verlangt Betrieb ohne IT.
 
@@ -52,11 +52,11 @@ Jede der vier Komponenten ist ein eigenes Projekt in der Versionskontrolle: ein 
 
 === Begründung
 
-Eberhard definiert die Box, bevor er weiterzeichnet: "Das sind Komponenten und zwar sind das separierte Projekte in der Versionskontrolle" (54:21). Er zählt auf: "ein Projekt Terminplanung, ein Projekt Reparatur durchführen, ein Projekt Bezahlung und ein Projekt Materialbeschaffung" (54:26). Dann sagt er "Das sind drei Git Repositories" (54:36); ein Versprecher, er meint vier, wie er am Ende bestätigt: "es gibt vier Projekte in der Versionskontrolle" (63:39).
+Eberhard definiert die Box, bevor er weiterzeichnet: "Das sind Komponenten und zwar sind das separierte Projekte in der Versionskontrolle" (link:{mp3-112}#t=3261[54:21,role=ts f112]). Er zählt auf: "ein Projekt Terminplanung, ein Projekt Reparatur durchführen, ein Projekt Bezahlung und ein Projekt Materialbeschaffung" (link:{mp3-112}#t=3266[54:26,role=ts f112]). Dann sagt er "Das sind drei Git Repositories" (link:{mp3-112}#t=3276[54:36,role=ts f112]); ein Versprecher, er meint vier, wie er am Ende bestätigt: "es gibt vier Projekte in der Versionskontrolle" (link:{mp3-112}#t=3819[63:39,role=ts f112]).
 
-Die Begründung ist methodisch, nicht technisch. Er stellt bei Architekturdiagrammen "die relativ unschuldige Frage" (54:55): "Was sind eigentlich diese Boxen?" (54:58). Oft "stellt sich halt heraus, dass diese Boxen in Wirklichkeit keine Semantik haben" (55:00), und das sei "super gefährlich" (55:05): "wenn diese Diagramme keine Semantik haben, dann rede ich halt gerade über nichts" (55:10).
+Die Begründung ist methodisch, nicht technisch. Er stellt bei Architekturdiagrammen "die relativ unschuldige Frage" (link:{mp3-112}#t=3295[54:55,role=ts f112]): "Was sind eigentlich diese Boxen?" (link:{mp3-112}#t=3298[54:58,role=ts f112]). Oft "stellt sich halt heraus, dass diese Boxen in Wirklichkeit keine Semantik haben" (link:{mp3-112}#t=3300[55:00,role=ts f112]), und das sei "super gefährlich" (link:{mp3-112}#t=3305[55:05,role=ts f112]): "wenn diese Diagramme keine Semantik haben, dann rede ich halt gerade über nichts" (link:{mp3-112}#t=3310[55:10,role=ts f112]).
 
-Die technische Folge benennt er kurz darauf: Materialbeschaffung und Bezahlung sollen gebaut werden können, "Reparatur das irgendwie nutzt und Terminplanung das irgendwie nutzt" (57:21), "dass ich also sozusagen eine Build-Reihenfolge habe" (57:27).
+Die technische Folge benennt er kurz darauf: Materialbeschaffung und Bezahlung sollen gebaut werden können, "Reparatur das irgendwie nutzt und Terminplanung das irgendwie nutzt" (link:{mp3-112}#t=3441[57:21,role=ts f112]), "dass ich also sozusagen eine Build-Reihenfolge habe" (link:{mp3-112}#t=3447[57:27,role=ts f112]).
 
 === Konsequenzen
 
@@ -80,3 +80,25 @@ Die technische Folge benennt er kurz darauf: Materialbeschaffung und Bezahlung s
 *Folgeentscheidung*
 
 Aus der Build-Reihenfolge folgt <<adr-012>>: Die Abhängigkeiten zwischen den vier Projekten bilden einen gerichteten Graphen.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

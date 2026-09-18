@@ -5,6 +5,9 @@
 :jbake-order: 6
 :filename: /chapters/06_runtime_view.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -16,7 +19,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-runtime-view]]
 == Laufzeitsicht
 
-Die Szenarien in diesem Kapitel sind aus den Pfeilen der Bausteinsicht (Board Seite 9) und dem technischen Kontext (Board Seite 3) abgeleitet. Eberhard Wolff beschreibt in den Videos keinen Ablauf Schritt für Schritt. Wo ein Schritt über die Pfeile hinausgeht, stützt er sich auf ein ADR; wo weder Board noch ADR etwas hergeben, steht eine offene Notiz. Die Reihenfolge der Aufrufe innerhalb eines Szenarios ist eine Lesart, keine Aussage des Boards. Die Pfeile auf dem Board bedeuten Informationsfluss, nicht Aufrufrichtung (Folge 112, 58:17); die Sequenzdiagramme zeigen deshalb eine mögliche Aufrufreihenfolge, keine festgelegte.
+Die Szenarien in diesem Kapitel sind aus den Pfeilen der Bausteinsicht (Board Seite 9) und dem technischen Kontext (Board Seite 3) abgeleitet. Eberhard Wolff beschreibt in den Videos keinen Ablauf Schritt für Schritt. Wo ein Schritt über die Pfeile hinausgeht, stützt er sich auf ein ADR; wo weder Board noch ADR etwas hergeben, steht eine offene Notiz. Die Reihenfolge der Aufrufe innerhalb eines Szenarios ist eine Lesart, keine Aussage des Boards. Die Pfeile auf dem Board bedeuten Informationsfluss, nicht Aufrufrichtung (Folge 112, link:{mp3-112}#t=3497[58:17,role=ts f112]); die Sequenzdiagramme zeigen deshalb eine mögliche Aufrufreihenfolge, keine festgelegte.
 
 Jeder Baustein aus Kapitel 5 kommt in mindestens einem Szenario vor: Terminplanung in Szenario 1, Reparatur durchführen und Materialbeschaffung in Szenario 2, Bezahlung in Szenario 2 und 4. Das fünfte Szenario, der Netzausfall im Laden, betrifft alle Bausteine gleich und kommt ohne Diagramm aus.
 
@@ -63,7 +66,7 @@ Schritte::
 
 Besonderheiten:: Der Webshop hält keine Reparaturdaten. Den Status sieht die Kund:in später auf einer Seite, die das Reparatur-System selbst rendert (<<{ch09}#adr-005,ADR-005>>). Das Usability-Ziel aus Kapitel 10 gilt für diesen Ablauf: 90 % der Benutzer:innen beauftragen eine Reparatur in zwei Minuten (Board Seite 5).
 
-NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt. Ob die Module sich synchron aufrufen oder Messages austauschen, hat Eberhard in Folge 112 ausdrücklich offen gelassen: "auf dieser Ebene noch nicht" (57:01, <<{ch09}#adr-012,ADR-012>>).
+NOTE: Offen: Ob Schritt 4 (Adressabfrage) in Terminplanung oder in einem gemeinsamen Teil des Systems liegt, sagt das Board nicht. Das Format des Aufrufs "Termin" ist nicht festgelegt. Ob die Module sich synchron aufrufen oder Messages austauschen, hat Eberhard in Folge 112 ausdrücklich offen gelassen: "auf dieser Ebene noch nicht" (link:{mp3-112}#t=3421[57:01,role=ts f112], <<{ch09}#adr-012,ADR-012>>).
 
 === Reparatur durchführen, abrechnen, bezahlen
 
@@ -122,7 +125,7 @@ Schritte::
 
 Besonderheiten:: Reparatur durchführen ist die Drehscheibe. Alle Pfeile nach außen außer Kasse und Payment Service gehen von ihm aus. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Kapitel 5) zielt auf die Schritte 6 und 7.
 
-NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder je Position fließen, ist nicht entschieden. Fest steht seit Folge 112, dass die Rechnungselemente aus Reparatur durchführen kommen, weil nur dieses Modul weiß, was repariert wurde; Bezahlung meldet nur "250 Euro bezahlt" (60:13 bis 61:36). Ob Bezahlung dem Rechnungswesen zusätzlich "Rechnung ist bezahlt" meldet, hat Eberhard offen gelassen: "Weiß ich nicht, könnte auch im Hintergrund laufen" (63:16, <<{ch09}#adr-012,ADR-012>>). Ob die Materialbestellung vor oder während der Reparatur ausgelöst wird, zeigt das Board nicht. Welche Quelle gilt, wenn Kasse und Payment Service verschiedene Zahlungsstatus liefern (R-011), ist offen.
+NOTE: Offen: Ob "Preis" und "Rechnungselemente" bei Abschluss, bei Abholung oder je Position fließen, ist nicht entschieden. Fest steht seit Folge 112, dass die Rechnungselemente aus Reparatur durchführen kommen, weil nur dieses Modul weiß, was repariert wurde; Bezahlung meldet nur "250 Euro bezahlt" (link:{mp3-112}#t=3613,3696[60:13 bis 61:36,role=ts f112]). Ob Bezahlung dem Rechnungswesen zusätzlich "Rechnung ist bezahlt" meldet, hat Eberhard offen gelassen: "Weiß ich nicht, könnte auch im Hintergrund laufen" (link:{mp3-112}#t=3796[63:16,role=ts f112], <<{ch09}#adr-012,ADR-012>>). Ob die Materialbestellung vor oder während der Reparatur ausgelöst wird, zeigt das Board nicht. Welche Quelle gilt, wenn Kasse und Payment Service verschiedene Zahlungsstatus liefern (R-011), ist offen.
 
 === Fehlerszenario: Webshop nicht erreichbar
 
@@ -155,7 +158,7 @@ NOTE: Offen: Verhalten nicht entschieden. Weder Board noch ADRs sagen, ob das Re
 
 === Fehlerszenario: Kasse aus der Cloud nicht erreichbar
 
-Die Kasse steht im Laden. Läuft das Reparatur-System in der Cloud, muss Bezahlung die Kasse über das Netz des Ladens erreichen. Das Board fragt auf Seite 10 und 11: "Kann man aus der Cloud in die Kasse kommunizieren?". Das ist Risiko R-010 aus <<{ch09}#adr-004,ADR-004>>. Folge 113 behandelt die Frage (24:38 bis 27:23), entscheidet sie nicht und stuft sie hoch ein: "ich habe potenziell etwas, was mir meinen Ansatz kaputt machen kann" (26:14), "das kann mir im Extremfall die Lösungsstrategie zerstören" (26:57).
+Die Kasse steht im Laden. Läuft das Reparatur-System in der Cloud, muss Bezahlung die Kasse über das Netz des Ladens erreichen. Das Board fragt auf Seite 10 und 11: "Kann man aus der Cloud in die Kasse kommunizieren?". Das ist Risiko R-010 aus <<{ch09}#adr-004,ADR-004>>. Folge 113 behandelt die Frage (link:{mp3-113}#t=1478,1643[24:38 bis 27:23,role=ts f113]), entscheidet sie nicht und stuft sie hoch ein: "ich habe potenziell etwas, was mir meinen Ansatz kaputt machen kann" (link:{mp3-113}#t=1574[26:14,role=ts f113]), "das kann mir im Extremfall die Lösungsstrategie zerstören" (link:{mp3-113}#t=1617[26:57,role=ts f113]).
 
 [plantuml, "06-fehler-kasse", svg]
 ----
@@ -172,14 +175,49 @@ bezahlung --> shop: Zahlungsstatus unbekannt
 
 Was Board und ADRs hergeben::
 * Das Qualitätsszenario "Das System im Shop fällt aus. Spätestens nach 2 Minuten kann man den Preis einer erfolgten Reparatur wieder ermitteln" (Board Seite 6) zeigt, dass der Preis auch bei Ausfall verfügbar sein muss. Für die Kasse selbst gibt es kein Szenario.
-* Eberhard nennt die Integration mit lokalen Systemen "vielleicht in der Cloud schwierig" (Folge 111, 59:46, zitiert in <<{ch09}#adr-004,ADR-004>>).
-* Der zweite Bezahlweg über den Online Payment Service bleibt offen, wenn die Kasse nicht antwortet; Online Payment lässt sich "sicher aus der Cloud anschließen" (Folge 113, 24:10).
-* Folge 113 nennt vier Optionen für die Anbindung: direkt REST aus der Cloud, weil "Kassensysteme heutzutage im Prinzip auch PCs" sind (24:38); ein Kassenproxy im Laden, vorgeschlagen von Zuschauer Jan und für Eberhard "eine mögliche Lösung" (29:27); ein Server im Laden; eine Änderung am Kassensystem (27:07). Der Bezahlvorgang, den die Anbindung tragen muss: Mensch wählt die Rechnung, Kasse erhält "20 Euro kassieren", Buchhaltung folgt (25:21 bis 25:43). Die Frage gilt für Monolith und Microservices gleichermaßen (26:34 bis 26:50).
+* Eberhard nennt die Integration mit lokalen Systemen "vielleicht in der Cloud schwierig" (Folge 111, link:{mp3-111}#t=3586[59:46,role=ts f111], zitiert in <<{ch09}#adr-004,ADR-004>>).
+* Der zweite Bezahlweg über den Online Payment Service bleibt offen, wenn die Kasse nicht antwortet; Online Payment lässt sich "sicher aus der Cloud anschließen" (Folge 113, link:{mp3-113}#t=1450[24:10,role=ts f113]).
+* Folge 113 nennt vier Optionen für die Anbindung: direkt REST aus der Cloud, weil "Kassensysteme heutzutage im Prinzip auch PCs" sind (link:{mp3-113}#t=1478[24:38,role=ts f113]); ein Kassenproxy im Laden, vorgeschlagen von Zuschauer Jan und für Eberhard "eine mögliche Lösung" (link:{mp3-113}#t=1767[29:27,role=ts f113]); ein Server im Laden; eine Änderung am Kassensystem (link:{mp3-113}#t=1627[27:07,role=ts f113]). Der Bezahlvorgang, den die Anbindung tragen muss: Mensch wählt die Rechnung, Kasse erhält "20 Euro kassieren", Buchhaltung folgt (link:{mp3-113}#t=1521,1543[25:21 bis 25:43,role=ts f113]). Die Frage gilt für Monolith und Microservices gleichermaßen (link:{mp3-113}#t=1594,1610[26:34 bis 26:50,role=ts f113]).
 
-NOTE: Offen: Verhalten nicht entschieden. Ob Bezahlung den Aufruf wiederholt, den Betrag zwischenspeichert oder die Shop-Mitarbeiter:in an der Kasse ohne Systemeintrag kassieren lässt, sagt das Board nicht. Cloud ist seit Folge 113 entschieden (<<{ch09}#adr-013,ADR-013>>); die Anbindung der Kasse aus der Cloud will Eberhard recherchieren (27:07), keine der vier Optionen ist gewählt (Kapitel 7, <<{ch09}#adr-004,ADR-004>>).
+NOTE: Offen: Verhalten nicht entschieden. Ob Bezahlung den Aufruf wiederholt, den Betrag zwischenspeichert oder die Shop-Mitarbeiter:in an der Kasse ohne Systemeintrag kassieren lässt, sagt das Board nicht. Cloud ist seit Folge 113 entschieden (<<{ch09}#adr-013,ADR-013>>); die Anbindung der Kasse aus der Cloud will Eberhard recherchieren (link:{mp3-113}#t=1627[27:07,role=ts f113]), keine der vier Optionen ist gewählt (Kapitel 7, <<{ch09}#adr-004,ADR-004>>).
 
 === Fehlerszenario: Netzausfall im Laden
 
-Zuschauer Jan fragt in Folge 113, was passiert, wenn der Router im Laden ausfällt und das System aus Kundensicht nicht erreichbar ist (08:24). Das Reparatur-System in der Cloud läuft weiter; Werkstatt und Kasse erreichen es nicht, bis das Netz im Laden wieder steht. Betroffen sind die Werkstattfunktionen und die Preisermittlung bei Abholung (QS-Z-02, QS-Z-03); Kund:innen im Web merken nichts. Das Szenario kommt ohne Diagramm aus, weil der Ablauf dem Kassen-Szenario gleicht, nur fehlt die Verbindung in beide Richtungen.
+Zuschauer Jan fragt in Folge 113, was passiert, wenn der Router im Laden ausfällt und das System aus Kundensicht nicht erreichbar ist (link:{mp3-113}#t=504[08:24,role=ts f113]). Das Reparatur-System in der Cloud läuft weiter; Werkstatt und Kasse erreichen es nicht, bis das Netz im Laden wieder steht. Betroffen sind die Werkstattfunktionen und die Preisermittlung bei Abholung (QS-Z-02, QS-Z-03); Kund:innen im Web merken nichts. Das Szenario kommt ohne Diagramm aus, weil der Ablauf dem Kassen-Szenario gleicht, nur fehlt die Verbindung in beide Richtungen.
 
-Eberhard liest das Szenario nicht als "nicht mein Problem", sondern als Erwartungshaltung des Kunden, die er mit Optionen und Preis zurückspielt (09:55, 12:32). Drei Optionen nennt er (08:24 bis 14:13): das Risiko akzeptieren; einen mobilen LTE/5G-Router mit automatischem Failover als Reserve, "kostet einen Router und Netzwerktricks, nicht wahnsinnig teuer" (12:52 bis 13:02); einen Cache-Server im Laden, der die Preise vorhält, verworfen, weil er Wartung braucht, innerhalb von 30 Minuten vor Ort sein müsste und "deutlich mehr Geld" kostet (13:10 bis 13:21). Erwartete Entscheidung: Risiko akzeptieren, "vielleicht noch einen mobilen Router als Fallback" (13:43; <<{ch09}#adr-018,ADR-018>>). Anders läge der Fall bei der "Maschinensteuerung eines Atomkraftwerks" (13:47).
+Eberhard liest das Szenario nicht als "nicht mein Problem", sondern als Erwartungshaltung des Kunden, die er mit Optionen und Preis zurückspielt (link:{mp3-113}#t=595[09:55,role=ts f113], link:{mp3-113}#t=752[12:32,role=ts f113]). Drei Optionen nennt er (link:{mp3-113}#t=504,853[08:24 bis 14:13,role=ts f113]): das Risiko akzeptieren; einen mobilen LTE/5G-Router mit automatischem Failover als Reserve, "kostet einen Router und Netzwerktricks, nicht wahnsinnig teuer" (link:{mp3-113}#t=772,782[12:52 bis 13:02,role=ts f113]); einen Cache-Server im Laden, der die Preise vorhält, verworfen, weil er Wartung braucht, innerhalb von 30 Minuten vor Ort sein müsste und "deutlich mehr Geld" kostet (link:{mp3-113}#t=790,801[13:10 bis 13:21,role=ts f113]). Erwartete Entscheidung: Risiko akzeptieren, "vielleicht noch einen mobilen Router als Fallback" (link:{mp3-113}#t=823[13:43,role=ts f113]; <<{ch09}#adr-018,ADR-018>>). Anders läge der Fall bei der "Maschinensteuerung eines Atomkraftwerks" (link:{mp3-113}#t=827[13:47,role=ts f113]).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

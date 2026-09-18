@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-02-25
-| Quelle | software-architektur.tv Folge 111, 29:32 und 31:24
+| Quelle | software-architektur.tv Folge 111, link:{mp3-111}#t=1772[29:32,role=ts f111] und link:{mp3-111}#t=1884[31:24,role=ts f111]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Das Reparatursystem ist eine eigene Anwendung neben dem Webshop. Kund:innen erre
 
 === Kontext
 
-<<adr-001>> legt fest, dass Kund:innen sich im Webshop anmelden und das Reparatursystem das JWT-Cookie des Webshops liest. Risiko R-004 aus <<adr-001>> benennt die Hürde: Der Browser sendet ein Cookie nur an die Domain, für die es gesetzt wurde. Zuschauer Jan bringt den Hinweis im Chat: "bei dem Cookie die Same-Origin-Policy beachten" (31:24).
+<<adr-001>> legt fest, dass Kund:innen sich im Webshop anmelden und das Reparatursystem das JWT-Cookie des Webshops liest. Risiko R-004 aus <<adr-001>> benennt die Hürde: Der Browser sendet ein Cookie nur an die Domain, für die es gesetzt wurde. Zuschauer Jan bringt den Hinweis im Chat: "bei dem Cookie die Same-Origin-Policy beachten" (link:{mp3-111}#t=1884[31:24,role=ts f111]).
 
 Der Webshop ist ein Fertigprodukt. Sein Login und seine Cookie-Einstellungen liegen außerhalb unserer Verantwortung. Änderungen daran sind nicht vorgesehen.
 
-Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
+Die Qualitätsziele setzen die Rangfolge (link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=3483[58:03,role=ts f111]): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security stuft Eberhard bewusst niedrig ein.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-02,QS-U-02>>, weil der Login aus dem Webshop nur unter derselben Domain durchläuft und Kund:innen sich sonst ein zweites Mal anmelden müssten; <<{ch10}#qs-a-01,QS-A-01>>, weil jeder weitere Laden eine eigene Umleitung unter seiner Domain braucht (R-006).
 
@@ -55,9 +55,9 @@ Wir betreiben das Reparatursystem unter dem Pfad `/reparatur` der Webshop-Domain
 
 === Begründung
 
-Die Entscheidung folgt aus <<adr-001>>. Die Integration mit dem Webshop "funktioniert darüber, dass wir bestimmte URLs umleiten an unser Reparatursystem" (29:36). Eberhard zieht die Grenze klar: "innerhalb von meintollerfahrradshop.de gibt es Slash Reparatur und Slash Reparatur ist unsere Verantwortung" (29:42).
+Die Entscheidung folgt aus <<adr-001>>. Die Integration mit dem Webshop "funktioniert darüber, dass wir bestimmte URLs umleiten an unser Reparatursystem" (link:{mp3-111}#t=1776[29:36,role=ts f111]). Eberhard zieht die Grenze klar: "innerhalb von meintollerfahrradshop.de gibt es Slash Reparatur und Slash Reparatur ist unsere Verantwortung" (link:{mp3-111}#t=1782[29:42,role=ts f111]).
 
-Den technischen Grund liefert der Chat. Jan erinnert an die Same-Origin-Policy (31:24). Eberhard greift das auf: "Cookies können nur ausgetauscht werden, wenn sie in derselben Domäne registriert sind" (31:28). Und weiter: "das ist auch einer der Gründe, weswegen wir bestimmte URLs umleiten wollen" (31:43). Unter `/reparatur` "würden dann eben die Cookies vom meintollerfahrradshop, also genau der mit JWT, übertragen werden" (31:48).
+Den technischen Grund liefert der Chat. Jan erinnert an die Same-Origin-Policy (link:{mp3-111}#t=1884[31:24,role=ts f111]). Eberhard greift das auf: "Cookies können nur ausgetauscht werden, wenn sie in derselben Domäne registriert sind" (link:{mp3-111}#t=1888[31:28,role=ts f111]). Und weiter: "das ist auch einer der Gründe, weswegen wir bestimmte URLs umleiten wollen" (link:{mp3-111}#t=1903[31:43,role=ts f111]). Unter `/reparatur` "würden dann eben die Cookies vom meintollerfahrradshop, also genau der mit JWT, übertragen werden" (link:{mp3-111}#t=1908[31:48,role=ts f111]).
 
 Eine eigene Domain diskutiert Eberhard nicht ausdrücklich. Sie scheidet aus, weil sie den Login aus <<adr-001>> bricht oder den Webshop zu Änderungen zwingt. Beides widerspricht der Rangfolge der Qualitätsziele.
 
@@ -77,9 +77,22 @@ Eine eigene Domain diskutiert Eberhard nicht ausdrücklich. Sie scheidet aus, we
 *Risiken*
 
 * R-005: Die Umleitung liegt vor dem Webshop. Wer sie betreibt und ob das Fertigprodukt sie zulässt, ist offen. Ohne Umleitung ist das Reparatursystem nicht erreichbar.
-* R-006: Beim Umbau zum SaaS braucht jeder Fahrradladen eine eigene Umleitung unter seiner Domain. Das erhöht den Aufwand für das Änderungsszenario "SaaS in zwei Monaten" (57:36).
+* R-006: Beim Umbau zum SaaS braucht jeder Fahrradladen eine eigene Umleitung unter seiner Domain. Das erhöht den Aufwand für das Änderungsszenario "SaaS in zwei Monaten" (link:{mp3-111}#t=3456[57:36,role=ts f111]).
 * R-007: Das Reparatursystem teilt den Origin mit dem Webshop. Eine Schwachstelle in einem der beiden Systeme betrifft die Cookies des anderen. Security steht bewusst niedrig, das Risiko bleibt benannt.
 
 *Bezug*
 
 Diese Entscheidung schließt R-004 aus <<adr-001>>. Die Wahl des Betriebsmodells (Cloud oder on-premise) bleibt offen und entscheidet, wo Umleitung und Reparatursystem laufen.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

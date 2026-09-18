@@ -5,6 +5,9 @@
 :jbake-order: 3
 :filename: /chapters/03_context_and_scope.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -16,7 +19,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-context-and-scope]]
 == Kontextabgrenzung
 
-Das Kontextdiagramm war Eberhards erster Schritt. "Ich habe dadurch ein besseres Bild bekommen, was ich bauen soll und mit wem ich interagieren muss, insbesondere welche Verantwortung ich habe und welche Schnittstellen" (Folge 111, 26:03). Er trennt fachlichen und technischen Kontext in zwei Diagramme (27:51, 28:22). Beide zeigen dieselben drei Akteure und sieben externen Systeme (Miro-Board Seiten 2 und 3).
+Das Kontextdiagramm war Eberhards erster Schritt. "Ich habe dadurch ein besseres Bild bekommen, was ich bauen soll und mit wem ich interagieren muss, insbesondere welche Verantwortung ich habe und welche Schnittstellen" (Folge 111, link:{mp3-111}#t=1563[26:03,role=ts f111]). Er trennt fachlichen und technischen Kontext in zwei Diagramme (link:{mp3-111}#t=1671[27:51,role=ts f111], link:{mp3-111}#t=1702[28:22,role=ts f111]). Beide zeigen dieselben drei Akteure und sieben externen Systeme (Miro-Board Seiten 2 und 3).
 
 === Fachlicher Kontext
 
@@ -148,7 +151,7 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |Kasse
 |REST
-|Protokoll "meinetwegen REST" (30:52); die Details sind bewusst offen gelassen.
+|Protokoll "meinetwegen REST" (link:{mp3-111}#t=1852[30:52,role=ts f111]); die Details sind bewusst offen gelassen.
 
 |Online Payment Service
 |REST und UI-Integration (Redirect-Button)
@@ -160,13 +163,30 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |EMail System
 |REST
-|Zugekaufter Dienst, etwa AWS Simple Email Service (31:02).
+|Zugekaufter Dienst, etwa AWS Simple Email Service (link:{mp3-111}#t=1862[31:02,role=ts f111]).
 
 |SMS Versand
 |REST
 |Kanal vorgesehen, nicht entschieden (<<{ch09}#adr-007,ADR-007>>).
 |===
 
-Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (29:53, 30:04).
+Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (link:{mp3-111}#t=1793[29:53,role=ts f111], link:{mp3-111}#t=1804[30:04,role=ts f111]).
 
-NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst nicht erfasst (35:36). Ob Kasse und Rechnungswesen aus der Cloud erreichbar sind, bleibt eine offene Frage auf dem Board (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.
+NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst nicht erfasst (link:{mp3-111}#t=2136[35:36,role=ts f111]). Ob Kasse und Rechnungswesen aus der Cloud erreichbar sind, bleibt eine offene Frage auf dem Board (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

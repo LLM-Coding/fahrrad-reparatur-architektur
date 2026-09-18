@@ -5,6 +5,9 @@
 :jbake-order: 9
 :filename: /chapters/09_architecture_decisions.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -157,7 +160,7 @@ d16 -[hidden]down- d18
 | Synchron oder Messages | ADR-012 | neu | offen, in Folge 112 ausdrücklich vertagt
 | Mandantenfähigkeit gegen Webshop-Kopplung | ADR-001, ADR-013, Mandantenfähigkeit beschlossen | P4 | Kopplung im Video nicht behandelt
 | Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P5, Reserve | offen, im Video nicht behandelt
-| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (51:55), nicht entschieden
+| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (link:{mp3-113}#t=3115[51:55,role=ts f113]), nicht entschieden
 |===
 
 === Übersicht der Entscheidungen
@@ -187,6 +190,35 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 | <<adr-017>> | Eigener Support mit Rufbereitschaft statt Betrieb durch den Shop | Accepted
 | <<adr-018>> | Netzausfall im Laden wird als Risiko akzeptiert | Accepted
 |===
+
+
+
+
+
+
+
+
+
+
+
+
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end
 
 include::../adr/_ADR-001-nutzerverwaltung-webshop.adoc[leveloffset=+1]
 
@@ -223,4 +255,3 @@ include::../adr/_ADR-016-relationale-datenbank-rds.adoc[leveloffset=+1]
 include::../adr/_ADR-017-eigener-support-rufbereitschaft.adoc[leveloffset=+1]
 
 include::../adr/_ADR-018-netzausfall-im-laden.adoc[leveloffset=+1]
-

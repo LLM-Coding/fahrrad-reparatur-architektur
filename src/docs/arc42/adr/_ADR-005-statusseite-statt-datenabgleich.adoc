@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-02-25
-| Quelle | software-architektur.tv Folge 111, 19:35 und 20:06
+| Quelle | software-architektur.tv Folge 111, link:{mp3-111}#t=1175[19:35,role=ts f111] und link:{mp3-111}#t=1206[20:06,role=ts f111]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Kund:innen wollen wissen, ob ihr Fahrrad fertig ist. Der Webshop kennt die Kund:
 
 === Kontext
 
-Der Webshop ist ein Standard-Fertigprodukt für Kaufen und Abholen (17:59). Eine Reparatur ist dort kein Produkt; das Reparatursystem bekommt einen eigenen Bereich neben dem Webshop mit eigenem Bezahlvorgang (18:40). Die Integration mit dem Webshop beschränkt sich auf User-Datenbank und Login.
+Der Webshop ist ein Standard-Fertigprodukt für Kaufen und Abholen (link:{mp3-111}#t=1079[17:59,role=ts f111]). Eine Reparatur ist dort kein Produkt; das Reparatursystem bekommt einen eigenen Bereich neben dem Webshop mit eigenem Bezahlvorgang (link:{mp3-111}#t=1120[18:40,role=ts f111]). Die Integration mit dem Webshop beschränkt sich auf User-Datenbank und Login.
 
-Aus dem Chat kommt die Frage, ob der Webshop Daten aus dem Reparatursystem braucht oder ob ein regelmäßiger Datenabgleich reicht (19:35). Eberhard ordnet die Frage unterhalb der aktuellen Flughöhe ein: Auf der Ebene des Systemkontexts geht es zunächst darum, welche Systeme überhaupt zu integrieren sind (19:49). Trotzdem ergibt sich die Antwort schon aus den bisherigen Ideen (20:02).
+Aus dem Chat kommt die Frage, ob der Webshop Daten aus dem Reparatursystem braucht oder ob ein regelmäßiger Datenabgleich reicht (link:{mp3-111}#t=1175[19:35,role=ts f111]). Eberhard ordnet die Frage unterhalb der aktuellen Flughöhe ein: Auf der Ebene des Systemkontexts geht es zunächst darum, welche Systeme überhaupt zu integrieren sind (link:{mp3-111}#t=1189[19:49,role=ts f111]). Trotzdem ergibt sich die Antwort schon aus den bisherigen Ideen (link:{mp3-111}#t=1202[20:02,role=ts f111]).
 
-Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
+Die Qualitätsziele setzen die Rangfolge (link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=3483[58:03,role=ts f111]): Benutzerfreundlichkeit für Kund:innen zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-03,QS-U-03>>, weil die Statusseite das ist, was Kund:innen nach der Reparatur vom System sehen und bewerten (R-014, R-015); <<{ch10}#qs-a-01,QS-A-01>>, weil Reparaturdaten genau einen Ort haben und andere Läden mit anderen Webshops keinen Abgleich brauchen.
 
@@ -53,11 +53,11 @@ Wir tauschen keine Reparaturdaten mit dem Webshop aus. Der Webshop hält keine D
 
 === Begründung
 
-Eberhard beantwortet die Chat-Frage direkt: "der Webshop hat keine Daten aus dem Reparatursystem" (20:06). Stattdessen gibt es eine Seite, "die wir selber rendern, deswegen müssen wir die Daten nicht austauschen" (20:22). Er beschreibt den Ablauf aus Kundensicht: Ich gehe auf die Webseite, sage, wer ich bin, und das System antwortet, ob das abgelieferte Fahrrad fertig ist (20:13).
+Eberhard beantwortet die Chat-Frage direkt: "der Webshop hat keine Daten aus dem Reparatursystem" (link:{mp3-111}#t=1206[20:06,role=ts f111]). Stattdessen gibt es eine Seite, "die wir selber rendern, deswegen müssen wir die Daten nicht austauschen" (link:{mp3-111}#t=1222[20:22,role=ts f111]). Er beschreibt den Ablauf aus Kundensicht: Ich gehe auf die Webseite, sage, wer ich bin, und das System antwortet, ob das abgelieferte Fahrrad fertig ist (link:{mp3-111}#t=1213[20:13,role=ts f111]).
 
-Die Entscheidung folgt aus <<adr-003>>: Der Reparaturbereich liegt neben dem Webshop, nicht in ihm (18:45). Wer dort beauftragt, schaut auch dort nach. Ein Abgleich würde das Fertigprodukt um eine Funktion erweitern, die es nicht hat.
+Die Entscheidung folgt aus <<adr-003>>: Der Reparaturbereich liegt neben dem Webshop, nicht in ihm (link:{mp3-111}#t=1125[18:45,role=ts f111]). Wer dort beauftragt, schaut auch dort nach. Ein Abgleich würde das Fertigprodukt um eine Funktion erweitern, die es nicht hat.
 
-Eberhard merkt an, dass die Frage eigentlich unter der aktuellen Granularität liegt (19:49). Sie lässt sich trotzdem schon beantworten, und die Antwort passt zu dem Bild, das der Systemkontext gerade zeichnet: wenige, klar geschnittene Schnittstellen.
+Eberhard merkt an, dass die Frage eigentlich unter der aktuellen Granularität liegt (link:{mp3-111}#t=1189[19:49,role=ts f111]). Sie lässt sich trotzdem schon beantworten, und die Antwort passt zu dem Bild, das der Systemkontext gerade zeichnet: wenige, klar geschnittene Schnittstellen.
 
 === Konsequenzen
 
@@ -80,3 +80,16 @@ Eberhard merkt an, dass die Frage eigentlich unter der aktuellen Granularität l
 *Verwandte Entscheidungen*
 
 Die Statusseite liegt unter dem Pfad `/reparatur` der Webshop-Domain (<<adr-002>>), damit das JWT-Cookie des Webshops den Login trägt (<<adr-001>>).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

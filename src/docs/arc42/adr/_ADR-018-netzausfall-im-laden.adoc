@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-25
-| Quelle | software-architektur.tv Folge 113, 08:24 bis 14:13
+| Quelle | software-architektur.tv Folge 113, link:{mp3-113}#t=504,853[08:24 bis 14:13,role=ts f113]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Das System läuft in der Cloud (<<adr-013>>). Fällt im Laden der Router oder be
 
 === Kontext
 
-Jan stellt die Frage im Chat, kurz nachdem Eberhard die Cloud gewählt hat: Fällt der Router im Laden aus, "eben das gesamte System ausfällt" (08:54) aus Sicht des Kunden. Eberhard nennt die Frage "eine spannende Sache" (09:28) und nutzt sie, um zu zeigen, wie man ein Qualitätsszenario liest, dessen Ursache außerhalb des eigenen Einflusses liegt. Betroffen sind "Ausfall eines Routers" (10:23) und Ausfall "des Internet-Providers" (10:25).
+Jan stellt die Frage im Chat, kurz nachdem Eberhard die Cloud gewählt hat: Fällt der Router im Laden aus, "eben das gesamte System ausfällt" (link:{mp3-113}#t=534[08:54,role=ts f113]) aus Sicht des Kunden. Eberhard nennt die Frage "eine spannende Sache" (link:{mp3-113}#t=568[09:28,role=ts f113]) und nutzt sie, um zu zeigen, wie man ein Qualitätsszenario liest, dessen Ursache außerhalb des eigenen Einflusses liegt. Betroffen sind "Ausfall eines Routers" (link:{mp3-113}#t=623[10:23,role=ts f113]) und Ausfall "des Internet-Providers" (link:{mp3-113}#t=625[10:25,role=ts f113]).
 
-Das Szenario mit dem Preis ist "das aggressivste Wiederanlauf Kriterium, was wir irgendwie haben" (07:55). Aus Folge 112 gibt es dafür schon einen Low-Tech-Fallback: Preise auf Zettel oder in einer Tabelle, festgehalten in <<adr-004>> und in Kapitel 8.5. Diese Entscheidung ergänzt ihn um die Frage, ob Technik im Laden den Ausfall abfangen soll.
+Das Szenario mit dem Preis ist "das aggressivste Wiederanlauf Kriterium, was wir irgendwie haben" (link:{mp3-113}#t=475[07:55,role=ts f113]). Aus Folge 112 gibt es dafür schon einen Low-Tech-Fallback: Preise auf Zettel oder in einer Tabelle, festgehalten in <<adr-004>> und in Kapitel 8.5. Diese Entscheidung ergänzt ihn um die Frage, ob Technik im Laden den Ausfall abfangen soll.
 
-*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-03,QS-Z-03>> (Preis nach 2 Minuten) ist der Auslöser; Eberhard liest es bei 10:06 vor. <<{ch10}#qs-z-02,QS-Z-02>> (Wiederanlauf 30 Minuten) ist betroffen, weil ein Cache-Server im Laden genau diese Frist nicht halten könnte (13:14).
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-03,QS-Z-03>> (Preis nach 2 Minuten) ist der Auslöser; Eberhard liest es bei link:{mp3-113}#t=606[10:06,role=ts f113] vor. <<{ch10}#qs-z-02,QS-Z-02>> (Wiederanlauf 30 Minuten) ist betroffen, weil ein Cache-Server im Laden genau diese Frist nicht halten könnte (link:{mp3-113}#t=794[13:14,role=ts f113]).
 
 === Optionen
 
@@ -53,11 +53,11 @@ Der Netzausfall im Laden wird als Risiko akzeptiert. Es steht kein Cache- oder E
 
 === Begründung
 
-Eberhard verwirft zuerst die bequeme Lesart: "Ist nicht mein Problem, was soll's" (09:42). "Das finde ich nicht wirklich hilfreich" (09:45). Ein Qualitätsszenario sei "die Erwartungshaltung, die ein Kunde hat" (09:55); die Ursache des Ausfalls ändert daran nichts. Seine Aufgabe sei, "technisch zu bewerten, wie ich das umsetzen kann" (12:25), und "die variable Größe dabei ist Preis" (12:32).
+Eberhard verwirft zuerst die bequeme Lesart: "Ist nicht mein Problem, was soll's" (link:{mp3-113}#t=582[09:42,role=ts f113]). "Das finde ich nicht wirklich hilfreich" (link:{mp3-113}#t=585[09:45,role=ts f113]). Ein Qualitätsszenario sei "die Erwartungshaltung, die ein Kunde hat" (link:{mp3-113}#t=595[09:55,role=ts f113]); die Ursache des Ausfalls ändert daran nichts. Seine Aufgabe sei, "technisch zu bewerten, wie ich das umsetzen kann" (link:{mp3-113}#t=745[12:25,role=ts f113]), und "die variable Größe dabei ist Preis" (link:{mp3-113}#t=752[12:32,role=ts f113]).
 
-Dann bepreist er die Optionen. Der mobile Router: "einen mobilen Router, der über LTE oder über 5G" (11:08) die Verbindung redundant hält, "kostet halt irgendwie einen Router und irgendwelche Netzwerktricks" (12:55), also "nicht so wahnsinnig teuer" (13:02). Der Cache-Server: Software "in deinem Server, den du nicht hast" (12:00), die die Preise cacht. "Das würde bedeuten, wir müssen den irgendwie warten" (13:12), und "wir müssen innerhalb von 30 Minuten da sein, sagst du" (13:14). "Das kostet also deutlich mehr Geld" (13:19). Selbst mit zwei Routern bleibt ein Rest: "wenn irgendwo in dem Stadtteil das Internet insgesamt von einem Provider ausfällt" (11:33).
+Dann bepreist er die Optionen. Der mobile Router: "einen mobilen Router, der über LTE oder über 5G" (link:{mp3-113}#t=668[11:08,role=ts f113]) die Verbindung redundant hält, "kostet halt irgendwie einen Router und irgendwelche Netzwerktricks" (link:{mp3-113}#t=775[12:55,role=ts f113]), also "nicht so wahnsinnig teuer" (link:{mp3-113}#t=782[13:02,role=ts f113]). Der Cache-Server: Software "in deinem Server, den du nicht hast" (link:{mp3-113}#t=720[12:00,role=ts f113]), die die Preise cacht. "Das würde bedeuten, wir müssen den irgendwie warten" (link:{mp3-113}#t=792[13:12,role=ts f113]), und "wir müssen innerhalb von 30 Minuten da sein, sagst du" (link:{mp3-113}#t=794[13:14,role=ts f113]). "Das kostet also deutlich mehr Geld" (link:{mp3-113}#t=799[13:19,role=ts f113]). Selbst mit zwei Routern bleibt ein Rest: "wenn irgendwo in dem Stadtteil das Internet insgesamt von einem Provider ausfällt" (link:{mp3-113}#t=693[11:33,role=ts f113]).
 
-Die Entscheidung überlässt er dem Kunden, mit einer klaren Erwartung: "das wäre jetzt etwas, was ich diskutieren würde, glaube ich, offen mit dem Kunden" (11:46). Die Frage "Wollen wir das tun?" (12:17) sei "ein valides Feedback" (12:19). Für einen Fahrradshop erwartet er, "dieses Risiko, dass die Verbindung zur Cloud abbricht, ist irgendwie akzeptabel" (13:36), "und vielleicht bauen wir dann noch einen mobilen Router als Fallback ein" (13:43). Anders wäre es bei "der Maschinensteuerung eines Atomkraftwerks" (13:47).
+Die Entscheidung überlässt er dem Kunden, mit einer klaren Erwartung: "das wäre jetzt etwas, was ich diskutieren würde, glaube ich, offen mit dem Kunden" (link:{mp3-113}#t=706[11:46,role=ts f113]). Die Frage "Wollen wir das tun?" (link:{mp3-113}#t=737[12:17,role=ts f113]) sei "ein valides Feedback" (link:{mp3-113}#t=739[12:19,role=ts f113]). Für einen Fahrradshop erwartet er, "dieses Risiko, dass die Verbindung zur Cloud abbricht, ist irgendwie akzeptabel" (link:{mp3-113}#t=816[13:36,role=ts f113]), "und vielleicht bauen wir dann noch einen mobilen Router als Fallback ein" (link:{mp3-113}#t=823[13:43,role=ts f113]). Anders wäre es bei "der Maschinensteuerung eines Atomkraftwerks" (link:{mp3-113}#t=827[13:47,role=ts f113]).
 
 === Konsequenzen
 
@@ -77,3 +77,16 @@ Die Entscheidung überlässt er dem Kunden, mit einer klaren Erwartung: "das wä
 
 * R-049: Der Kunde akzeptiert das Risiko nicht und verlangt den Cache-Server. Dann kehren Wartung vor Ort und das 30-Minuten-Problem zurück, die <<adr-013>> ausgeschlossen hat.
 * R-050: Der Low-Tech-Fallback aus <<adr-004>> setzt voraus, dass die Preise im Laden auf Papier oder in einer Tabelle aktuell sind. Niemand ist dafür benannt; veraltet die Liste, fällt bei Netzausfall auch der Fallback.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

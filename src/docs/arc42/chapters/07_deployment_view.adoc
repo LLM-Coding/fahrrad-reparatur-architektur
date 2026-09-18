@@ -5,6 +5,9 @@
 :jbake-order: 7
 :filename: /chapters/07_deployment_view.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -16,9 +19,9 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-deployment-view]]
 == Verteilungssicht
 
-Das Miro-Board zeigt zwei Verteilungen nebeneinander: einen Monolithen auf EC2 (Seite 10) und Microservices in Docker-Containern (Seite 11). Beide bilden dieselben vier Bausteine aus Kapitel 5 ab und binden dieselben externen Systeme an. Eberhard hat Folge 113 mit dieser Sicht begonnen, weil "dieses Zeug auf irgendeine Infrastruktur laufen muss, und diese Infrastruktur hilft mir, das Ziel mit der Verfügbarkeit zu lösen" (14:54).
+Das Miro-Board zeigt zwei Verteilungen nebeneinander: einen Monolithen auf EC2 (Seite 10) und Microservices in Docker-Containern (Seite 11). Beide bilden dieselben vier Bausteine aus Kapitel 5 ab und binden dieselben externen Systeme an. Eberhard hat Folge 113 mit dieser Sicht begonnen, weil "dieses Zeug auf irgendeine Infrastruktur laufen muss, und diese Infrastruktur hilft mir, das Ziel mit der Verfügbarkeit zu lösen" (link:{mp3-113}#t=894[14:54,role=ts f113]).
 
-Die Wahl zwischen Monolith und Microservices ist vertagt (<<{ch09}#adr-014,ADR-014>>, Status Deferred). Eberhard hält sie für die Qualitätsziele für "relativ irrelevant": "Das eine wie das andere bekomme ich genauso verfügbar" (Folge 113, 20:29 bis 21:37). Was beide Varianten seit Folge 113 verbindet: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>), weil der AWS-SLA einen Ausfall erst zählt, wenn mehr als eine Availability Zone ausfällt (32:30 bis 33:39). Die Board-Seite 10 mit "einer EC2-Instanz" hält den Stand vor dieser SLA-Analyse fest; die Diagramme unten zeigen den Stand danach.
+Die Wahl zwischen Monolith und Microservices ist vertagt (<<{ch09}#adr-014,ADR-014>>, Status Deferred). Eberhard hält sie für die Qualitätsziele für "relativ irrelevant": "Das eine wie das andere bekomme ich genauso verfügbar" (Folge 113, link:{mp3-113}#t=1229,1297[20:29 bis 21:37,role=ts f113]). Was beide Varianten seit Folge 113 verbindet: mindestens zwei Instanzen über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>), weil der AWS-SLA einen Ausfall erst zählt, wenn mehr als eine Availability Zone ausfällt (link:{mp3-113}#t=1950,2019[32:30 bis 33:39,role=ts f113]). Die Board-Seite 10 mit "einer EC2-Instanz" hält den Stand vor dieser SLA-Analyse fest; die Diagramme unten zeigen den Stand danach.
 
 === Infrastruktur Ebene 1
 
@@ -26,7 +29,7 @@ Beide Varianten teilen den Rahmen. Nutzer:innen greifen über den Webbrowser zu 
 
 ==== Variante A: Monolith auf EC2-Instanzen
 
-Alle vier Bausteine laufen als ein Deployment-Artefakt auf EC2 bei AWS (Board Seite 10). Das Board zeichnet eine Instanz; das Transkript verlangt für 99 % mindestens zwei Instanzen hinter einem Elastic Load Balancer über mehrere Availability Zones (Folge 113, 33:35 bis 34:38; <<{ch09}#adr-015,ADR-015>>). Die Datenbank ist RDS (<<{ch09}#adr-016,ADR-016>>).
+Alle vier Bausteine laufen als ein Deployment-Artefakt auf EC2 bei AWS (Board Seite 10). Das Board zeichnet eine Instanz; das Transkript verlangt für 99 % mindestens zwei Instanzen hinter einem Elastic Load Balancer über mehrere Availability Zones (Folge 113, link:{mp3-113}#t=2015,2078[33:35 bis 34:38,role=ts f113]; <<{ch09}#adr-015,ADR-015>>). Die Datenbank ist RDS (<<{ch09}#adr-016,ADR-016>>).
 
 [plantuml, "07-monolith", svg]
 ----
@@ -80,13 +83,13 @@ Rel(monolith, email, "Info über Updates", "REST")
 
 Zuordnung von Bausteinen zu Infrastruktur:: Terminplanung, Reparatur durchführen, Materialbeschaffung und Bezahlung laufen in einem Prozess je EC2-Instanz; beide Instanzen tragen dasselbe Artefakt, der Elastic Load Balancer verteilt die Anfragen. Die Aufrufe "Termin", "Preis" und "Materialbestellung" aus Kapitel 5 bleiben prozessintern. Die Aufrufe nach außen gehen von jeder Instanz aus; das Diagramm zeichnet sie nur an Instanz 1.
 
-Begründung:: Das Board nennt keine. Die Variante ist die einfachere von beiden: ein Artefakt, kein Netz zwischen den Bausteinen. Die zweite Instanz und der Load Balancer folgen aus dem AWS-SLA: EC2 braucht "ELB plus zwei Instanzen" (Folge 113, 33:35; <<{ch09}#adr-015,ADR-015>>).
+Begründung:: Das Board nennt keine. Die Variante ist die einfachere von beiden: ein Artefakt, kein Netz zwischen den Bausteinen. Die zweite Instanz und der Load Balancer folgen aus dem AWS-SLA: EC2 braucht "ELB plus zwei Instanzen" (Folge 113, link:{mp3-113}#t=2015[33:35,role=ts f113]; <<{ch09}#adr-015,ADR-015>>).
 
 NOTE: Offen: Der Reverse Proxy für die Umleitung fehlt auf dem Board. Datenbank (RDS, <<{ch09}#adr-016,ADR-016>>) und Anzahl der Instanzen (mindestens zwei, <<{ch09}#adr-015,ADR-015>>) sind seit Folge 113 bekannt; ob der Elastic Load Balancer auch die Umleitung von `/reparatur` übernimmt, sagt das Video nicht.
 
 ==== Variante B: Microservices in Docker-Containern
 
-Jeder Baustein läuft in einem eigenen Container aus einem eigenen Docker Image (Board Seite 11). Die Informationsflüsse sind dieselben wie in Variante A, laufen aber über das Netz. Seit Folge 113 gilt: Der EKS-Cluster verteilt die Container "offensichtlich automatisch" über mehrere Availability Zones (33:25 bis 33:39; <<{ch09}#adr-015,ADR-015>>); der Container Bezahlung könnte höher redundant laufen, "fünf Instanzen, die anderen nur zwei" (22:20).
+Jeder Baustein läuft in einem eigenen Container aus einem eigenen Docker Image (Board Seite 11). Die Informationsflüsse sind dieselben wie in Variante A, laufen aber über das Netz. Seit Folge 113 gilt: Der EKS-Cluster verteilt die Container "offensichtlich automatisch" über mehrere Availability Zones (link:{mp3-113}#t=2005,2019[33:25 bis 33:39,role=ts f113]; <<{ch09}#adr-015,ADR-015>>); der Container Bezahlung könnte höher redundant laufen, "fünf Instanzen, die anderen nur zwei" (link:{mp3-113}#t=1340[22:20,role=ts f113]).
 
 [plantuml, "07-microservices", svg]
 ----
@@ -145,7 +148,7 @@ Rel(bezahlung, payment, "Zahlung", "REST, Redirect")
 
 Zuordnung von Bausteinen zu Infrastruktur:: Ein Container je Baustein, mindestens zweimal über die Availability Zones verteilt. Die Aufrufe "Termin", "Preis" und "Materialbestellung" werden zu Netzaufrufen zwischen Containern. Das Diagramm zeichnet die Aufrufe nur an den Containern in Zone 1.
 
-Begründung:: Das Board nennt keine. Die Maßnahmen-Karte "EKS / EC2 SLAs" (Board Seite 6) nennt EKS, den Kubernetes-Dienst von AWS, "oder irgendwas, was Container abbilden kann" (Folge 113, 17:40). Eberhard sieht einen kleinen Vorteil: Bezahlung als eigener Container kann redundanter laufen; das hilft gegen Ausfall, nicht beim Wiederanlauf, "was das wesentliche Kriterium ist" (22:31 bis 22:45). Jan im Chat: Die Latenz zwischen Containern ist gegenüber der Latenz Laden zu Rechenzentrum zweitrangig (21:50).
+Begründung:: Das Board nennt keine. Die Maßnahmen-Karte "EKS / EC2 SLAs" (Board Seite 6) nennt EKS, den Kubernetes-Dienst von AWS, "oder irgendwas, was Container abbilden kann" (Folge 113, link:{mp3-113}#t=1060[17:40,role=ts f113]). Eberhard sieht einen kleinen Vorteil: Bezahlung als eigener Container kann redundanter laufen; das hilft gegen Ausfall, nicht beim Wiederanlauf, "was das wesentliche Kriterium ist" (link:{mp3-113}#t=1351,1365[22:31 bis 22:45,role=ts f113]). Jan im Chat: Die Latenz zwischen Containern ist gegenüber der Latenz Laden zu Rechenzentrum zweitrangig (link:{mp3-113}#t=1310[21:50,role=ts f113]).
 
 NOTE: Offen: Protokoll zwischen den Containern und Reverse Proxy fehlen auf dem Board. Die Datenbank ist RDS (<<{ch09}#adr-016,ADR-016>>), die Datenhaltung je Service ist nicht entschieden; das Diagramm lässt sie deshalb weg.
 
@@ -166,8 +169,8 @@ Die Qualitätsziele aus Kapitel 1 setzen die Rangfolge: Benutzerfreundlichkeit, 
 | ? Wie A. Ob getrennte Container die Mandantenfähigkeit erleichtern, ist nicht belegt.
 
 | Verfügbarkeit
-| Mindestens zwei Instanzen hinter einem Elastic Load Balancer über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>). Wiederanlauf in 30 Minuten (Werkstatt) und 99,9 % im Web (<<{ch09}#adr-008,ADR-008>>) hängen am AWS-SLA, der einen Ausfall erst ab mehr als einer Availability Zone zählt (Folge 113, 32:30).
-| Container je Modul, von EKS über Availability Zones verteilt (<<{ch09}#adr-015,ADR-015>>). Ein Ausfall trifft einen Baustein, nicht alle; Bezahlung kann höher redundant laufen. Eberhard: Das hilft gegen Ausfall, nicht beim Wiederanlauf (22:31 bis 22:45); beide Varianten sind "genauso verfügbar" (20:38).
+| Mindestens zwei Instanzen hinter einem Elastic Load Balancer über mehrere Availability Zones (<<{ch09}#adr-015,ADR-015>>). Wiederanlauf in 30 Minuten (Werkstatt) und 99,9 % im Web (<<{ch09}#adr-008,ADR-008>>) hängen am AWS-SLA, der einen Ausfall erst ab mehr als einer Availability Zone zählt (Folge 113, link:{mp3-113}#t=1950[32:30,role=ts f113]).
+| Container je Modul, von EKS über Availability Zones verteilt (<<{ch09}#adr-015,ADR-015>>). Ein Ausfall trifft einen Baustein, nicht alle; Bezahlung kann höher redundant laufen. Eberhard: Das hilft gegen Ausfall, nicht beim Wiederanlauf (link:{mp3-113}#t=1351,1365[22:31 bis 22:45,role=ts f113]); beide Varianten sind "genauso verfügbar" (link:{mp3-113}#t=1238[20:38,role=ts f113]).
 
 | Betrieb ohne IT-Experten (Randbedingung, Board Seite 5)
 | Ein Artefakt, zwei gleiche Instanzen. Weniger bewegliche Teile.
@@ -178,21 +181,38 @@ Die Qualitätsziele aus Kapitel 1 setzen die Rangfolge: Benutzerfreundlichkeit, 
 
 Die Maßnahmen-Karten der Qualitätsszenarien (Board Seite 5 und 6) waren Annahmen an die Infrastruktur. Folge 113 hat sie geprüft und entschieden:
 
-* *Cloud.* Antwort auf "Im Shop sind keine IT-Experten beschäftigt. Das System kann dennoch betrieben werden." und auf das SaaS-Änderungsszenario. Entschieden in Folge 113 (<<{ch09}#adr-013,ADR-013>>): kein Server im Laden, weil niemand ihn betreiben und in 30 Minuten wieder anfahren könnte (06:01, 09:14); eigenes oder externes Rechenzentrum teurer und nicht verfügbarer (38:04 bis 38:15). AWS aus Vertrautheit, Google "wäre auch fein" (53:12).
-* *EKS / EC2 SLAs.* Antwort auf alle Verfügbarkeitsszenarien: 99 % Werkstatt 9 bis 18 Uhr, 99,9 % Web 7 bis 24 Uhr, Wiederanlauf in 30 und 2 Minuten (<<{ch09}#adr-008,ADR-008>>; die Karte "5 Minuten" ist im Video nicht belegt, Kapitel 10). Konkretisiert in Folge 113 (<<{ch09}#adr-015,ADR-015>>): mindestens zwei Instanzen über mehrere Availability Zones. Bei SLA-Verletzung gibt es nur eine Dienstgutschrift, der Schaden bleibt beim Betreiber (35:03 bis 35:26); ein Ausfall der ganzen Region ist "hinreichend unwahrscheinlich", Ausweichen in eine andere Region ist nicht geplant (32:38 bis 36:53).
-* *RDS SLAs?* Antwort auf "Daten, die älter als 5 Minuten sind, stehen mit 99,9 % Sicherheit wieder zur Verfügung." Entschieden als relationale Datenbank, Oracle oder MySQL, kein NoSQL (<<{ch09}#adr-016,ADR-016>>, 41:24 bis 41:39). Das Fragezeichen bleibt: RDS garantiert Verfügbarkeit, "den Datenverlust aber nicht getrennt" (42:01).
-* *Eigener Support*, nachts *Eigener Support 24/7.* Antwort auf den Betrieb ohne IT-Experten und auf das nächtliche Web-Ziel. Entschieden (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten eine Entwicklerin, für das Web-System Rufbereitschaft rund um die Uhr (40:16 bis 40:59).
-* *Mobiler LTE/5G-Router als Reserve im Laden.* Nicht auf dem Board. Antwort auf Jans Frage nach dem Routerausfall (08:24 bis 14:13): Das Netzrisiko im Laden ist ein akzeptiertes Risiko, das mit dem Kunden zu besprechen ist; der mobile Router ist die günstige Reserve, ein Cache-Server im Laden ist verworfen (<<{ch09}#adr-018,ADR-018>>).
+* *Cloud.* Antwort auf "Im Shop sind keine IT-Experten beschäftigt. Das System kann dennoch betrieben werden." und auf das SaaS-Änderungsszenario. Entschieden in Folge 113 (<<{ch09}#adr-013,ADR-013>>): kein Server im Laden, weil niemand ihn betreiben und in 30 Minuten wieder anfahren könnte (link:{mp3-113}#t=361[06:01,role=ts f113], link:{mp3-113}#t=554[09:14,role=ts f113]); eigenes oder externes Rechenzentrum teurer und nicht verfügbarer (link:{mp3-113}#t=2284,2295[38:04 bis 38:15,role=ts f113]). AWS aus Vertrautheit, Google "wäre auch fein" (link:{mp3-113}#t=3192[53:12,role=ts f113]).
+* *EKS / EC2 SLAs.* Antwort auf alle Verfügbarkeitsszenarien: 99 % Werkstatt 9 bis 18 Uhr, 99,9 % Web 7 bis 24 Uhr, Wiederanlauf in 30 und 2 Minuten (<<{ch09}#adr-008,ADR-008>>; die Karte "5 Minuten" ist im Video nicht belegt, Kapitel 10). Konkretisiert in Folge 113 (<<{ch09}#adr-015,ADR-015>>): mindestens zwei Instanzen über mehrere Availability Zones. Bei SLA-Verletzung gibt es nur eine Dienstgutschrift, der Schaden bleibt beim Betreiber (link:{mp3-113}#t=2103,2126[35:03 bis 35:26,role=ts f113]); ein Ausfall der ganzen Region ist "hinreichend unwahrscheinlich", Ausweichen in eine andere Region ist nicht geplant (link:{mp3-113}#t=1958,2213[32:38 bis 36:53,role=ts f113]).
+* *RDS SLAs?* Antwort auf "Daten, die älter als 5 Minuten sind, stehen mit 99,9 % Sicherheit wieder zur Verfügung." Entschieden als relationale Datenbank, Oracle oder MySQL, kein NoSQL (<<{ch09}#adr-016,ADR-016>>, link:{mp3-113}#t=2484,2499[41:24 bis 41:39,role=ts f113]). Das Fragezeichen bleibt: RDS garantiert Verfügbarkeit, "den Datenverlust aber nicht getrennt" (link:{mp3-113}#t=2521[42:01,role=ts f113]).
+* *Eigener Support*, nachts *Eigener Support 24/7.* Antwort auf den Betrieb ohne IT-Experten und auf das nächtliche Web-Ziel. Entschieden (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten eine Entwicklerin, für das Web-System Rufbereitschaft rund um die Uhr (link:{mp3-113}#t=2416,2459[40:16 bis 40:59,role=ts f113]).
+* *Mobiler LTE/5G-Router als Reserve im Laden.* Nicht auf dem Board. Antwort auf Jans Frage nach dem Routerausfall (link:{mp3-113}#t=504,853[08:24 bis 14:13,role=ts f113]): Das Netzrisiko im Laden ist ein akzeptiertes Risiko, das mit dem Kunden zu besprechen ist; der mobile Router ist die günstige Reserve, ein Cache-Server im Laden ist verworfen (<<{ch09}#adr-018,ADR-018>>).
 
 Zwei offene Fragen stehen auf beiden Deployment-Seiten des Boards (Seite 10 und 11):
 
 * "Kann man aus der Cloud in das Rechnungswesen kommunizieren?"
 * "Kann man aus der Cloud in die Kasse kommunizieren?" (R-010 aus <<{ch09}#adr-004,ADR-004>>)
 
-Folge 113 behandelt beide Fragen, entscheidet sie nicht und benennt sie als Risiko (24:38 bis 27:23, 29:27). Eberhard erkennt sie erst beim Ausführen des Deployment-Diagramms: "ich habe potenziell etwas, was mir meinen Ansatz kaputt machen kann" (26:14), "das kann mir im Extremfall die Lösungsstrategie zerstören" (26:57). Genannte Optionen: direkt REST aus der Cloud, weil "Kassensysteme heutzutage im Prinzip auch PCs" sind; ein Kassenproxy im Laden (Vorschlag von Zuschauer Jan, 29:27, "eine mögliche Lösung"); ein Server im Laden; eine Änderung am Kassensystem (27:07). Online Payment ist nicht betroffen (24:10); die Frage gilt für beide Varianten gleich (26:34 bis 26:50). R-022 aus <<{ch09}#adr-008,ADR-008>> hält fest, dass das Web-Ziel 99,9 % und die lokale Integration in verschiedene Richtungen ziehen.
+Folge 113 behandelt beide Fragen, entscheidet sie nicht und benennt sie als Risiko (link:{mp3-113}#t=1478,1643[24:38 bis 27:23,role=ts f113], link:{mp3-113}#t=1767[29:27,role=ts f113]). Eberhard erkennt sie erst beim Ausführen des Deployment-Diagramms: "ich habe potenziell etwas, was mir meinen Ansatz kaputt machen kann" (link:{mp3-113}#t=1574[26:14,role=ts f113]), "das kann mir im Extremfall die Lösungsstrategie zerstören" (link:{mp3-113}#t=1617[26:57,role=ts f113]). Genannte Optionen: direkt REST aus der Cloud, weil "Kassensysteme heutzutage im Prinzip auch PCs" sind; ein Kassenproxy im Laden (Vorschlag von Zuschauer Jan, link:{mp3-113}#t=1767[29:27,role=ts f113], "eine mögliche Lösung"); ein Server im Laden; eine Änderung am Kassensystem (link:{mp3-113}#t=1627[27:07,role=ts f113]). Online Payment ist nicht betroffen (link:{mp3-113}#t=1450[24:10,role=ts f113]); die Frage gilt für beide Varianten gleich (link:{mp3-113}#t=1594,1610[26:34 bis 26:50,role=ts f113]). R-022 aus <<{ch09}#adr-008,ADR-008>> hält fest, dass das Web-Ziel 99,9 % und die lokale Integration in verschiedene Richtungen ziehen.
 
-NOTE: Offen: Die Anbindung von Kasse und Rechnungswesen aus der Cloud ist zu recherchieren (Folge 113, 27:07). Cloud selbst ist entschieden (<<{ch09}#adr-013,ADR-013>>); scheitert die Anbindung, braucht das System einen Teil im Laden, und die Lösungsstrategie ist neu zu bewerten.
+NOTE: Offen: Die Anbindung von Kasse und Rechnungswesen aus der Cloud ist zu recherchieren (Folge 113, link:{mp3-113}#t=1627[27:07,role=ts f113]). Cloud selbst ist entschieden (<<{ch09}#adr-013,ADR-013>>); scheitert die Anbindung, braucht das System einen Teil im Laden, und die Lösungsstrategie ist neu zu bewerten.
 
 === Infrastruktur Ebene 2
 
 NOTE: Offen: Das Board zeigt keine Ebene 2. Bekannt seit Folge 113: Elastic Load Balancer vor mindestens zwei Instanzen in zwei Availability Zones (<<{ch09}#adr-015,ADR-015>>), RDS als relationale Datenbank (<<{ch09}#adr-016,ADR-016>>). Nicht beschrieben: Netze, Reverse Proxy und Umgebungen (Entwicklung, Test, Produktion).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

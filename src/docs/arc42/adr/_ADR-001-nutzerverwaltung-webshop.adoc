@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-02-25
-| Quelle | software-architektur.tv Folge 111, 14:25 und 28:29
+| Quelle | software-architektur.tv Folge 111, link:{mp3-111}#t=865[14:25,role=ts f111] und link:{mp3-111}#t=1709[28:29,role=ts f111]
 |===
 
 === Problem
@@ -16,7 +16,7 @@ Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden. Der Fahrradladen be
 
 Der Webshop ist ein bestehendes Fertigprodukt. Wer dort registriert ist, hat schon Name, Adresse und bevorzugte Zahlungsart hinterlegt. Der Webshop stellt nach dem Login ein JWT als Cookie aus und bietet eine REST-Schnittstelle für Nutzerdaten.
 
-Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit für Kund:innen steht an erster Stelle, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Confidentiality stuft Eberhard bewusst niedrig ein, weil es am Ende um Fahrradreparaturdaten geht. Die Usability-Szenarien verlangen, dass eine Reparatur in zwei Minuten beauftragt ist und eine Registrierung eine Minute dauert.
+Die Qualitätsziele setzen die Rangfolge (link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=3483[58:03,role=ts f111]): Benutzerfreundlichkeit für Kund:innen steht an erster Stelle, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security und Confidentiality stuft Eberhard bewusst niedrig ein, weil es am Ende um Fahrradreparaturdaten geht. Die Usability-Szenarien verlangen, dass eine Reparatur in zwei Minuten beauftragt ist und eine Registrierung eine Minute dauert.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-01,QS-U-01>>, weil die Registrierung im Webshop bleibt und das Szenario im Reparatursystem damit nicht erfüllbar ist; <<{ch10}#qs-u-02,QS-U-02>>, weil Login und vorbelegte Adresse aus dem Webshop die Beauftragung in zwei Minuten erst möglich machen; <<{ch10}#qs-z-04,QS-Z-04>>, weil der Web-Login mit dem Webshop ausfällt (R-002); <<{ch10}#qs-a-01,QS-A-01>>, weil die feste Kopplung an diesen einen Webshop den Umbau zum SaaS verteuert (R-003).
 
@@ -53,11 +53,11 @@ Wir führen keine eigene Nutzerverwaltung. Wir übernehmen die Konten des Websho
 
 === Begründung
 
-Das Geschäftsziel entscheidet. Kund:innen sollen online Reparaturen beauftragen, und das gelingt nur, wenn das System benutzerfreundlich ist (41:44). Eberhard formuliert den Wunsch direkt: "es wäre total super, wenn sich dort jemand registriert hat, dass diese Personen gleich Reparatur beauftragen" (15:36). Dafür muss das Reparatursystem "mit dieser Datenbank von dem Webshop interagieren" (15:59) und dort Adresse und Zahlungsart nachfragen (16:11).
+Das Geschäftsziel entscheidet. Kund:innen sollen online Reparaturen beauftragen, und das gelingt nur, wenn das System benutzerfreundlich ist (link:{mp3-111}#t=2504[41:44,role=ts f111]). Eberhard formuliert den Wunsch direkt: "es wäre total super, wenn sich dort jemand registriert hat, dass diese Personen gleich Reparatur beauftragen" (link:{mp3-111}#t=936[15:36,role=ts f111]). Dafür muss das Reparatursystem "mit dieser Datenbank von dem Webshop interagieren" (link:{mp3-111}#t=959[15:59,role=ts f111]) und dort Adresse und Zahlungsart nachfragen (link:{mp3-111}#t=971[16:11,role=ts f111]).
 
-Für den Login greift er zum Standard, den der Webshop schon liefert: "ich logge mich ein bei dem Webshop, dann kriege ich einen JWT als Cookie" (28:34). Über dieses Cookie erfährt das Reparatursystem, wer gerade arbeitet, und tauscht darüber die Benutzerinformation aus (28:59). Die Adresse holt es zusätzlich über eine REST-Schnittstelle (29:10).
+Für den Login greift er zum Standard, den der Webshop schon liefert: "ich logge mich ein bei dem Webshop, dann kriege ich einen JWT als Cookie" (link:{mp3-111}#t=1714[28:34,role=ts f111]). Über dieses Cookie erfährt das Reparatursystem, wer gerade arbeitet, und tauscht darüber die Benutzerinformation aus (link:{mp3-111}#t=1739[28:59,role=ts f111]). Die Adresse holt es zusätzlich über eine REST-Schnittstelle (link:{mp3-111}#t=1750[29:10,role=ts f111]).
 
-Die Registrierung im Reparatursystem entfällt damit ganz. Das Usability-Szenario "Registrierung in einer Minute" erklärt Eberhard später für nicht erfüllbar, weil die Registrierung im Webshop liegt (46:00).
+Die Registrierung im Reparatursystem entfällt damit ganz. Das Usability-Szenario "Registrierung in einer Minute" erklärt Eberhard später für nicht erfüllbar, weil die Registrierung im Webshop liegt (link:{mp3-111}#t=2760[46:00,role=ts f111]).
 
 === Konsequenzen
 
@@ -74,11 +74,24 @@ Die Registrierung im Reparatursystem entfällt damit ganz. Das Usability-Szenari
 
 *Risiken*
 
-* R-001: Die Adresse liegt in der User-Datenbank des Webshops, obwohl sie fachlich eine Kundeninformation ist. Eberhard nennt das "ein bisschen borderline" (29:21). Die Grenze zwischen Nutzerdaten und Kundendaten bleibt unscharf.
+* R-001: Die Adresse liegt in der User-Datenbank des Webshops, obwohl sie fachlich eine Kundeninformation ist. Eberhard nennt das "ein bisschen borderline" (link:{mp3-111}#t=1761[29:21,role=ts f111]). Die Grenze zwischen Nutzerdaten und Kundendaten bleibt unscharf.
 * R-002: Fällt der Webshop aus, funktionieren Login und Adressabfrage nicht. Das trifft das Qualitätsziel Verfügbarkeit.
 * R-003: Andere Fahrradläden haben andere oder keine Webshops. Die feste Kopplung an diesen Webshop steht dem Qualitätsziel Änderbarkeit Richtung SaaS entgegen.
-* R-004: Das JWT-Cookie erreicht das Reparatursystem nur innerhalb derselben Domain (Same-Origin-Policy, 31:24). Ohne passende URL-Struktur scheitert der Login.
+* R-004: Das JWT-Cookie erreicht das Reparatursystem nur innerhalb derselben Domain (Same-Origin-Policy, link:{mp3-111}#t=1884[31:24,role=ts f111]). Ohne passende URL-Struktur scheitert der Login.
 
 *Folgeentscheidung*
 
 Aus R-004 folgt <<adr-002>>: Das Reparatursystem läuft unter dem Pfad `/reparatur` der Webshop-Domain, bestimmte URLs werden dorthin umgeleitet.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

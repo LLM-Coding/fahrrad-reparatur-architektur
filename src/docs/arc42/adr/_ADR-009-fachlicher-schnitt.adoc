@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-11
-| Quelle | software-architektur.tv Folge 112, 22:03, 32:21, 45:16 und 47:23
+| Quelle | software-architektur.tv Folge 112, link:{mp3-112}#t=1323[22:03,role=ts f112], link:{mp3-112}#t=1941[32:21,role=ts f112], link:{mp3-112}#t=2716[45:16,role=ts f112] und link:{mp3-112}#t=2843[47:23,role=ts f112]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Das Reparatursystem soll die Stories aus Folge 111 umsetzen: Fahrrad zur Reparat
 
 === Kontext
 
-Eberhard strukturiert das System live am Board entlang der Stories. Er wählt bewusst einen leichtgewichtigen Weg statt Event Storming oder Domain Storytelling, weil er "konzeptionell da durchführen" will (21:33). Die Stories liegen räumlich sortiert: oben die Kundenperspektive, unten die Sicht der Mechaniker:in (24:33). Die Rangfolge der Qualitätsziele aus Folge 111 gilt weiter: Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit.
+Eberhard strukturiert das System live am Board entlang der Stories. Er wählt bewusst einen leichtgewichtigen Weg statt Event Storming oder Domain Storytelling, weil er "konzeptionell da durchführen" will (link:{mp3-112}#t=1293[21:33,role=ts f112]). Die Stories liegen räumlich sortiert: oben die Kundenperspektive, unten die Sicht der Mechaniker:in (link:{mp3-112}#t=1473[24:33,role=ts f112]). Die Rangfolge der Qualitätsziele aus Folge 111 gilt weiter: Benutzerfreundlichkeit, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit.
 
-Der Schnitt entsteht induktiv beim Gruppieren. Nacheinander entstehen Terminplanung (24:51), Reparatur durchführen (30:14), Bezahlung (45:16) und Materialbeschaffung (47:23). Das Kriterium bleibt jedes Mal dasselbe: Ein Modul bekommt ein eigenes Domänenmodell mit eigenen Daten, die als Beispiel neben die Box geschrieben werden.
+Der Schnitt entsteht induktiv beim Gruppieren. Nacheinander entstehen Terminplanung (link:{mp3-112}#t=1491[24:51,role=ts f112]), Reparatur durchführen (link:{mp3-112}#t=1814[30:14,role=ts f112]), Bezahlung (link:{mp3-112}#t=2716[45:16,role=ts f112]) und Materialbeschaffung (link:{mp3-112}#t=2843[47:23,role=ts f112]). Das Kriterium bleibt jedes Mal dasselbe: Ein Modul bekommt ein eigenes Domänenmodell mit eigenen Daten, die als Beispiel neben die Box geschrieben werden.
 
-*Betroffene Qualitätsszenarien:* Keines direkt. Eberhard begründet den Schnitt mit den fachlichen Anforderungen, nicht mit einem Qualitätsszenario (22:41). <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar betroffen, weil ein Schnitt nach Fachlichkeit die Stelle eingrenzt, an der ein weiterer Laden eigene Regeln mitbringt; das Video stellt diesen Zusammenhang aber nicht her. Die Einarbeitungsszenarien <<{ch10}#qs-u-05,QS-U-05>> und <<{ch10}#qs-u-06,QS-U-06>> nennt Eberhard in diesem Zusammenhang nicht.
+*Betroffene Qualitätsszenarien:* Keines direkt. Eberhard begründet den Schnitt mit den fachlichen Anforderungen, nicht mit einem Qualitätsszenario (link:{mp3-112}#t=1361[22:41,role=ts f112]). <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar betroffen, weil ein Schnitt nach Fachlichkeit die Stelle eingrenzt, an der ein weiterer Laden eigene Regeln mitbringt; das Video stellt diesen Zusammenhang aber nicht her. Die Einarbeitungsszenarien <<{ch10}#qs-u-05,QS-U-05>> und <<{ch10}#qs-u-06,QS-U-06>> nennt Eberhard in diesem Zusammenhang nicht.
 
 === Optionen
 
@@ -53,11 +53,11 @@ Wir schneiden das System auf oberster Ebene fachlich in vier Module: Terminplanu
 
 === Begründung
 
-Die Schichten fallen zuerst. Eberhard sagt: "ich mache bewusst keine technische Aufteilung" (22:11). UI, Logik und Persistenz findet er "auf dieser grob-granularen Ebene nicht hilfreich" (22:33). Das System soll fachliche Anforderungen erfüllen, und "darauf können wir nur eine Antwort geben, wenn wir das Zeug fachlich strukturieren" (22:54).
+Die Schichten fallen zuerst. Eberhard sagt: "ich mache bewusst keine technische Aufteilung" (link:{mp3-112}#t=1331[22:11,role=ts f112]). UI, Logik und Persistenz findet er "auf dieser grob-granularen Ebene nicht hilfreich" (link:{mp3-112}#t=1353[22:33,role=ts f112]). Das System soll fachliche Anforderungen erfüllen, und "darauf können wir nur eine Antwort geben, wenn wir das Zeug fachlich strukturieren" (link:{mp3-112}#t=1374[22:54,role=ts f112]).
 
-Das Kriterium für einen Schnitt nennt er bei Terminplanung und Reparatur durchführen: "zwei unterschiedliche Informationsdichten" (33:21). Das gehe "in diese Richtung von Bounded Contexts" (33:34): gleiche Namen wie "die Reparatur", aber "unterschiedliche Informationen, die damit einhergehen" (33:48). Bezahlung folgt demselben Muster: "da geht es halt tatsächlich nur darum, einen Betrag zu bezahlen" (45:23). Die Preise lägen zwar bei Reparatur durchführen, "aber ich würde es halt, glaube ich, tendenziell trennen" (45:45), denn das Modul hat "keine Informationen mehr über die Reparatur" (46:10). Materialbeschaffung begründet er nur über ihr eigenes Datum: "das vielleicht auch was Eigenes ist" (47:36), es kennt "eine Bestellung bei einem Großhändler" (47:40).
+Das Kriterium für einen Schnitt nennt er bei Terminplanung und Reparatur durchführen: "zwei unterschiedliche Informationsdichten" (link:{mp3-112}#t=2001[33:21,role=ts f112]). Das gehe "in diese Richtung von Bounded Contexts" (link:{mp3-112}#t=2014[33:34,role=ts f112]): gleiche Namen wie "die Reparatur", aber "unterschiedliche Informationen, die damit einhergehen" (link:{mp3-112}#t=2028[33:48,role=ts f112]). Bezahlung folgt demselben Muster: "da geht es halt tatsächlich nur darum, einen Betrag zu bezahlen" (link:{mp3-112}#t=2723[45:23,role=ts f112]). Die Preise lägen zwar bei Reparatur durchführen, "aber ich würde es halt, glaube ich, tendenziell trennen" (link:{mp3-112}#t=2745[45:45,role=ts f112]), denn das Modul hat "keine Informationen mehr über die Reparatur" (link:{mp3-112}#t=2770[46:10,role=ts f112]). Materialbeschaffung begründet er nur über ihr eigenes Datum: "das vielleicht auch was Eigenes ist" (link:{mp3-112}#t=2856[47:36,role=ts f112]), es kennt "eine Bestellung bei einem Großhändler" (link:{mp3-112}#t=2860[47:40,role=ts f112]).
 
-Das fünfte Modul Reparaturstatus prüft er und verwirft es: "Ich finde das in diesem Fall nicht sonderlich sinnvoll" (35:43). Die Kundensicht braucht "exakt diese Informationen, die hier drinstehen" (36:54), "die sind so identisch" (37:08), also "schmeißen wir das mal weg" (37:22). Ein eigenes Modul lohnt sich erst bei "einen sehr begrenzten und auch sehr anderen Blick" (36:07), etwa einer Statistik, die nur zählt, wie viele Schaltungen eingebaut wurden (36:18).
+Das fünfte Modul Reparaturstatus prüft er und verwirft es: "Ich finde das in diesem Fall nicht sonderlich sinnvoll" (link:{mp3-112}#t=2143[35:43,role=ts f112]). Die Kundensicht braucht "exakt diese Informationen, die hier drinstehen" (link:{mp3-112}#t=2214[36:54,role=ts f112]), "die sind so identisch" (link:{mp3-112}#t=2228[37:08,role=ts f112]), also "schmeißen wir das mal weg" (link:{mp3-112}#t=2242[37:22,role=ts f112]). Ein eigenes Modul lohnt sich erst bei "einen sehr begrenzten und auch sehr anderen Blick" (link:{mp3-112}#t=2167[36:07,role=ts f112]), etwa einer Statistik, die nur zählt, wie viele Schaltungen eingebaut wurden (link:{mp3-112}#t=2178[36:18,role=ts f112]).
 
 === Konsequenzen
 
@@ -75,6 +75,19 @@ Das fünfte Modul Reparaturstatus prüft er und verwirft es: "Ich finde das in d
 
 *Risiken*
 
-* R-027: Das Protokoll kann Einträge enthalten, "die jetzt eben nicht kundensichtbar sein sollen" (37:03). Ohne Filter in Reparatur durchführen erreichen interne Einträge die Statusseite.
+* R-027: Das Protokoll kann Einträge enthalten, "die jetzt eben nicht kundensichtbar sein sollen" (link:{mp3-112}#t=2223[37:03,role=ts f112]). Ohne Filter in Reparatur durchführen erreichen interne Einträge die Statusseite.
 * R-028: Erweist sich das Domänenmodell der Materialbeschaffung als dünn, trägt das Modul den Aufwand eines eigenen Projekts (<<adr-011>>) ohne fachlichen Gewinn.
-* R-029: Der Schnitt entstand leichtgewichtig entlang der Stories. Komplexe Fachlogik, die Event Storming oder Domain Storytelling aufdecken würden (21:23), kann quer zu den Modulen liegen.
+* R-029: Der Schnitt entstand leichtgewichtig entlang der Stories. Komplexe Fachlogik, die Event Storming oder Domain Storytelling aufdecken würden (link:{mp3-112}#t=1283[21:23,role=ts f112]), kann quer zu den Modulen liegen.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

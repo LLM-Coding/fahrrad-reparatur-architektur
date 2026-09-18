@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-11
-| Quelle | software-architektur.tv Folge 112, 24:51, 33:15, 37:27 und 43:58
+| Quelle | software-architektur.tv Folge 112, link:{mp3-112}#t=1491[24:51,role=ts f112], link:{mp3-112}#t=1995[33:15,role=ts f112], link:{mp3-112}#t=2247[37:27,role=ts f112] und link:{mp3-112}#t=2638[43:58,role=ts f112]
 |===
 
 === Problem
@@ -14,9 +14,9 @@ Kund:innen melden ein Fahrrad zur Reparatur an und bekommen einen Termin. Mechan
 
 === Kontext
 
-Der fachliche Schnitt aus <<adr-009>> verlangt je Modul ein eigenes Domänenmodell mit eigenen Daten. Beim Gruppieren der Stories entsteht links die Terminplanung: "wann ich diese Fahrräder halt eigentlich repariere" (24:51), ein großer Kalender. Rechts entsteht Reparatur durchführen mit Defekt, Protokoll, Ersatzteilen und Kosten. Quer dazu liegt die Story "Status der Reparatur abfragen": Kund:innen wollen auf einer Seite sehen, ob die Reparatur eingeplant ist und was schon getan wurde (31:14).
+Der fachliche Schnitt aus <<adr-009>> verlangt je Modul ein eigenes Domänenmodell mit eigenen Daten. Beim Gruppieren der Stories entsteht links die Terminplanung: "wann ich diese Fahrräder halt eigentlich repariere" (link:{mp3-112}#t=1491[24:51,role=ts f112]), ein großer Kalender. Rechts entsteht Reparatur durchführen mit Defekt, Protokoll, Ersatzteilen und Kosten. Quer dazu liegt die Story "Status der Reparatur abfragen": Kund:innen wollen auf einer Seite sehen, ob die Reparatur eingeplant ist und was schon getan wurde (link:{mp3-112}#t=1874[31:14,role=ts f112]).
 
-Aus dem Chat kommt die Frage, ob man die Terminplanung nicht einkaufen könne (37:27). Eberhard entscheidet das nicht, hält es aber offen und ordnet den Fall ein: Eine gekaufte Terminplanung wäre eine Generic Subdomain (41:16).
+Aus dem Chat kommt die Frage, ob man die Terminplanung nicht einkaufen könne (link:{mp3-112}#t=2247[37:27,role=ts f112]). Eberhard entscheidet das nicht, hält es aber offen und ordnet den Fall ein: Eine gekaufte Terminplanung wäre eine Generic Subdomain (link:{mp3-112}#t=2476[41:16,role=ts f112]).
 
 *Betroffene Qualitätsszenarien:* Keines direkt. Der Schnitt zielt auf getrennte Domänenmodelle, nicht auf ein Qualitätsszenario. <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar berührt, weil eine austauschbare Terminplanung (R-030) den Umbau zum SaaS um ein zu bauendes Modul entlastet; das Video stellt diesen Zusammenhang nicht her.
 
@@ -52,13 +52,13 @@ Terminplanung und Reparatur durchführen sind zwei Module. Terminplanung hält d
 
 === Begründung
 
-Das tragende Argument ist die Informationsdichte. Eberhard: "diese fachliche Aufteilung ist trotzdem sinnvoll" (33:15), weil "wir hier zwei unterschiedliche Informationsdichten sozusagen haben" (33:21). Links ist die Reparatur "eigentlich als Termin" (33:53), und das "bedeutet Arbeitsplanung" (34:00), die er "auch für mich als Eberhard Wolff, der Berater, nutzen könnte" (34:04). Rechts steckt das Wissen, "dass ich irgendwie Ersatzteile habe, dass ich die einbaue, dass es Zeit kostet" (34:08). Sein Schluss: "Diese beiden Systeme jetzt zusammenzupacken, macht, glaube ich, keinen Sinn" (34:20).
+Das tragende Argument ist die Informationsdichte. Eberhard: "diese fachliche Aufteilung ist trotzdem sinnvoll" (link:{mp3-112}#t=1995[33:15,role=ts f112]), weil "wir hier zwei unterschiedliche Informationsdichten sozusagen haben" (link:{mp3-112}#t=2001[33:21,role=ts f112]). Links ist die Reparatur "eigentlich als Termin" (link:{mp3-112}#t=2033[33:53,role=ts f112]), und das "bedeutet Arbeitsplanung" (link:{mp3-112}#t=2040[34:00,role=ts f112]), die er "auch für mich als Eberhard Wolff, der Berater, nutzen könnte" (link:{mp3-112}#t=2044[34:04,role=ts f112]). Rechts steckt das Wissen, "dass ich irgendwie Ersatzteile habe, dass ich die einbaue, dass es Zeit kostet" (link:{mp3-112}#t=2048[34:08,role=ts f112]). Sein Schluss: "Diese beiden Systeme jetzt zusammenzupacken, macht, glaube ich, keinen Sinn" (link:{mp3-112}#t=2060[34:20,role=ts f112]).
 
-Er ordnet das Muster ein: "ein bisschen geht das in diese Richtung von Bounded Contexts" (33:34). Beide Modelle haben "Dinge, die gleich benannt sind" (33:46), aber "unterschiedliche Informationen, die damit einhergehen" (33:48).
+Er ordnet das Muster ein: "ein bisschen geht das in diese Richtung von Bounded Contexts" (link:{mp3-112}#t=2014[33:34,role=ts f112]). Beide Modelle haben "Dinge, die gleich benannt sind" (link:{mp3-112}#t=2026[33:46,role=ts f112]), aber "unterschiedliche Informationen, die damit einhergehen" (link:{mp3-112}#t=2028[33:48,role=ts f112]).
 
-Die Statusseite löst er, ohne den Schnitt aufzugeben: "diese Webseite wird gemeinsam hergestellt von diesen beiden Systemen" (34:27). Terminplanung sagt, wann die Reparatur begonnen wurde, Reparatur durchführen sagt, "wir haben halt übrigens folgende Dinge gemacht" (34:42).
+Die Statusseite löst er, ohne den Schnitt aufzugeben: "diese Webseite wird gemeinsam hergestellt von diesen beiden Systemen" (link:{mp3-112}#t=2067[34:27,role=ts f112]). Terminplanung sagt, wann die Reparatur begonnen wurde, Reparatur durchführen sagt, "wir haben halt übrigens folgende Dinge gemacht" (link:{mp3-112}#t=2082[34:42,role=ts f112]).
 
-Den Einkauf der Terminplanung schließt er nicht aus: "Das will ich nicht ausschließen" (40:08) und "es steht, glaube ich, außer Frage, dass man eine Terminplanung kaufen kann" (43:58). Beurteilen könne er das aber nicht: "Ich kann das aber nicht ernsthaft bewerten" (40:26), dafür sieht er "andere Personen" (40:27). Bei Standardsoftware nehme man, "was ungefähr passt" (44:18), und "würge das halt irgendwie in den Rest des Systems rein" (44:38).
+Den Einkauf der Terminplanung schließt er nicht aus: "Das will ich nicht ausschließen" (link:{mp3-112}#t=2408[40:08,role=ts f112]) und "es steht, glaube ich, außer Frage, dass man eine Terminplanung kaufen kann" (link:{mp3-112}#t=2638[43:58,role=ts f112]). Beurteilen könne er das aber nicht: "Ich kann das aber nicht ernsthaft bewerten" (link:{mp3-112}#t=2426[40:26,role=ts f112]), dafür sieht er "andere Personen" (link:{mp3-112}#t=2427[40:27,role=ts f112]). Bei Standardsoftware nehme man, "was ungefähr passt" (link:{mp3-112}#t=2658[44:18,role=ts f112]), und "würge das halt irgendwie in den Rest des Systems rein" (link:{mp3-112}#t=2678[44:38,role=ts f112]).
 
 === Konsequenzen
 
@@ -71,13 +71,26 @@ Den Einkauf der Terminplanung schließt er nicht aus: "Das will ich nicht aussch
 *Negativ*
 
 * Die Statusseite braucht Beiträge aus zwei Modulen; jemand muss sie zusammenführen.
-* Der Übergang vom Termin zur Reparatur (Fahrrad abgeben, 47:05) liegt an der Modulgrenze und braucht eine Schnittstelle.
+* Der Übergang vom Termin zur Reparatur (Fahrrad abgeben, link:{mp3-112}#t=2825[47:05,role=ts f112]) liegt an der Modulgrenze und braucht eine Schnittstelle.
 
 *Risiken*
 
-* R-030: Wird die Terminplanung gekauft, passt das Produkt nur "ungefähr" (44:18). Kompromisse an der Schnittstelle zu Reparatur durchführen und an der Statusseite sind die Folge. Wer den Kauf beurteilt, ist offen (40:27).
-* R-031: Terminänderungen durch hochpriorisierte Aufträge oder Ausfall einer Mechaniker:in (30:51) müssen in beiden Modulen konsistent ankommen, sonst zeigt die Statusseite zwei Wahrheiten.
+* R-030: Wird die Terminplanung gekauft, passt das Produkt nur "ungefähr" (link:{mp3-112}#t=2658[44:18,role=ts f112]). Kompromisse an der Schnittstelle zu Reparatur durchführen und an der Statusseite sind die Folge. Wer den Kauf beurteilt, ist offen (link:{mp3-112}#t=2427[40:27,role=ts f112]).
+* R-031: Terminänderungen durch hochpriorisierte Aufträge oder Ausfall einer Mechaniker:in (link:{mp3-112}#t=1851[30:51,role=ts f112]) müssen in beiden Modulen konsistent ankommen, sonst zeigt die Statusseite zwei Wahrheiten.
 
 *Folgeentscheidung*
 
 Die Richtung der Abhängigkeit zwischen beiden Modulen legt <<adr-012>> fest.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-25
-| Quelle | software-architektur.tv Folge 113, 40:59 bis 42:09
+| Quelle | software-architektur.tv Folge 113, link:{mp3-113}#t=2459,2529[40:59 bis 42:09,role=ts f113]
 |===
 
 === Problem
@@ -14,7 +14,7 @@ Das Datenverlust-Szenario verlangt, dass nach einem Ausfall höchstens 5 Minuten
 
 === Kontext
 
-Die Entscheidung ist die kürzeste der Folge. Eberhard liest die Karte als "dass Daten nicht verloren gehen sollen" (40:59), nennt die Zahlen 5 Minuten und 99,9 % nicht und antwortet mit einem Dienst: "im Amazon-Universum gibt es da RDS" (41:14), "der Datenbank-Service von denen" (41:22). Auf dem Board steht die Maßnahmen-Karte "RDS SLAs?" mit Fragezeichen.
+Die Entscheidung ist die kürzeste der Folge. Eberhard liest die Karte als "dass Daten nicht verloren gehen sollen" (link:{mp3-113}#t=2459[40:59,role=ts f113]), nennt die Zahlen 5 Minuten und 99,9 % nicht und antwortet mit einem Dienst: "im Amazon-Universum gibt es da RDS" (link:{mp3-113}#t=2474[41:14,role=ts f113]), "der Datenbank-Service von denen" (link:{mp3-113}#t=2482[41:22,role=ts f113]). Auf dem Board steht die Maßnahmen-Karte "RDS SLAs?" mit Fragezeichen.
 
 Die Entscheidung setzt <<adr-013>> voraus und ergänzt <<adr-015>>: Was für die Anwendungsinstanzen gilt, muss für die Datenbank ebenfalls gelten, sonst nützt Multi-AZ nichts. Ob jedes Modul aus <<adr-009>> eine eigene Datenbank bekommt oder alle eine teilen, sagt das Video nicht.
 
@@ -53,9 +53,9 @@ Die Daten des Reparatursystems liegen in einer relationalen Datenbank, die AWS a
 
 === Begründung
 
-Eberhard wählt bewusst das Gewohnte: "einen Oracle oder MySQL, also ich bin da jetzt mal konservativ unterwegs" (41:24). NoSQL verwirft er in einem Satz: "ich will jetzt nicht irgendwie eine NoSQL-Datenbank oder sowas aufbauen" (41:29), sondern "einfach eine relationale Datenbank, so wie die meisten Projekte" (41:36). Ein Argument aus den Szenarien gibt er dafür nicht; die Wahl folgt demselben Muster wie Java und AWS (53:05 bis 53:19): das, womit das Team am besten umgeht.
+Eberhard wählt bewusst das Gewohnte: "einen Oracle oder MySQL, also ich bin da jetzt mal konservativ unterwegs" (link:{mp3-113}#t=2484[41:24,role=ts f113]). NoSQL verwirft er in einem Satz: "ich will jetzt nicht irgendwie eine NoSQL-Datenbank oder sowas aufbauen" (link:{mp3-113}#t=2489[41:29,role=ts f113]), sondern "einfach eine relationale Datenbank, so wie die meisten Projekte" (link:{mp3-113}#t=2496[41:36,role=ts f113]). Ein Argument aus den Szenarien gibt er dafür nicht; die Wahl folgt demselben Muster wie Java und AWS (link:{mp3-113}#t=3185,3199[53:05 bis 53:19,role=ts f113]): das, womit das Team am besten umgeht.
 
-Den Managed Service begründet er mit dem SLA, das er nur teilweise kennt: "muss man nochmal in die RDS-SLAs reingucken" (41:40). Nach seiner Recherche garantiere RDS "eine entsprechende Verfügbarkeit" (41:53), "so dass ich erwarten würde, dass das halt einfach funktioniert" (41:59). Dann die Einschränkung, die das Fragezeichen auf der Karte erklärt: "ich glaube aber, dass sie den Datenverlust eben tatsächlich nicht getrennt nochmal garantieren" (42:01).
+Den Managed Service begründet er mit dem SLA, das er nur teilweise kennt: "muss man nochmal in die RDS-SLAs reingucken" (link:{mp3-113}#t=2500[41:40,role=ts f113]). Nach seiner Recherche garantiere RDS "eine entsprechende Verfügbarkeit" (link:{mp3-113}#t=2513[41:53,role=ts f113]), "so dass ich erwarten würde, dass das halt einfach funktioniert" (link:{mp3-113}#t=2519[41:59,role=ts f113]). Dann die Einschränkung, die das Fragezeichen auf der Karte erklärt: "ich glaube aber, dass sie den Datenverlust eben tatsächlich nicht getrennt nochmal garantieren" (link:{mp3-113}#t=2521[42:01,role=ts f113]).
 
 Diese Lücke ist der Kern des ADR. Das Szenario misst Datenverlust, das SLA misst Verfügbarkeit. Der Weg von RDS zu höchstens 5 Minuten Verlust führt über synchrone Replikation in eine zweite Zone und über Backup-Intervalle, die das Team einstellt. Das Video benennt diesen Weg nicht; es benennt nur, dass er fehlt.
 
@@ -75,5 +75,18 @@ Diese Lücke ist der Kern des ADR. Das Szenario misst Datenverlust, das SLA miss
 
 *Risiken*
 
-* R-044: QS-Z-07 fordert höchstens 5 Minuten Datenverlust in 99,9 % der Fälle. Kein Beleg im Video zeigt, dass RDS dieses Maß liefert; Eberhard vermutet das Gegenteil (42:01). Bleibt das Maß unbelegt, ist das Szenario nicht erfüllt, ohne dass es jemand merkt.
+* R-044: QS-Z-07 fordert höchstens 5 Minuten Datenverlust in 99,9 % der Fälle. Kein Beleg im Video zeigt, dass RDS dieses Maß liefert; Eberhard vermutet das Gegenteil (link:{mp3-113}#t=2521[42:01,role=ts f113]). Bleibt das Maß unbelegt, ist das Szenario nicht erfüllt, ohne dass es jemand merkt.
 * R-045: Eine gemeinsame Datenbank für vier Module unterläuft den fachlichen Schnitt aus <<adr-009>>: Module greifen auf fremde Tabellen zu, und aus getrennten Domänenmodellen wird ein gemeinsames Schema.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-25
-| Quelle | software-architektur.tv Folge 113, 06:01, 08:38, 09:14, 37:34 bis 38:25 und 43:39
+| Quelle | software-architektur.tv Folge 113, link:{mp3-113}#t=361[06:01,role=ts f113], link:{mp3-113}#t=518[08:38,role=ts f113], link:{mp3-113}#t=554[09:14,role=ts f113], link:{mp3-113}#t=2254,2305[37:34 bis 38:25,role=ts f113] und link:{mp3-113}#t=2619[43:39,role=ts f113]
 |===
 
 === Problem
@@ -14,9 +14,9 @@ Das Reparatursystem muss irgendwo laufen. Der Fahrradshop beschäftigt keine IT-
 
 === Kontext
 
-Folge 113 setzt die Qualitätsszenarien aus Folge 111 in Maßnahmen um. Eberhard liest die Szenarien der Reihe nach vom Board und fragt bei jedem, ob er eine Antwort hat. Das Szenario "Im Shop sind keine IT-Experten beschäftigt" (05:36) ist das erste, das eine Infrastrukturentscheidung erzwingt. Es hängt "mit ein paar anderen Szenarien zusammen" (06:13): Verfügbarkeit und Wiederanlauf.
+Folge 113 setzt die Qualitätsszenarien aus Folge 111 in Maßnahmen um. Eberhard liest die Szenarien der Reihe nach vom Board und fragt bei jedem, ob er eine Antwort hat. Das Szenario "Im Shop sind keine IT-Experten beschäftigt" (link:{mp3-113}#t=336[05:36,role=ts f113]) ist das erste, das eine Infrastrukturentscheidung erzwingt. Es hängt "mit ein paar anderen Szenarien zusammen" (link:{mp3-113}#t=373[06:13,role=ts f113]): Verfügbarkeit und Wiederanlauf.
 
-Die Wahl fällt früh und zieht die restliche Folge nach sich: das Deployment (<<adr-014>>, <<adr-015>>), die Datenbank (<<adr-016>>) und der Support (<<adr-017>>) setzen alle die Cloud voraus. Bei 37:34 prüft Eberhard die Entscheidung noch einmal gegen die Alternativen, nachdem er die AWS-SLAs gelesen hat.
+Die Wahl fällt früh und zieht die restliche Folge nach sich: das Deployment (<<adr-014>>, <<adr-015>>), die Datenbank (<<adr-016>>) und der Support (<<adr-017>>) setzen alle die Cloud voraus. Bei link:{mp3-113}#t=2254[37:34,role=ts f113] prüft Eberhard die Entscheidung noch einmal gegen die Alternativen, nachdem er die AWS-SLAs gelesen hat.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-07,QS-U-07>> ist der Auslöser: kein Betrieb ohne IT-Experten mit einem Server vor Ort. <<{ch10}#qs-z-01,QS-Z-01>>, <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-04,QS-Z-04>> liefern die Zahlen, an denen ein Server im Laden scheitert. <<{ch10}#qs-a-01,QS-A-01>> ist mittelbar betroffen: Eine SaaS-Lösung setzt einen zentralen Betrieb voraus, den ein Server je Laden nicht bietet.
 
@@ -56,19 +56,19 @@ Wir betreiben das Reparatursystem in der Cloud bei AWS. Es steht kein Server im 
 
 === Begründung
 
-Der Server im Laden fällt zuerst. Eberhard leitet aus dem Szenario ab, "dass wir eigentlich nicht ernsthaft einen Server unterstellen können" (06:01). Der Wiederanlauf macht es endgültig: "Ich schaffe es nicht, innerhalb von 30 Minuten vor Ort zu sein" (06:36), also "das können wir eigentlich schon mal irgendwie ausschließen" (06:44). Bei 09:14 wiederholt er: "einen Server in dem Laden selber ausschließen können".
+Der Server im Laden fällt zuerst. Eberhard leitet aus dem Szenario ab, "dass wir eigentlich nicht ernsthaft einen Server unterstellen können" (link:{mp3-113}#t=361[06:01,role=ts f113]). Der Wiederanlauf macht es endgültig: "Ich schaffe es nicht, innerhalb von 30 Minuten vor Ort zu sein" (link:{mp3-113}#t=396[06:36,role=ts f113]), also "das können wir eigentlich schon mal irgendwie ausschließen" (link:{mp3-113}#t=404[06:44,role=ts f113]). Bei link:{mp3-113}#t=554[09:14,role=ts f113] wiederholt er: "einen Server in dem Laden selber ausschließen können".
 
-Die Cloud ist die Antwort, nicht die einzige denkbare: "meine Lösungsstrategie wäre halt irgendwie Cloud" (08:38), aber "es könnte ja auch sein, dass wir in einem externen Rechenzentrum das machen" (09:10). Er verfolgt das Rechenzentrum nicht weiter. Bei 38:04 nennt er es "wahrscheinlich teurer" und ist "nicht sicher, ob das wirklich eine höhere Verfügbarkeit erzeugt" (38:10). Für den Server beim Händler gilt dasselbe (38:15).
+Die Cloud ist die Antwort, nicht die einzige denkbare: "meine Lösungsstrategie wäre halt irgendwie Cloud" (link:{mp3-113}#t=518[08:38,role=ts f113]), aber "es könnte ja auch sein, dass wir in einem externen Rechenzentrum das machen" (link:{mp3-113}#t=550[09:10,role=ts f113]). Er verfolgt das Rechenzentrum nicht weiter. Bei link:{mp3-113}#t=2284[38:04,role=ts f113] nennt er es "wahrscheinlich teurer" und ist "nicht sicher, ob das wirklich eine höhere Verfügbarkeit erzeugt" (link:{mp3-113}#t=2290[38:10,role=ts f113]). Für den Server beim Händler gilt dasselbe (link:{mp3-113}#t=2295[38:15,role=ts f113]).
 
-Die anderen Clouds prüft er nach der SLA-Lektüre: "ich benutze Google und Microsoft, wäre eine Alternative" (37:40). Ein Modell, in dem der Anbieter "für Schadensersatz gerade steht, kann eigentlich nicht funktionieren" (37:55); die Alternativen helfen also nicht. Das Fazit: "vielleicht ist das hier tatsächlich die beste Lösung" (38:21). AWS bleibt Gewohnheit: "ich kenne irgendwie Amazon" (53:15), Google wäre "irgendwie auch fein" (53:19). Die Wahl ist kommerziell begründet: "wenn sozusagen mein Leben davon abhängt" (38:30), würde er "vielleicht etwas anders vorgehen" (38:39). DSGVO ist geprüft: "in der Amazon Cloud irgendwie machbar" (43:45), "kein Killer-Argument" (43:48).
+Die anderen Clouds prüft er nach der SLA-Lektüre: "ich benutze Google und Microsoft, wäre eine Alternative" (link:{mp3-113}#t=2260[37:40,role=ts f113]). Ein Modell, in dem der Anbieter "für Schadensersatz gerade steht, kann eigentlich nicht funktionieren" (link:{mp3-113}#t=2275[37:55,role=ts f113]); die Alternativen helfen also nicht. Das Fazit: "vielleicht ist das hier tatsächlich die beste Lösung" (link:{mp3-113}#t=2301[38:21,role=ts f113]). AWS bleibt Gewohnheit: "ich kenne irgendwie Amazon" (link:{mp3-113}#t=3195[53:15,role=ts f113]), Google wäre "irgendwie auch fein" (link:{mp3-113}#t=3199[53:19,role=ts f113]). Die Wahl ist kommerziell begründet: "wenn sozusagen mein Leben davon abhängt" (link:{mp3-113}#t=2310[38:30,role=ts f113]), würde er "vielleicht etwas anders vorgehen" (link:{mp3-113}#t=2319[38:39,role=ts f113]). DSGVO ist geprüft: "in der Amazon Cloud irgendwie machbar" (link:{mp3-113}#t=2625[43:45,role=ts f113]), "kein Killer-Argument" (link:{mp3-113}#t=2628[43:48,role=ts f113]).
 
-*Eberhards Einwand zum Format.* Jan fragt im Chat, ob die Abwägung Server gegen Cloud als ADR festzuhalten wäre (42:09). Eberhard findet ADRs "prinzipiell auch eine gute Idee" (42:39), würde sie hier aber nicht nehmen: Sein Problem sei, "dass die das Potenzial haben, einfach unstrukturiert irgendwelche Entscheidungen zu enthalten" (42:48). Hier gehe es um "die Kernentscheidung des Systems" (42:57), "das wäre für mich eher eine Solution Strategy" (43:02). Die Abwägung selbst hält er für unverzichtbar: "nochmal die Abwägung hinzuschreiben, das ist, glaube ich, eine sehr, sehr wichtige" (43:05). Wenn festgehalten ist, "was mich zu dieser Meinung bewegt, dann kann man darüber diskutieren" (43:34). Dieses ADR widerspricht ihm im Format und folgt ihm in der Sache: Die Abwägung steht hier, Kapitel 4 verweist darauf.
+*Eberhards Einwand zum Format.* Jan fragt im Chat, ob die Abwägung Server gegen Cloud als ADR festzuhalten wäre (link:{mp3-113}#t=2529[42:09,role=ts f113]). Eberhard findet ADRs "prinzipiell auch eine gute Idee" (link:{mp3-113}#t=2559[42:39,role=ts f113]), würde sie hier aber nicht nehmen: Sein Problem sei, "dass die das Potenzial haben, einfach unstrukturiert irgendwelche Entscheidungen zu enthalten" (link:{mp3-113}#t=2568[42:48,role=ts f113]). Hier gehe es um "die Kernentscheidung des Systems" (link:{mp3-113}#t=2577[42:57,role=ts f113]), "das wäre für mich eher eine Solution Strategy" (link:{mp3-113}#t=2582[43:02,role=ts f113]). Die Abwägung selbst hält er für unverzichtbar: "nochmal die Abwägung hinzuschreiben, das ist, glaube ich, eine sehr, sehr wichtige" (link:{mp3-113}#t=2585[43:05,role=ts f113]). Wenn festgehalten ist, "was mich zu dieser Meinung bewegt, dann kann man darüber diskutieren" (link:{mp3-113}#t=2614[43:34,role=ts f113]). Dieses ADR widerspricht ihm im Format und folgt ihm in der Sache: Die Abwägung steht hier, Kapitel 4 verweist darauf.
 
 === Konsequenzen
 
 *Positiv*
 
-* Der Shop braucht keinen Server, keine Wartung vor Ort und keine IT-Kenntnisse; er braucht nur "eine Webadresse" (28:28).
+* Der Shop braucht keinen Server, keine Wartung vor Ort und keine IT-Kenntnisse; er braucht nur "eine Webadresse" (link:{mp3-113}#t=1708[28:28,role=ts f113]).
 * Verfügbarkeit und Wiederanlauf stützen sich auf die SLAs des Anbieters (<<adr-015>>) und auf Managed Services (<<adr-016>>).
 * Ein zentraler Betrieb ist die Voraussetzung für SaaS und Mandantenfähigkeit.
 
@@ -82,4 +82,17 @@ Die anderen Clouds prüft er nach der SLA-Lektüre: "ich benutze Google und Micr
 
 * R-037: Ein Ausfall der AWS-Region trifft alle Szenarien zugleich. Eberhard hält ihn für hinreichend unwahrscheinlich und plant kein Ausweichen auf eine zweite Region.
 * R-038: Die Wahl von AWS beruht auf der Erfahrung des Autors. Ein Team ohne AWS-Erfahrung trägt Einarbeitung, die das Video nicht einplant.
-* R-039: Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie. Eberhard nennt das bei 26:14 ein Risiko, das seinen Ansatz "kaputt machen kann".
+* R-039: Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie. Eberhard nennt das bei link:{mp3-113}#t=1574[26:14,role=ts f113] ein Risiko, das seinen Ansatz "kaputt machen kann".
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

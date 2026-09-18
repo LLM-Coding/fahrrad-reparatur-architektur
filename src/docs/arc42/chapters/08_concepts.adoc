@@ -5,6 +5,9 @@
 :jbake-order: 8
 :filename: /chapters/08_concepts.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -20,7 +23,7 @@ Die fünf Konzepte dieses Kapitels sind aus Kontext, ADRs und Qualitätsszenarie
 
 === 8.1 Threat Model (STRIDE)
 
-NOTE: Die folgende Liste ist abgeleitet aus Kontext und ADRs, nicht aus dem Video. Eberhard stuft Security und Vertraulichkeit bewusst niedrig ein: "das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (Folge 111, A14, 41:44 bis 43:00 und 58:03). Das Threat Model hält fest, was diese Einstufung in Kauf nimmt.
+NOTE: Die folgende Liste ist abgeleitet aus Kontext und ADRs, nicht aus dem Video. Eberhard stuft Security und Vertraulichkeit bewusst niedrig ein: "das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (Folge 111, A14, link:{mp3-111}#t=2504,2580[41:44 bis 43:00,role=ts f111] und link:{mp3-111}#t=3483[58:03,role=ts f111]). Das Threat Model hält fest, was diese Einstufung in Kauf nimmt.
 
 [cols="1,1,3,2",options="header"]
 |===
@@ -49,13 +52,13 @@ Jede Maßnahme nennt die T-IDs, die sie schließt. Die Maßnahmen sind abgeleite
 | Rollen aus dem Kontext | Drei Rollen: Kund:in, Shop-Mitarbeiter:in, Fahrrad-Mechaniker:in (Board Seite 1). Werkstattfunktionen sind für Kund:innen nicht erreichbar. | T-006
 | Nachvollziehbares Protokoll | Jede Protokollposition trägt Zeitstempel und Urheber:in (siehe 8.4 Audit). | T-003
 | Provider-Schutz gegen Überlast | Der Cloud-Betrieb bei AWS (<<{ch09}#adr-013,ADR-013>>) bringt Schutz des Anbieters mit; der Elastic Load Balancer vor mindestens zwei Instanzen (<<{ch09}#adr-015,ADR-015>>) verteilt die Last. | T-005 (teilweise)
-| Security-Updates durch eigenen Support | Videobeleg, nicht abgeleitet: Cloud allein reicht nicht, weil jemand "Updates installieren" muss, "weil es Security-Probleme gibt" (Folge 113, 29:05; <<{ch09}#adr-017,ADR-017>>). Security ist damit ein Grund für den eigenen Support, nicht Gegenstand eines Szenarios. | keine T-ID; hält die übrigen Maßnahmen aktuell
-| DSGVO in AWS | Videobeleg, nicht abgeleitet: Eberhard prüft die DSGVO für den Cloud-Betrieb und hält sie für "machbar, kein Killer-Argument" (Folge 113, 43:39; <<{ch09}#adr-013,ADR-013>>). | T-004 (rechtlicher Rahmen, keine technische Maßnahme)
+| Security-Updates durch eigenen Support | Videobeleg, nicht abgeleitet: Cloud allein reicht nicht, weil jemand "Updates installieren" muss, "weil es Security-Probleme gibt" (Folge 113, link:{mp3-113}#t=1745[29:05,role=ts f113]; <<{ch09}#adr-017,ADR-017>>). Security ist damit ein Grund für den eigenen Support, nicht Gegenstand eines Szenarios. | keine T-ID; hält die übrigen Maßnahmen aktuell
+| DSGVO in AWS | Videobeleg, nicht abgeleitet: Eberhard prüft die DSGVO für den Cloud-Betrieb und hält sie für "machbar, kein Killer-Argument" (Folge 113, link:{mp3-113}#t=2619[43:39,role=ts f113]; <<{ch09}#adr-013,ADR-013>>). | T-004 (rechtlicher Rahmen, keine technische Maßnahme)
 |===
 
 NOTE: Offen: Wie das Reparatursystem Rollen aus dem JWT des Webshops ableitet, ist nicht entschieden. Der Webshop kennt nur Kund:innen; Mitarbeitende und Mechaniker:innen brauchen einen eigenen Login oder eine Zuordnung. Das Video behandelt das nicht.
 
-NOTE: Offen: Security ist laut Video "mit dem Experten nochmal zu sprechen" (43:00). Die Einstufung als nachrangig ist bewusst, aber nicht bestätigt.
+NOTE: Offen: Security ist laut Video "mit dem Experten nochmal zu sprechen" (Folge 111, link:{mp3-111}#t=2580[43:00,role=ts f111]). Die Einstufung als nachrangig ist bewusst, aber nicht bestätigt.
 
 === 8.3 Test
 
@@ -63,7 +66,7 @@ Abgeleitet: Es gibt keinen Code und keine Tests. Das Konzept legt fest, wie Test
 
 * *Unit-Tests* (Basis der Pyramide) prüfen die Logik der vier Module: Terminberechnung, Preisberechnung aus dem Protokoll, Bestandsführung, Zahlungsstatus. Jeder Test nennt die Story vom Board (Seite 1), die er absichert.
 * *Integrationstests* (Mitte) prüfen jede REST-Schnittstelle gegen einen Stub: Webshop User Database, Payment Service, Kasse, Rechnungswesen, EMail System, SMS Versand. Sie decken die Fehlerfälle aus 8.5 ab.
-* *End-to-End-Tests* (Spitze) laufen im Browser unter `/reparatur` mit einem JWT-Cookie und prüfen die Usability-Szenarien mit Zeitmessung: QS-U-02 (Reparatur beauftragen in 2 Minuten) ist mit der Stoppuhr messbar (Folge 111, V8, 49:30).
+* *End-to-End-Tests* (Spitze) laufen im Browser unter `/reparatur` mit einem JWT-Cookie und prüfen die Usability-Szenarien mit Zeitmessung: QS-U-02 (Reparatur beauftragen in 2 Minuten) ist mit der Stoppuhr messbar (Folge 111, V8, link:{mp3-111}#t=2970[49:30,role=ts f111]).
 * *Betriebstests* prüfen die Zuverlässigkeitsszenarien: Wiederanlauf QS-Z-02 (30 Minuten) und QS-Z-06 (5 Minuten), Datenverlust QS-Z-07 (5 Minuten, 99,9 %). Sie laufen als Chaos-Test gegen die Cloud-Umgebung.
 * Die Szenarien QS-U-03, QS-U-04, QS-U-05 und QS-U-06 sind Befragungen und Einarbeitungsmessungen, keine automatisierten Tests.
 
@@ -71,7 +74,7 @@ NOTE: Offen: kein Code, keine Tests. Testframework, Testdaten und Abdeckungsziel
 
 === 8.4 Observability
 
-Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6). Folge 113 macht daraus eine Betriebsannahme (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten "eine Entwicklerin, die sich um das Thema kümmert", für das Web-System eine Rufbereitschaft rund um die Uhr, die "nachts um zwei" klingelt (40:16 bis 40:59).
+Abgeleitet aus den Verfügbarkeitsszenarien: Wer in 5 oder 30 Minuten wieder anlaufen will (QS-Z-02, QS-Z-06), muss den Ausfall zuerst bemerken. Der Shop hat keine IT-Experten (QS-U-07); die Alarmierung geht an den eigenen Support von außen (Board Seite 6). Folge 113 macht daraus eine Betriebsannahme (<<{ch09}#adr-017,ADR-017>>): für die Ladenzeiten "eine Entwicklerin, die sich um das Thema kümmert", für das Web-System eine Rufbereitschaft rund um die Uhr, die "nachts um zwei" klingelt (link:{mp3-113}#t=2416,2459[40:16 bis 40:59,role=ts f113]).
 
 * *Logs*: Jede Anfrage unter `/reparatur` und jeder REST-Aufruf nach außen mit Zeitstempel, Modul und Ergebnis. Fehler der Schnittstellen aus 8.5 sind eigene Log-Ereignisse.
 * *Metriken*: Verfügbarkeit getrennt für Werkstatt- und Web-Teil, weil die Ziele verschieden sind (<<{ch09}#adr-008,ADR-008>>): 99 % zwischen 9 und 18 Uhr, 99,9 % zwischen 7 und 24 Uhr, 99 % nachts. Dazu Antwortzeit der Statusseite und Zeit bis zur Preisermittlung (QS-Z-03, 2 Minuten).
@@ -90,12 +93,47 @@ Abgeleitet aus den Risiken der ADRs. Jeder Fall nennt Retry, Fallback und Recove
 | Fehlerfall | Retry | Fallback | Recovery
 
 | Webshop oder Webshop User Database nicht erreichbar (R-002) | Adressabfrage per REST zweimal wiederholen, kurzer Timeout. | Login schlägt fehl; die Statusseite zeigt eine Wartungsmeldung. Werkstattfunktionen laufen weiter, weil sie kein Webshop-Login brauchen. | Sobald der Webshop antwortet, funktioniert der Login ohne Eingriff.
-| Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10; in Folge 113 als Risiko benannt, 24:38 bis 27:23) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". Videobeleg, nicht entschieden: Zuschauer Jan schlägt in Folge 113 einen Kassenproxy im Laden vor, für Eberhard "eine mögliche Lösung" (29:27; <<{ch09}#adr-004,ADR-004>>, Kapitel 7). | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
+| Kasse aus der Cloud nicht erreichbar (R-010, Board Seite 10; in Folge 113 als Risiko benannt, link:{mp3-113}#t=1478,1643[24:38 bis 27:23,role=ts f113]) | Zahlungsstatus im Hintergrund erneut abfragen, mit wachsendem Abstand. | Shop-Mitarbeiter:in trägt die Bezahlung von Hand im Reparatursystem ein; der Auftrag bleibt bis dahin "bezahlt, unbestätigt". Videobeleg, nicht entschieden: Zuschauer Jan schlägt in Folge 113 einen Kassenproxy im Laden vor, für Eberhard "eine mögliche Lösung" (link:{mp3-113}#t=1767[29:27,role=ts f113]; <<{ch09}#adr-004,ADR-004>>, Kapitel 7). | Nachlaufender Abgleich mit der Kasse, sobald sie erreichbar ist; Widersprüche gehen an das Modul Bezahlung (R-011).
 | Payment-Redirect bricht ab (R-012) | Buchungsstatus per REST beim Payment Service nachfragen, auch ohne Rückkehr des Browsers. | Der Auftrag bleibt "Zahlung offen"; Kund:in kann erneut bezahlen oder im Laden zahlen. | Ein periodischer Abgleich holt bezahlte, aber nicht bestätigte Zahlungen nach.
 | EMail-Dienst fällt aus (R-020) | Versand in eine Warteschlange, Wiederholung bis der Dienst antwortet. | Die Statusseite zeigt "fertig" unabhängig von der E-Mail (<<{ch09}#adr-005,ADR-005>>). SMS ist nicht gebaut (<<{ch09}#adr-007,ADR-007>>). | Warteschlange leert sich, sobald der Dienst antwortet; keine Nachricht geht verloren.
 | Rechnungswesen aus der Cloud nicht erreichbar (Board Seite 10) | Rechnungselemente in eine Warteschlange, Wiederholung. | Reparatur und Bezahlung laufen weiter; das Rechnungswesen erhält die Elemente später. | Nachlieferung in Reihenfolge, idempotent.
-| Das eigene System im Shop fällt aus (QS-Z-02, QS-Z-03) | Kein Retry im System; der Wiederanlauf liegt beim Provider (EKS / EC2 SLAs, abgeleitet). | Videobeleg, nicht abgeleitet: Eberhard nennt in Folge 112 einen Low-Tech-Fallback (12:52 bis 14:35). Die Annahme von Reparaturen überbrückt der Laden 30 Minuten mit Zettel und Bleistift. Für den Preis bei Abholung schlägt er einen ausgedruckten Zettel am Fahrrad vor ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle. Entschieden ist nichts: "da kann man sich was ausdenken". | Nach dem Wiederanlauf trägt die Werkstatt die Zettel nach (abgeleitet).
-| Netzausfall im Laden: Router oder Provider fällt aus (Folge 113, 08:24 bis 14:13) | Kein Retry im System; die Cloud läuft weiter, der Laden erreicht sie nicht (abgeleitet). | Videobeleg, nicht abgeleitet: akzeptiertes Risiko, mit dem Kunden zu besprechen. Als Reserve ein mobiler LTE/5G-Router mit automatischem Failover, "kostet einen Router und Netzwerktricks" (12:52 bis 13:02). Ein Cache-Server im Laden ist verworfen, weil er Wartung braucht und "deutlich mehr Geld" kostet (13:10 bis 13:21). <<{ch09}#adr-018,ADR-018>> | Sobald das Netz steht, arbeitet der Laden ohne Eingriff weiter; die Daten liegen in der Cloud (abgeleitet).
+| Das eigene System im Shop fällt aus (QS-Z-02, QS-Z-03) | Kein Retry im System; der Wiederanlauf liegt beim Provider (EKS / EC2 SLAs, abgeleitet). | Videobeleg, nicht abgeleitet: Eberhard nennt in Folge 112 einen Low-Tech-Fallback (link:{mp3-112}#t=772,875[12:52 bis 14:35,role=ts f112]). Die Annahme von Reparaturen überbrückt der Laden 30 Minuten mit Zettel und Bleistift. Für den Preis bei Abholung schlägt er einen ausgedruckten Zettel am Fahrrad vor ("diese Reparatur hat übrigens 10 Euro gekostet") oder eine fest abgelegte Tabelle. Entschieden ist nichts: "da kann man sich was ausdenken". | Nach dem Wiederanlauf trägt die Werkstatt die Zettel nach (abgeleitet).
+| Netzausfall im Laden: Router oder Provider fällt aus (Folge 113, link:{mp3-113}#t=504,853[08:24 bis 14:13,role=ts f113]) | Kein Retry im System; die Cloud läuft weiter, der Laden erreicht sie nicht (abgeleitet). | Videobeleg, nicht abgeleitet: akzeptiertes Risiko, mit dem Kunden zu besprechen. Als Reserve ein mobiler LTE/5G-Router mit automatischem Failover, "kostet einen Router und Netzwerktricks" (link:{mp3-113}#t=772,782[12:52 bis 13:02,role=ts f113]). Ein Cache-Server im Laden ist verworfen, weil er Wartung braucht und "deutlich mehr Geld" kostet (link:{mp3-113}#t=790,801[13:10 bis 13:21,role=ts f113]). <<{ch09}#adr-018,ADR-018>> | Sobald das Netz steht, arbeitet der Laden ohne Eingriff weiter; die Daten liegen in der Cloud (abgeleitet).
 |===
 
-NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung an zwei Stellen: dem Ausfall des eigenen Systems in Folge 112 (12:52 bis 14:35) und dem Netzausfall im Laden in Folge 113 (08:24 bis 14:13).
+NOTE: Offen: Circuit Breaker, Timeouts und Warteschlangen-Technik sind Vorschläge. Das Video behandelt Fehlerbehandlung an zwei Stellen: dem Ausfall des eigenen Systems in Folge 112 (link:{mp3-112}#t=772,875[12:52 bis 14:35,role=ts f112]) und dem Netzausfall im Laden in Folge 113 (link:{mp3-113}#t=504,853[08:24 bis 14:13,role=ts f113]).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

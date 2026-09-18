@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-03-25
-| Quelle | software-architektur.tv Folge 113, 18:12, 31:18 bis 34:38 und 35:03
+| Quelle | software-architektur.tv Folge 113, link:{mp3-113}#t=1092[18:12,role=ts f113], link:{mp3-113}#t=1878,2078[31:18 bis 34:38,role=ts f113] und link:{mp3-113}#t=2103[35:03,role=ts f113]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Das System läuft bei AWS (<<adr-013>>). Reicht eine Instanz, wie das erste Depl
 
 === Kontext
 
-Eberhard rechnet das Werkstatt-Szenario zuerst grob durch: 99 % von 9 Stunden sind "3 Minuten" (30:53) Ausfall am Tag, "prinzipiell erstmal machbar" (30:55). Weil Verfügbarkeit "eines der wenigen Qualitätsszenarien, was ich habe" (31:00) ist, liest er die AWS-SLAs für EC2 und EKS nach. Er sagt Amazon, "weil das irgendwie die Cloud ist, über die ich am meisten weiß" (31:31), und nimmt an, dass es "in anderen Clouds ähnlich sein wird" (31:39).
+Eberhard rechnet das Werkstatt-Szenario zuerst grob durch: 99 % von 9 Stunden sind "3 Minuten" (link:{mp3-113}#t=1853[30:53,role=ts f113]) Ausfall am Tag, "prinzipiell erstmal machbar" (link:{mp3-113}#t=1855[30:55,role=ts f113]). Weil Verfügbarkeit "eines der wenigen Qualitätsszenarien, was ich habe" (link:{mp3-113}#t=1860[31:00,role=ts f113]) ist, liest er die AWS-SLAs für EC2 und EKS nach. Er sagt Amazon, "weil das irgendwie die Cloud ist, über die ich am meisten weiß" (link:{mp3-113}#t=1891[31:31,role=ts f113]), und nimmt an, dass es "in anderen Clouds ähnlich sein wird" (link:{mp3-113}#t=1899[31:39,role=ts f113]).
 
-Das Board zeigt auf Seite 10 noch "einer EC2-Instanz". Das Transkript ist weiter: Schon bei 18:12 kündigt Eberhard an, "dazu kommen wir gleich irgendwie mehrere". Diese Entscheidung gilt für beide Deployment-Varianten aus <<adr-014>>.
+Das Board zeigt auf Seite 10 noch "einer EC2-Instanz". Das Transkript ist weiter: Schon bei link:{mp3-113}#t=1092[18:12,role=ts f113] kündigt Eberhard an, "dazu kommen wir gleich irgendwie mehrere". Diese Entscheidung gilt für beide Deployment-Varianten aus <<adr-014>>.
 
-*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-01,QS-Z-01>> (99 % Werkstatt) ist der Auslöser der SLA-Lektüre. <<{ch10}#qs-z-04,QS-Z-04>> (99,9 % Web) verlangt das Zehnfache und setzt die Maßnahme erst recht voraus. <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-05,QS-Z-05>> tragen dieselbe Maßnahmen-Karte "EKS / EC2 SLAs" auf dem Board; Eberhard nennt sie bei 39:18 bis 39:49 als seine Antwort auf alle Verfügbarkeits- und Wiederanlauf-Szenarien.
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-01,QS-Z-01>> (99 % Werkstatt) ist der Auslöser der SLA-Lektüre. <<{ch10}#qs-z-04,QS-Z-04>> (99,9 % Web) verlangt das Zehnfache und setzt die Maßnahme erst recht voraus. <<{ch10}#qs-z-02,QS-Z-02>> und <<{ch10}#qs-z-05,QS-Z-05>> tragen dieselbe Maßnahmen-Karte "EKS / EC2 SLAs" auf dem Board; Eberhard nennt sie bei link:{mp3-113}#t=2358,2389[39:18 bis 39:49,role=ts f113] als seine Antwort auf alle Verfügbarkeits- und Wiederanlauf-Szenarien.
 
 === Optionen
 
@@ -52,13 +52,13 @@ Das System läuft auf mindestens zwei Instanzen, verteilt über mehrere Availabi
 
 === Begründung
 
-Die Entscheidung folgt aus dem SLA-Text, nicht aus einer Vermutung. AWS garantiert "eine Verfügbarkeit von 99,99% im Monat" (31:54), "hört sich ja erstmal super an" (32:02). Die Definition dahinter ist der Punkt: "ein Ausfall einer Availability-Zone ist noch kein Ausfall" (32:21), "das ist ein juristischer Text" (32:25). Ein Ausfall liegt erst vor, wenn "mehr als eine Availability-Zone in der Region ausgefallen ist" (32:30).
+Die Entscheidung folgt aus dem SLA-Text, nicht aus einer Vermutung. AWS garantiert "eine Verfügbarkeit von 99,99% im Monat" (link:{mp3-113}#t=1914[31:54,role=ts f113]), "hört sich ja erstmal super an" (link:{mp3-113}#t=1922[32:02,role=ts f113]). Die Definition dahinter ist der Punkt: "ein Ausfall einer Availability-Zone ist noch kein Ausfall" (link:{mp3-113}#t=1941[32:21,role=ts f113]), "das ist ein juristischer Text" (link:{mp3-113}#t=1945[32:25,role=ts f113]). Ein Ausfall liegt erst vor, wenn "mehr als eine Availability-Zone in der Region ausgefallen ist" (link:{mp3-113}#t=1950[32:30,role=ts f113]).
 
-Daraus liest Eberhard eine Anweisung des Anbieters: "du musst darauf vorbereitet sein, dass eine Availability-Zone ausfällt" (33:03). Also "müssen wir irgendwie unser System verteilen auf mehrere Availability-Zones" (33:19). Für EKS gilt: "macht das offensichtlich automatisch" (33:25), man braucht nur "mehrere Container-Instanzen" (33:31). Für EC2: "Elastic Load Balancer davor stecken" (33:35) und "mindestens zwei EC2-Instanzen" (33:39). Sein Fazit: "etwas sehr Konkretes, was sich ableitet aus unserer Verfügbarkeitsanforderung" (33:43).
+Daraus liest Eberhard eine Anweisung des Anbieters: "du musst darauf vorbereitet sein, dass eine Availability-Zone ausfällt" (link:{mp3-113}#t=1983[33:03,role=ts f113]). Also "müssen wir irgendwie unser System verteilen auf mehrere Availability-Zones" (link:{mp3-113}#t=1999[33:19,role=ts f113]). Für EKS gilt: "macht das offensichtlich automatisch" (link:{mp3-113}#t=2005[33:25,role=ts f113]), man braucht nur "mehrere Container-Instanzen" (link:{mp3-113}#t=2011[33:31,role=ts f113]). Für EC2: "Elastic Load Balancer davor stecken" (link:{mp3-113}#t=2015[33:35,role=ts f113]) und "mindestens zwei EC2-Instanzen" (link:{mp3-113}#t=2019[33:39,role=ts f113]). Sein Fazit: "etwas sehr Konkretes, was sich ableitet aus unserer Verfügbarkeitsanforderung" (link:{mp3-113}#t=2023[33:43,role=ts f113]).
 
-Für die einzelne EC2-Instanz nennt er eine zweite Zahl aus dem SLA: "90 % Verfügbarkeit pro Stunde" (34:28). Diese Zahl ist Eberhards Lesart des SLA-Texts und in diesem Projekt unverifiziert; sie trägt die Entscheidung nicht, nur der Hinweis dahinter: "nimm mal mindestens zwei EC2-Instanzen" (34:38).
+Für die einzelne EC2-Instanz nennt er eine zweite Zahl aus dem SLA: "90 % Verfügbarkeit pro Stunde" (link:{mp3-113}#t=2068[34:28,role=ts f113]). Diese Zahl ist Eberhards Lesart des SLA-Texts und in diesem Projekt unverifiziert; sie trägt die Entscheidung nicht, nur der Hinweis dahinter: "nimm mal mindestens zwei EC2-Instanzen" (link:{mp3-113}#t=2078[34:38,role=ts f113]).
 
-Was das SLA nicht leistet, benennt er ebenfalls: Bei Unterschreitung gibt es "eine Gutschrift" (35:03), der Ausfall wird "trotzdem einen ökonomischen Schaden erzeugen" (35:19). Multi-AZ senkt die Wahrscheinlichkeit, ersetzt aber keine Haftung.
+Was das SLA nicht leistet, benennt er ebenfalls: Bei Unterschreitung gibt es "eine Gutschrift" (link:{mp3-113}#t=2103[35:03,role=ts f113]), der Ausfall wird "trotzdem einen ökonomischen Schaden erzeugen" (link:{mp3-113}#t=2119[35:19,role=ts f113]). Multi-AZ senkt die Wahrscheinlichkeit, ersetzt aber keine Haftung.
 
 === Konsequenzen
 
@@ -76,5 +76,18 @@ Was das SLA nicht leistet, benennt er ebenfalls: Bei Unterschreitung gibt es "ei
 
 *Risiken*
 
-* R-042: Ein Ausfall der ganzen Region bleibt ungedeckt. Eberhard würde "sinnvollerweise auf eine andere Region ausweichen" (32:38 bis 36:53, sinngemäß), plant das aber nicht.
+* R-042: Ein Ausfall der ganzen Region bleibt ungedeckt. Eberhard würde "sinnvollerweise auf eine andere Region ausweichen" (link:{mp3-113}#t=1958,2213[32:38 bis 36:53,role=ts f113], sinngemäß), plant das aber nicht.
 * R-043: Die SLA-Zahlen stammen aus Eberhards Lektüre im März 2022. Ändert AWS die Definition von Ausfall oder die Garantie je Instanz, gilt die Ableitung nicht mehr; das Team prüft den Text vor dem ersten Inkrement.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

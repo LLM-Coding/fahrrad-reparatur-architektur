@@ -5,7 +5,7 @@
 |===
 | Status | Deferred
 | Datum | 2022-03-25
-| Quelle | software-architektur.tv Folge 113, 17:40, 19:10, 20:29, 21:37, 50:49 und 56:21
+| Quelle | software-architektur.tv Folge 113, link:{mp3-113}#t=1060[17:40,role=ts f113], link:{mp3-113}#t=1150[19:10,role=ts f113], link:{mp3-113}#t=1229[20:29,role=ts f113], link:{mp3-113}#t=1297[21:37,role=ts f113], link:{mp3-113}#t=3049[50:49,role=ts f113] und link:{mp3-113}#t=3381[56:21,role=ts f113]
 |===
 
 === Problem
@@ -14,9 +14,9 @@ Die vier fachlichen Module aus <<adr-009>> müssen auf die Infrastruktur aus <<a
 
 === Kontext
 
-Eberhard zeichnet in Folge 113 zwei Deployment-Diagramme mit eigener Legende. Das erste: "das gesamte Ding wird halt monolithisch deployed als beispielsweise eine EC2 Instanz" (17:40). Das zweite: "ich habe ein Container, in dem die Terminplanung läuft" (19:28), und so weiter für alle vier Module, was "so was wie EKS benutze, also ein Kubernetes Service" (19:44) voraussetzt. Beide Diagramme bleiben am Board stehen.
+Eberhard zeichnet in Folge 113 zwei Deployment-Diagramme mit eigener Legende. Das erste: "das gesamte Ding wird halt monolithisch deployed als beispielsweise eine EC2 Instanz" (link:{mp3-113}#t=1060[17:40,role=ts f113]). Das zweite: "ich habe ein Container, in dem die Terminplanung läuft" (link:{mp3-113}#t=1168[19:28,role=ts f113]), und so weiter für alle vier Module, was "so was wie EKS benutze, also ein Kubernetes Service" (link:{mp3-113}#t=1184[19:44,role=ts f113]) voraussetzt. Beide Diagramme bleiben am Board stehen.
 
-Die Frage berührt <<adr-011>>: Dort hat jedes Modul ein eigenes Repository, "ein oder mehrere Projekte in der Versionskontrolle" (20:12) sind bei Containern "irgendwie egal" (20:17). Die roten Boxen der Bausteinsicht ändern mit der Wahl ihre Bedeutung: Projekte im Monolithen, "Docker Images" (20:01) bei Containern. <<adr-012>> zur Integration der Module bleibt von der Wahl unberührt.
+Die Frage berührt <<adr-011>>: Dort hat jedes Modul ein eigenes Repository, "ein oder mehrere Projekte in der Versionskontrolle" (link:{mp3-113}#t=1212[20:12,role=ts f113]) sind bei Containern "irgendwie egal" (link:{mp3-113}#t=1217[20:17,role=ts f113]). Die roten Boxen der Bausteinsicht ändern mit der Wahl ihre Bedeutung: Projekte im Monolithen, "Docker Images" (link:{mp3-113}#t=1201[20:01,role=ts f113]) bei Containern. <<adr-012>> zur Integration der Module bleibt von der Wahl unberührt.
 
 *Betroffene Qualitätsszenarien:* Keines, und das ist der Kern dieser Entscheidung. Eberhard prüft <<{ch10}#qs-z-01,QS-Z-01>> bis <<{ch10}#qs-z-06,QS-Z-06>> und findet keinen Unterschied zwischen den Varianten. Nur <<{ch10}#qs-z-03,QS-Z-03>> (Preis nach 2 Minuten) sieht er als leichten Vorteil der Container, verwirft den Vorteil aber, weil er dem Wiederanlauf nicht hilft.
 
@@ -54,13 +54,13 @@ Wir entscheiden nicht. Beide Deployment-Diagramme bleiben gültig, Monolith auf 
 
 === Begründung
 
-Eberhard stellt die Frage selbst: "Also ist das eine relevante Architekturentscheidung?" (20:29). Seine Antwort: In Bezug auf die Qualitätsszenarien "hat das keinen Einfluss" (20:32), denn "das eine wie das andere bekomme ich halt irgendwie genauso verfügbar" (20:38). Das Fazit ist eindeutig: "die Frage Microservices oder nicht, halte ich hierfür relativ irrelevant" (21:37).
+Eberhard stellt die Frage selbst: "Also ist das eine relevante Architekturentscheidung?" (link:{mp3-113}#t=1229[20:29,role=ts f113]). Seine Antwort: In Bezug auf die Qualitätsszenarien "hat das keinen Einfluss" (link:{mp3-113}#t=1232[20:32,role=ts f113]), denn "das eine wie das andere bekomme ich halt irgendwie genauso verfügbar" (link:{mp3-113}#t=1238[20:38,role=ts f113]). Das Fazit ist eindeutig: "die Frage Microservices oder nicht, halte ich hierfür relativ irrelevant" (link:{mp3-113}#t=1297[21:37,role=ts f113]).
 
-Den einzigen Vorteil der Container prüft er und verwirft ihn. "Der Bezahlungscontainer, der wird halt redundanter ausgelegt" (21:13), etwa "fünf Instanzen" (22:20) statt "von den anderen nur zwei" (22:23). Das bringt "einen leichten Vorteil in Bezug auf die Verfügbarkeit bei der Bezahlung" (22:26). "Aber das hilft mir nichts bei dem Wiederanlauf, was ja eigentlich das wesentliche Kriterium ist" (22:31). Redundanz "hilft ja nur gegen Ausfallsicherheit" (22:45). Jans Einwand im Chat stützt die Gleichwertigkeit: Die Latenz zwischen Containern sei gegenüber der Latenz zwischen Laden und Rechenzentrum "zweitrangig" (21:50).
+Den einzigen Vorteil der Container prüft er und verwirft ihn. "Der Bezahlungscontainer, der wird halt redundanter ausgelegt" (link:{mp3-113}#t=1273[21:13,role=ts f113]), etwa "fünf Instanzen" (link:{mp3-113}#t=1340[22:20,role=ts f113]) statt "von den anderen nur zwei" (link:{mp3-113}#t=1343[22:23,role=ts f113]). Das bringt "einen leichten Vorteil in Bezug auf die Verfügbarkeit bei der Bezahlung" (link:{mp3-113}#t=1346[22:26,role=ts f113]). "Aber das hilft mir nichts bei dem Wiederanlauf, was ja eigentlich das wesentliche Kriterium ist" (link:{mp3-113}#t=1351[22:31,role=ts f113]). Redundanz "hilft ja nur gegen Ausfallsicherheit" (link:{mp3-113}#t=1365[22:45,role=ts f113]). Jans Einwand im Chat stützt die Gleichwertigkeit: Die Latenz zwischen Containern sei gegenüber der Latenz zwischen Laden und Rechenzentrum "zweitrangig" (link:{mp3-113}#t=1310[21:50,role=ts f113]).
 
-Serverless kommt erst bei der Mandantenfrage auf: "vielleicht ist das dann auch sogar kostengünstig machbar" (50:49), weil man nur die Instanzen bezahlt, die aktiv sind (50:55). Dieter ergänzt im Chat "Lambda, Azure Functions wäre eine weitere Möglichkeit" (56:21). Ein Deployment-Diagramm dafür zeichnet Eberhard nicht.
+Serverless kommt erst bei der Mandantenfrage auf: "vielleicht ist das dann auch sogar kostengünstig machbar" (link:{mp3-113}#t=3049[50:49,role=ts f113]), weil man nur die Instanzen bezahlt, die aktiv sind (link:{mp3-113}#t=3055[50:55,role=ts f113]). Dieter ergänzt im Chat "Lambda, Azure Functions wäre eine weitere Möglichkeit" (link:{mp3-113}#t=3381[56:21,role=ts f113]). Ein Deployment-Diagramm dafür zeichnet Eberhard nicht.
 
-Der Aufschub ist Methode, nicht Verlegenheit. Eberhard fokussiert sich "auf die Themen, von denen ich eben erwarte, dass sie sozusagen spannend sind" (16:30), und hält es für wichtiger, "die wichtigen Punkte identifiziert" (54:41) zu haben, als viele beliebige Entscheidungen zu treffen (54:41 bis 55:03, sinngemäß).
+Der Aufschub ist Methode, nicht Verlegenheit. Eberhard fokussiert sich "auf die Themen, von denen ich eben erwarte, dass sie sozusagen spannend sind" (link:{mp3-113}#t=990[16:30,role=ts f113]), und hält es für wichtiger, "die wichtigen Punkte identifiziert" (link:{mp3-113}#t=3281[54:41,role=ts f113]) zu haben, als viele beliebige Entscheidungen zu treffen (link:{mp3-113}#t=3281,3303[54:41 bis 55:03,role=ts f113], sinngemäß).
 
 === Konsequenzen
 
@@ -79,4 +79,17 @@ Der Aufschub ist Methode, nicht Verlegenheit. Eberhard fokussiert sich "auf die 
 *Risiken*
 
 * R-040: Bleibt die Entscheidung über das erste Inkrement hinaus offen, baut das Team implizit einen Monolithen, weil das der Weg des geringsten Widerstands ist. Der Vorteil der Container beim Bezahlungsmodul geht dann verloren, ohne dass es jemand entschieden hat.
-* R-041: Die Gleichwertigkeit gilt nur für die Qualitätsszenarien aus Folge 111. Szenarien zu Performance oder Security fehlen (62:43); eines davon könnte die Varianten doch trennen.
+* R-041: Die Gleichwertigkeit gilt nur für die Qualitätsszenarien aus Folge 111. Szenarien zu Performance oder Security fehlen (link:{mp3-113}#t=3763[62:43,role=ts f113]); eines davon könnte die Varianten doch trennen.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

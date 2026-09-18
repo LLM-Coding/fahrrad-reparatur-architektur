@@ -5,6 +5,9 @@
 :jbake-order: 12
 :filename: /chapters/12_glossary.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -50,7 +53,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Akteur. Im Webshop registrierte Person, die ein Fahrrad zur Reparatur anmeldet, den Status abfragt, bezahlt und das Fahrrad abholt.
 
 |Mandant
-|Ein Fahrradshop als Nutzerorganisation innerhalb einer SaaS-Installation. Mandantenfähigkeit bedeutet: eine Installation bedient mehrere Shops mit getrennten Daten. Alternative ist eine Installation pro Shop; die Wahl ist offen (Folge 111, 43:58, 44:12).
+|Ein Fahrradshop als Nutzerorganisation innerhalb einer SaaS-Installation. Mandantenfähigkeit bedeutet: eine Installation bedient mehrere Shops mit getrennten Daten. Alternative ist eine Installation pro Shop; die Wahl ist offen (Folge 111, link:{mp3-111}#t=2638[43:58,role=ts f111], link:{mp3-111}#t=2652[44:12,role=ts f111]).
 
 |Materialbeschaffung
 |Modul des Reparatur-Systems (Board Seite 7). Enthält die Stories "Ersatzteile bestellen" und "Werkzeuge bestellen".
@@ -89,7 +92,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Berechneter Termin, an dem die Werkstatt eine Reparatur ausführt. Ergebnis der Story "Reparaturtermin berechnen". Die Terminplanung übergibt den Termin an das Modul Reparatur durchführen (Board Seite 9).
 
 |REST
-|Schnittstellenstil über HTTP. Default für alle Schnittstellen zu Kasse, Rechnungswesen, Payment Service, E-Mail und SMS. Alternativen wie gRPC wurden nicht bewertet (Folge 111, 29:53).
+|Schnittstellenstil über HTTP. Default für alle Schnittstellen zu Kasse, Rechnungswesen, Payment Service, E-Mail und SMS. Alternativen wie gRPC wurden nicht bewertet (Folge 111, link:{mp3-111}#t=1793[29:53,role=ts f111]).
 
 |SaaS
 |Software as a Service. Ziel: das Reparatur-System anderen Fahrradshops über das Internet anbieten. Änderungsszenario: Umbau in höchstens zwei Monaten und 20 Personentagen (Board Seite 6). Im Whisper-Transkript als "SARS" wiedergegeben.
@@ -121,3 +124,20 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Werkzeug
 |Arbeitsmittel der Werkstatt, das die Mechaniker:in über das Modul Materialbeschaffung beim Großhändler bestellt. Bestand im Reparatur-System (<<{ch09}#adr-006,ADR-006>>).
 |===
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

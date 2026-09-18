@@ -5,6 +5,9 @@
 :jbake-order: 11
 :filename: /chapters/11_technical_risks.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -33,9 +36,9 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 
 | R-026 | Mandantenfähigkeit und Skalierbarkeit für SaaS sind offen ("?" auf dem Board). Ohne Mandantenfähigkeit steigen die Betriebskosten je Shop. | Board Seite 6 | hoch | hoch | hoch | Mandantenfähigkeit im Datenmodell vorsehen; QS-A-01 (zwei Monate, 20 PT) als Grenze.
 
-| R-035 | Das Rechnungswesen erfährt von einer Zahlung nur, wenn Kasse, Online-Payment oder Bezahlung sie melden. Die Zuordnung Bezahlung zu Rechnungswesen ist offen (63:16). | <<{ch09}#adr-012,ADR-012>> | hoch | hoch | hoch | Zuordnung entscheiden; bis dahin Zahlungen in Reparatur durchführen protokollieren (8.4 Audit).
+| R-035 | Das Rechnungswesen erfährt von einer Zahlung nur, wenn Kasse, Online-Payment oder Bezahlung sie melden. Die Zuordnung Bezahlung zu Rechnungswesen ist offen (link:{mp3-112}#t=3796[63:16,role=ts f112]). | <<{ch09}#adr-012,ADR-012>> | hoch | hoch | hoch | Zuordnung entscheiden; bis dahin Zahlungen in Reparatur durchführen protokollieren (8.4 Audit).
 
-| R-039 | Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie (26:14, "kaputt machen"). | <<{ch09}#adr-013,ADR-013>> | mittel | hoch | hoch | Kassenanbindung vor dem ersten Inkrement klären; Kassenproxy als Option (Kapitel 7, 8.5).
+| R-039 | Erlaubt das Kassensystem keinen Zugriff aus der Cloud, kippt die Lösungsstrategie (link:{mp3-113}#t=1574[26:14,role=ts f113], "kaputt machen"). | <<{ch09}#adr-013,ADR-013>> | mittel | hoch | hoch | Kassenanbindung vor dem ersten Inkrement klären; Kassenproxy als Option (Kapitel 7, 8.5).
 
 | R-044 | QS-Z-07 fordert höchstens 5 Minuten Datenverlust; kein Beleg, dass RDS das liefert. | <<{ch09}#adr-016,ADR-016>> | mittel | hoch | hoch | RDS-Replikation und Backup-Intervall festlegen; QS-Z-07 messbar machen.
 
@@ -73,13 +76,13 @@ Die Risiken R-001 bis R-024 stammen aus den Konsequenzen der acht ADRs. R-025 un
 
 | R-032 | Vier Repositories bei einem Team von drei bis vier Personen ohne IT. Pflege, Zugriffsrechte und Build-Ketten liegen bei niemandem im Shop. | <<{ch09}#adr-011,ADR-011>> | hoch | mittel | mittel | Eigener Support (QS-U-07); Build-Kette automatisieren.
 
-| R-034 | Terminplanung muss bei Reparatur durchführen nachfragen, ob die Planung noch gilt (57:50). Das läuft gegen die Abhängigkeitsrichtung. | <<{ch09}#adr-012,ADR-012>> | hoch | mittel | mittel | Entscheidung synchron oder Messages nachholen; 8.5.
+| R-034 | Terminplanung muss bei Reparatur durchführen nachfragen, ob die Planung noch gilt (link:{mp3-112}#t=3470[57:50,role=ts f112]). Das läuft gegen die Abhängigkeitsrichtung. | <<{ch09}#adr-012,ADR-012>> | hoch | mittel | mittel | Entscheidung synchron oder Messages nachholen; 8.5.
 
-| R-027 | Das Protokoll enthält Einträge, die nicht kundensichtbar sein sollen (37:03). Ohne Filter erreichen sie die Statusseite. | <<{ch09}#adr-009,ADR-009>> | mittel | mittel | mittel | Filter in Reparatur durchführen; 8.2 (T-004).
+| R-027 | Das Protokoll enthält Einträge, die nicht kundensichtbar sein sollen (link:{mp3-112}#t=2223[37:03,role=ts f112]). Ohne Filter erreichen sie die Statusseite. | <<{ch09}#adr-009,ADR-009>> | mittel | mittel | mittel | Filter in Reparatur durchführen; 8.2 (T-004).
 
 | R-029 | Der Schnitt entstand leichtgewichtig entlang der Stories. Komplexe Fachlogik, die Event Storming aufdecken würde, bleibt unentdeckt. | <<{ch09}#adr-009,ADR-009>> | mittel | mittel | mittel | Domänenanalyse nachholen, sobald Fachlogik wächst; 11.2.
 
-| R-030 | Wird die Terminplanung gekauft, passt das Produkt nur ungefähr (44:18). Kompromisse an der Schnittstelle zu Reparatur durchführen. | <<{ch09}#adr-010,ADR-010>> | mittel | mittel | mittel | Spike vor Kaufentscheidung; QS-A-01 als Aufwandsgrenze.
+| R-030 | Wird die Terminplanung gekauft, passt das Produkt nur ungefähr (link:{mp3-112}#t=2658[44:18,role=ts f112]). Kompromisse an der Schnittstelle zu Reparatur durchführen. | <<{ch09}#adr-010,ADR-010>> | mittel | mittel | mittel | Spike vor Kaufentscheidung; QS-A-01 als Aufwandsgrenze.
 
 | R-033 | Repository-Grenzen fixieren den Modulschnitt früh. Ein falscher Schnitt kostet Umzug von Code und Historie. | <<{ch09}#adr-011,ADR-011>> | mittel | mittel | mittel | Schnitt vor Anlage der Repositories prüfen (R-028).
 
@@ -134,3 +137,29 @@ NOTE: Offen: Die Spalten Wahrscheinlichkeit und Auswirkung sind Schätzungen. Da
 NOTE: Offen: kein Code, keine technischen Schulden erfasst.
 
 Kandidaten bei der Umsetzung: Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" (Board Seite 9) ist eine Entwurfsschuld an den Bausteinen Reparatur durchführen und Bezahlung, falls Preisberechnung und Rechnungselemente zunächst im Baustein Reparatur durchführen bleiben. Ein zweiter Kandidat ist die Bestandsführung im Baustein Materialbeschaffung (<<{ch09}#adr-006,ADR-006>>), falls sie als Eigenlösung ohne Abgleichschnittstelle gebaut wird (R-017).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

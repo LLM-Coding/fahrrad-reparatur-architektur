@@ -5,6 +5,9 @@
 :jbake-order: 2
 :filename: /chapters/02_architecture_constraints.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -16,7 +19,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-architecture-constraints]]
 == Randbedingungen
 
-Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitmarken) und dem Endstand des Miro-Boards nach Folge 113 (Seitenangaben). Eberhard nennt die Webshop-Integration den wertvollsten Constraint, den das Kontextdiagramm sichtbar macht (28:22). Wo eine Randbedingung zu einer Entscheidung führte, verweist die Tabelle auf den ADR.
+Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitmarken) und dem Endstand des Miro-Boards nach Folge 113 (Seitenangaben). Eberhard nennt die Webshop-Integration den wertvollsten Constraint, den das Kontextdiagramm sichtbar macht (link:{mp3-111}#t=1702[28:22,role=ts f111]). Wo eine Randbedingung zu einer Entscheidung führte, verweist die Tabelle auf den ADR.
 
 === Technische Randbedingungen
 
@@ -26,27 +29,27 @@ Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitma
 
 |Bestehender Webshop als Fertigprodukt
 |Der Shop betreibt einen Standard-Webshop für Kaufen und Abholen. Er ist nicht änderbar. Eine Reparatur als Produkt darin abzubilden wäre "unnatürlich, das ist etwas anderes". Das Reparatur-System ist deshalb ein eigener Bereich neben dem Webshop (<<{ch09}#adr-003,ADR-003>>).
-|14:25, 17:50, 18:09
+|link:{mp3-111}#t=865[14:25,role=ts f111], link:{mp3-111}#t=1070[17:50,role=ts f111], link:{mp3-111}#t=1089[18:09,role=ts f111]
 
 |Webshop User Database mit JWT-Cookie und REST
 |Registrierung und Login bleiben im Webshop. Nach dem Login liefert der Webshop einen JWT als Cookie. Adresse und bevorzugte Zahlungsart liest das Reparatur-System per REST aus der User Database (<<{ch09}#adr-001,ADR-001>>). Ein eigenes Registrierungs-Szenario ist damit "nicht erfüllbar".
-|15:53, 16:04, 28:29; Board Seiten 3 und 5
+|link:{mp3-111}#t=953[15:53,role=ts f111], link:{mp3-111}#t=964[16:04,role=ts f111], link:{mp3-111}#t=1709[28:29,role=ts f111]; Board Seiten 3 und 5
 
 |Same-Origin-Policy des Browsers
 |Cookies gelten nur innerhalb derselben Domain. Das Reparatur-System muss deshalb unter der Webshop-Domain laufen; der Webshop leitet den Pfad `/reparatur` um (<<{ch09}#adr-002,ADR-002>>).
-|29:32; Board Seite 3
+|link:{mp3-111}#t=1772[29:32,role=ts f111]; Board Seite 3
 
 |Kasse im Laden
 |Bezahlt wird typischerweise bei Abholung im Shop. Das Kassensystem ist "eine Art PC" im Laden; Anbindung per REST (<<{ch09}#adr-004,ADR-004>>). Die lokale Integration erschwert einen reinen Cloud-Betrieb.
-|21:03, 21:23, 30:52, 59:46; Board Seite 3
+|link:{mp3-111}#t=1263[21:03,role=ts f111], link:{mp3-111}#t=1283[21:23,role=ts f111], link:{mp3-111}#t=1852[30:52,role=ts f111], link:{mp3-111}#t=3586[59:46,role=ts f111]; Board Seite 3
 
 |Rechnungswesen und Steuerberater:in
 |Jede Reparatur muss "vernünftig verbucht" werden. Das Reparatur-System übergibt Rechnungselemente per REST an das Rechnungswesen.
-|20:35, 20:51; Board Seiten 3 und 9
+|link:{mp3-111}#t=1235[20:35,role=ts f111], link:{mp3-111}#t=1251[20:51,role=ts f111]; Board Seiten 3 und 9
 
 |Online Payment Service
 |Online-Zahlung läuft über einen externen, PayPal-artigen Dienst (Konto oder Kreditkarte). Anbindung per REST für den Buchungsstatus plus UI-Integration über einen Redirect-Button (<<{ch09}#adr-004,ADR-004>>).
-|19:12, 30:16; Board Seite 3
+|link:{mp3-111}#t=1152[19:12,role=ts f111], link:{mp3-111}#t=1816[30:16,role=ts f111]; Board Seite 3
 
 |Bedienung im Browser
 |Alle Nutzergruppen bedienen das System über den Webbrowser. "Rechner nutzen das System über den Webbrowser." Der Webshop verlinkt auf die Komponenten.
@@ -54,10 +57,10 @@ Die Randbedingungen stammen aus zwei Quellen: dem Gespräch in Folge 111 (Zeitma
 
 |E-Mail und SMS als gekaufte Dienste
 |Benachrichtigungen laufen über einen zugekauften Dienst wie AWS Simple Email Service, per REST. SMS ist vorgesehen (<<{ch09}#adr-007,ADR-007>>).
-|23:30, 31:02; Board Seite 3
+|link:{mp3-111}#t=1410[23:30,role=ts f111], link:{mp3-111}#t=1862[31:02,role=ts f111]; Board Seite 3
 |===
 
-NOTE: Offen: Ob das System aus der Cloud heraus mit Kasse und Rechnungswesen kommunizieren kann, steht auf dem Board als offene Frage (Seiten 10 und 11). In Folge 113 als Risiko behandelt, nicht entschieden (24:38 bis 27:23): Eberhard erkennt beim Zeichnen des Deployments, dass diese Anbindung "im Extremfall die Lösungsstrategie zerstören" kann, und will sie recherchieren. Genannte Optionen: direkt REST, Kassenproxy im Laden (Vorschlag von Zuschauer Jan, 29:27), Server im Laden, Änderung am Kassensystem (Kapitel 7, <<{ch09}#adr-004,ADR-004>>).
+NOTE: Offen: Ob das System aus der Cloud heraus mit Kasse und Rechnungswesen kommunizieren kann, steht auf dem Board als offene Frage (Seiten 10 und 11). In Folge 113 als Risiko behandelt, nicht entschieden (link:{mp3-113}#t=1478,1643[24:38 bis 27:23,role=ts f113]): Eberhard erkennt beim Zeichnen des Deployments, dass diese Anbindung "im Extremfall die Lösungsstrategie zerstören" kann, und will sie recherchieren. Genannte Optionen: direkt REST, Kassenproxy im Laden (Vorschlag von Zuschauer Jan, link:{mp3-113}#t=1767[29:27,role=ts f113]), Server im Laden, Änderung am Kassensystem (Kapitel 7, <<{ch09}#adr-004,ADR-004>>).
 
 === Organisatorische Randbedingungen
 
@@ -66,23 +69,23 @@ NOTE: Offen: Ob das System aus der Cloud heraus mit Kasse und Rechnungswesen kom
 |Randbedingung |Erläuterung |Quelle
 
 |Keine IT-Experten im Shop
-|Die Mitarbeitenden haben "keine echte Ahnung von IT". Es gibt keinen Betrieb, deshalb ist der Betrieb kein Akteur. Das System muss ohne eigenes IT-Personal laufen. Folge 113 zieht daraus zwei Folgerungen: Betrieb in der Cloud (<<{ch09}#adr-013,ADR-013>>), weil niemand im Laden einen Server installieren oder auf einen Alarm reagieren kann (05:47 bis 05:57), und ein eigener Support mit Rufbereitschaft (<<{ch09}#adr-017,ADR-017>>), weil Cloud allein nicht reicht: Ausfälle und Security-Updates brauchen jemanden, "der angerufen werden kann" (28:42 bis 29:24, 38:50).
-|16:59, 17:05, 17:09; Board Seite 5; Folge 113, 05:36 bis 06:13 und 28:42 bis 29:24
+|Die Mitarbeitenden haben "keine echte Ahnung von IT". Es gibt keinen Betrieb, deshalb ist der Betrieb kein Akteur. Das System muss ohne eigenes IT-Personal laufen. Folge 113 zieht daraus zwei Folgerungen: Betrieb in der Cloud (<<{ch09}#adr-013,ADR-013>>), weil niemand im Laden einen Server installieren oder auf einen Alarm reagieren kann (link:{mp3-113}#t=347,357[05:47 bis 05:57,role=ts f113]), und ein eigener Support mit Rufbereitschaft (<<{ch09}#adr-017,ADR-017>>), weil Cloud allein nicht reicht: Ausfälle und Security-Updates brauchen jemanden, "der angerufen werden kann" (link:{mp3-113}#t=1722,1764[28:42 bis 29:24,role=ts f113], link:{mp3-113}#t=2330[38:50,role=ts f113]).
+|link:{mp3-111}#t=1019[16:59,role=ts f111], link:{mp3-111}#t=1025[17:05,role=ts f111], link:{mp3-111}#t=1029[17:09,role=ts f111]; Board Seite 5; Folge 113, link:{mp3-113}#t=336,373[05:36 bis 06:13,role=ts f113] und link:{mp3-113}#t=1722,1764[28:42 bis 29:24,role=ts f113]
 
 |Kleiner Betrieb
 |Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Leuten. Ob eine eigene Installation pro Shop finanzierbar ist, ist offen und entscheidet über die SaaS-Architektur.
-|16:46, 44:12
+|link:{mp3-111}#t=1006[16:46,role=ts f111], link:{mp3-111}#t=2652[44:12,role=ts f111]
 
 |Anforderungen liegen als Backlog vor
 |Es gibt kein Anforderungsdokument, nur Stories auf dem Miro-Board. Der Architekt nimmt das Backlog als Input; fachliche Detaillierung liegt beim Requirements Engineering.
-|09:38, 09:49; Board Seite 1
+|link:{mp3-111}#t=578[09:38,role=ts f111], link:{mp3-111}#t=589[09:49,role=ts f111]; Board Seite 1
 
 |Fachexperte ist imaginär
 |Gespräche mit Anforderern und Experten werden nicht geführt, sondern angenommen und dokumentiert.
-|14:38, 14:47
+|link:{mp3-111}#t=878[14:38,role=ts f111], link:{mp3-111}#t=887[14:47,role=ts f111]
 
 |Ein Architekt entwirft allein, der Chat ist Sparringspartner
-|Eberhard Wolff entwirft live. Der Chat liefert Hinweise, die er übernimmt: Rechnungswesen (20:35), Same-Origin-Policy (29:32), Frage nach dem Betrieb als Akteur (16:22), Mandantenfähigkeit (43:58).
+|Eberhard Wolff entwirft live. Der Chat liefert Hinweise, die er übernimmt: Rechnungswesen (link:{mp3-111}#t=1235[20:35,role=ts f111]), Same-Origin-Policy (link:{mp3-111}#t=1772[29:32,role=ts f111]), Frage nach dem Betrieb als Akteur (link:{mp3-111}#t=982[16:22,role=ts f111]), Mandantenfähigkeit (link:{mp3-111}#t=2638[43:58,role=ts f111]).
 |Folge 111 durchgehend
 
 |Zeitrahmen der Kata
@@ -100,11 +103,11 @@ Die ersten beiden Konventionen stammen aus dem Video. Die übrigen setzt dieses 
 
 |arc42 als Ablagestruktur, nicht als Vorgehensreihenfolge
 |"Man sollte nicht blind so ein arc42-Template ausfüllen." Die Kapitel dienen zum Ablegen von Informationen; die Reihenfolge der Bearbeitung wählt der Architekt selbst.
-|08:01, 11:35, 11:43
+|link:{mp3-111}#t=481[08:01,role=ts f111], link:{mp3-111}#t=695[11:35,role=ts f111], link:{mp3-111}#t=703[11:43,role=ts f111]
 
 |Qualitätsziele als Qualitätsszenarien mit Metrik und Perzentil
 |Stimulus (Usage, Change, Failure) trifft auf das System, das Ergebnis ist eine Metrik. Adjektive wie "benutzerfreundlich" genügen nicht; Szenarien nennen Perzentile und Zeiten.
-|44:36, 49:30; Board Seite 4
+|link:{mp3-111}#t=2676[44:36,role=ts f111], link:{mp3-111}#t=2970[49:30,role=ts f111]; Board Seite 4
 
 |Architekturentscheidungen als ADRs nach Nygard mit Pugh-Matrix
 |Jede Entscheidung mit mehr als einer ernsthaften Option erhält einen ADR (Kontext, Optionen, Entscheidung, Konsequenzen) mit 3-Punkt-Pugh-Matrix. Stand: <<{ch09}#adr-001,ADR-001>> bis <<{ch09}#adr-018,ADR-018>>.
@@ -118,3 +121,29 @@ Die ersten beiden Konventionen stammen aus dem Video. Die übrigen setzt dieses 
 |Deutsch, Fachbegriffe bleiben englisch. Zeitmarken im Format mm:ss beziehen sich auf Folge 111, sofern nicht anders angegeben.
 |Dieses Dokument
 |===
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

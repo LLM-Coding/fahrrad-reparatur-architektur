@@ -5,7 +5,7 @@
 |===
 | Status | Accepted
 | Datum | 2022-02-25
-| Quelle | software-architektur.tv Folge 111, 22:13 und 22:30
+| Quelle | software-architektur.tv Folge 111, link:{mp3-111}#t=1333[22:13,role=ts f111] und link:{mp3-111}#t=1350[22:30,role=ts f111]
 |===
 
 === Problem
@@ -14,11 +14,11 @@ Eine Reparatur braucht Ersatzteile. Die Werkstatt muss wissen, ob ein Teil da is
 
 === Kontext
 
-Der Fahrradladen ist klein: drei bis vier Leute, kein IT-Betrieb (16:22). Das Backlog nennt, dass Ersatzteile bestellt werden können und dass Reparaturen protokolliert werden (25:04). Beides deutet darauf hin, dass das System Teile zumindest zum Teil verfolgt (25:09).
+Der Fahrradladen ist klein: drei bis vier Leute, kein IT-Betrieb (link:{mp3-111}#t=982[16:22,role=ts f111]). Das Backlog nennt, dass Ersatzteile bestellt werden können und dass Reparaturen protokolliert werden (link:{mp3-111}#t=1504[25:04,role=ts f111]). Beides deutet darauf hin, dass das System Teile zumindest zum Teil verfolgt (link:{mp3-111}#t=1509[25:09,role=ts f111]).
 
-Aus dem Chat kommt der Hinweis, ein Inventarsystem für Teile des Rades in den Systemkontext aufzunehmen (22:13). Eberhard nennt das "eine spannende Frage" (22:25). Der Systemkontext hat zu diesem Zeitpunkt schon viele Schnittstellen: Webshop, User-Datenbank, Payment Service, Kasse, Rechnungswesen, E-Mail-Dienst.
+Aus dem Chat kommt der Hinweis, ein Inventarsystem für Teile des Rades in den Systemkontext aufzunehmen (link:{mp3-111}#t=1333[22:13,role=ts f111]). Eberhard nennt das "eine spannende Frage" (link:{mp3-111}#t=1345[22:25,role=ts f111]). Der Systemkontext hat zu diesem Zeitpunkt schon viele Schnittstellen: Webshop, User-Datenbank, Payment Service, Kasse, Rechnungswesen, E-Mail-Dienst.
 
-Die Qualitätsziele setzen die Rangfolge (41:44, 58:03): Benutzerfreundlichkeit zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
+Die Qualitätsziele setzen die Rangfolge (link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=3483[58:03,role=ts f111]): Benutzerfreundlichkeit zuerst, dann Änderbarkeit Richtung SaaS, dann Verfügbarkeit. Security steht bewusst weiter unten.
 
 *Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-07,QS-U-07>>, weil ein Inventarsystem weniger ein System weniger ist, das der Laden ohne IT-Experten betreiben müsste; <<{ch10}#qs-a-01,QS-A-01>>, weil Läden mit eigenem Inventarsystem als SaaS-Kunden auf die Eigenlösung treffen (R-018).
 
@@ -54,11 +54,11 @@ Wir führen Ersatzteile und Werkzeuge im Reparatursystem selbst. Das System wei�
 
 === Begründung
 
-Eberhard legt die Annahme offen: Das System, das die Reparatur macht, soll "selber Buch führen über Ersatzteile" (22:30). Sein Beispiel ist ein Schaltwerk, das noch da ist und so viel Euro kostet: "das wollen wir halt im Reparatursystem selber drin haben" (22:49).
+Eberhard legt die Annahme offen: Das System, das die Reparatur macht, soll "selber Buch führen über Ersatzteile" (link:{mp3-111}#t=1350[22:30,role=ts f111]). Sein Beispiel ist ein Schaltwerk, das noch da ist und so viel Euro kostet: "das wollen wir halt im Reparatursystem selber drin haben" (link:{mp3-111}#t=1369[22:49,role=ts f111]).
 
-Der Systemkontext liefert ihm das Argument. Er hat gerade definiert, welche Verantwortung das System hat: "wir müssen eben die Ersatzteile checken" (23:04). Daraus folgt: "wir müssen uns eben nicht integrieren mit irgendeinem anderen System" (23:12). Er nennt das ausdrücklich "eine Entscheidung, die wir jetzt getroffen haben" (23:15). Genau für solche Entscheidungen hält er das Kontextdiagramm für wertvoll (22:59).
+Der Systemkontext liefert ihm das Argument. Er hat gerade definiert, welche Verantwortung das System hat: "wir müssen eben die Ersatzteile checken" (link:{mp3-111}#t=1384[23:04,role=ts f111]). Daraus folgt: "wir müssen uns eben nicht integrieren mit irgendeinem anderen System" (link:{mp3-111}#t=1392[23:12,role=ts f111]). Er nennt das ausdrücklich "eine Entscheidung, die wir jetzt getroffen haben" (link:{mp3-111}#t=1395[23:15,role=ts f111]). Genau für solche Entscheidungen hält er das Kontextdiagramm für wertvoll (link:{mp3-111}#t=1379[22:59,role=ts f111]).
 
-Die fachliche Verantwortung selbst gehört nicht ins Kontextdiagramm, sondern in die Anforderungen (24:38). Das Diagramm sagt nur, mit welchen Systemen wir Schnittstellen haben, und das Inventarsystem ist keines davon.
+Die fachliche Verantwortung selbst gehört nicht ins Kontextdiagramm, sondern in die Anforderungen (link:{mp3-111}#t=1478[24:38,role=ts f111]). Das Diagramm sagt nur, mit welchen Systemen wir Schnittstellen haben, und das Inventarsystem ist keines davon.
 
 === Konsequenzen
 
@@ -81,4 +81,17 @@ Die fachliche Verantwortung selbst gehört nicht ins Kontextdiagramm, sondern in
 
 *Verwandte Entscheidungen*
 
-Die fachliche Verantwortung "Ersatzteile prüfen" steht in den Anforderungen, nicht im Kontextdiagramm (24:38).
+Die fachliche Verantwortung "Ersatzteile prüfen" steht in den Anforderungen, nicht im Kontextdiagramm (link:{mp3-111}#t=1478[24:38,role=ts f111]).
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+// hoerprobe:end

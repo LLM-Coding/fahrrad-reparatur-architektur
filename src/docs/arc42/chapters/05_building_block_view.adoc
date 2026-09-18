@@ -5,6 +5,9 @@
 :jbake-order: 5
 :filename: /chapters/05_building_block_view.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -20,7 +23,7 @@ Die Bausteinsicht folgt Seite 9 des Miro-Boards (Endstand nach Folge 113). Eberh
 
 === Whitebox Gesamtsystem
 
-Das folgende C4-Container-Diagramm zeigt das Reparatur-System als Whitebox. Innerhalb der Systemgrenze liegen die vier Bausteine. Außerhalb stehen dieselben sieben externen Systeme wie im Kontext in Kapitel 3. Pfeile bedeuten Informationsfluss und nennen die ausgetauschte Information. Die Board-Legende sagt noch "Aufrufrichtung"; Eberhard hat die Semantik in Folge 112 auf eine Frage aus dem Chat zu Informationsfluss umdefiniert (58:17, <<{ch09}#adr-012,ADR-012>>). Ob die Module sich synchron aufrufen oder Messages austauschen, bleibt auf dieser Ebene offen (57:01).
+Das folgende C4-Container-Diagramm zeigt das Reparatur-System als Whitebox. Innerhalb der Systemgrenze liegen die vier Bausteine. Außerhalb stehen dieselben sieben externen Systeme wie im Kontext in Kapitel 3. Pfeile bedeuten Informationsfluss und nennen die ausgetauschte Information. Die Board-Legende sagt noch "Aufrufrichtung"; Eberhard hat die Semantik in Folge 112 auf eine Frage aus dem Chat zu Informationsfluss umdefiniert (link:{mp3-112}#t=3497[58:17,role=ts f112], <<{ch09}#adr-012,ADR-012>>). Ob die Module sich synchron aufrufen oder Messages austauschen, bleibt auf dieser Ebene offen (link:{mp3-112}#t=3421[57:01,role=ts f112]).
 
 [plantuml, "05-level1", svg]
 ----
@@ -69,7 +72,7 @@ Rel(bezahlung, kasse, "Zahlung", "REST")
 Rel(bezahlung, payment, "Zahlung", "REST, Redirect")
 ----
 
-Begründung:: Die Zerlegung folgt den Stories aus dem Backlog (Board Seite 1). Eberhard gruppiert die Stories nach fachlichem Zusammenhang und gibt jeder Gruppe Beispieldaten (Board Seite 7). Das Ergebnis sind vier Bausteine entlang des Reparaturprozesses: Termin vereinbaren, Reparatur ausführen, Material besorgen, Geld einnehmen. Eine technische Schichtung (UI, Logik, Persistenz) verwirft Eberhard in Folge 112 ausdrücklich: Schichten sind "auf dieser grob-granularen Ebene nicht hilfreich" (22:24, <<{ch09}#adr-009,ADR-009>>). Kriterium für jeden Schnitt ist ein eigenes Domänenmodell mit eigenen Daten (33:21).
+Begründung:: Die Zerlegung folgt den Stories aus dem Backlog (Board Seite 1). Eberhard gruppiert die Stories nach fachlichem Zusammenhang und gibt jeder Gruppe Beispieldaten (Board Seite 7). Das Ergebnis sind vier Bausteine entlang des Reparaturprozesses: Termin vereinbaren, Reparatur ausführen, Material besorgen, Geld einnehmen. Eine technische Schichtung (UI, Logik, Persistenz) verwirft Eberhard in Folge 112 ausdrücklich: Schichten sind "auf dieser grob-granularen Ebene nicht hilfreich" (link:{mp3-112}#t=1344[22:24,role=ts f112], <<{ch09}#adr-009,ADR-009>>). Kriterium für jeden Schnitt ist ein eigenes Domänenmodell mit eigenen Daten (link:{mp3-112}#t=2001[33:21,role=ts f112]).
 
 Enthaltene Bausteine::
 +
@@ -82,11 +85,11 @@ Enthaltene Bausteine::
 | Bezahlung | Nimmt den Geldbetrag für eine Reparatur über Kasse oder Online Payment Service entgegen.
 |===
 
-Wichtige Schnittstellen:: Das Board beschriftet vier interne Informationsflüsse: "Termin" (Terminplanung an Reparatur durchführen), "Preis" (Reparatur durchführen an Bezahlung), "Materialbestellung" (Reparatur durchführen an Materialbeschaffung) und nach außen "Rechnungselemente" (an Rechnungswesen) sowie "Info über Updates" (an SMS Versand und EMail System). Der Webshop ruft Terminplanung, Reparatur durchführen und Bezahlung über die Umleitung von `/reparatur` auf (<<{ch09}#adr-002,ADR-002>>). Protokolle und Datenformate der internen Aufrufe legt das Board nicht fest. Die technischen Abhängigkeiten bilden einen gerichteten Graphen: Terminplanung nutzt Reparatur durchführen, Reparatur durchführen nutzt Bezahlung und Materialbeschaffung. So lassen sich Bezahlung und Materialbeschaffung zuerst bauen, dann Reparatur durchführen, dann Terminplanung (Folge 112, 57:09; <<{ch09}#adr-012,ADR-012>>).
+Wichtige Schnittstellen:: Das Board beschriftet vier interne Informationsflüsse: "Termin" (Terminplanung an Reparatur durchführen), "Preis" (Reparatur durchführen an Bezahlung), "Materialbestellung" (Reparatur durchführen an Materialbeschaffung) und nach außen "Rechnungselemente" (an Rechnungswesen) sowie "Info über Updates" (an SMS Versand und EMail System). Der Webshop ruft Terminplanung, Reparatur durchführen und Bezahlung über die Umleitung von `/reparatur` auf (<<{ch09}#adr-002,ADR-002>>). Protokolle und Datenformate der internen Aufrufe legt das Board nicht fest. Die technischen Abhängigkeiten bilden einen gerichteten Graphen: Terminplanung nutzt Reparatur durchführen, Reparatur durchführen nutzt Bezahlung und Materialbeschaffung. So lassen sich Bezahlung und Materialbeschaffung zuerst bauen, dann Reparatur durchführen, dann Terminplanung (Folge 112, link:{mp3-112}#t=3429[57:09,role=ts f112]; <<{ch09}#adr-012,ADR-012>>).
 
 Offene Entwurfsfrage:: Auf dem Board klebt eine gelbe Notiz: "ggf. finanziellen Aspekt separieren?". Gemeint ist, ob Preisermittlung, Rechnungselemente und Bezahlung in einen eigenen Baustein wandern, statt auf Reparatur durchführen und Bezahlung verteilt zu bleiben. Die Frage ist nicht entschieden; die Notiz stammt nicht aus Folge 112.
 
-Komponentenbegriff:: Jeder Baustein ist ein eigenes Projekt in der Versionskontrolle, also vier Repositories. Die Alternative "separiertes Verzeichnis im Source Code" steht auf dem Board als Legende, Eberhard hat sie in Folge 112 nicht gewählt (54:13, bestätigt 63:39; <<{ch09}#adr-011,ADR-011>>).
+Komponentenbegriff:: Jeder Baustein ist ein eigenes Projekt in der Versionskontrolle, also vier Repositories. Die Alternative "separiertes Verzeichnis im Source Code" steht auf dem Board als Legende, Eberhard hat sie in Folge 112 nicht gewählt (link:{mp3-112}#t=3253[54:13,role=ts f112], bestätigt link:{mp3-112}#t=3819[63:39,role=ts f112]; <<{ch09}#adr-011,ADR-011>>).
 
 ==== Terminplanung
 
@@ -107,9 +110,9 @@ Zugeordnete Stories (Board Seite 7)::
 Beispieldaten (Board Seite 7):: "Reparatur 18.3. Eberhard"
 
 Ablageort::
-Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, 54:13). Code gibt es nicht.
+Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, link:{mp3-112}#t=3253[54:13,role=ts f112]). Code gibt es nicht.
 
-Offene Punkte:: Die Story "Status der Reparatur abfragen" steht auf dem Board bei Terminplanung und bei Reparatur durchführen. Folge 112 bestätigt das: Die Statusseite aus <<{ch09}#adr-005,ADR-005>> entsteht aus beiden Bausteinen, Terminplanung liefert den Termin, Reparatur durchführen den Protokollstand (32:21, 38:04); wer sie rendert, ist nicht gesagt. Kaufen statt bauen ist offen: Terminplanung ist generische Arbeitsplanung, "es steht außer Frage, dass man eine Terminplanung kaufen kann", bewertet hat Eberhard das nicht (43:58; <<{ch09}#adr-010,ADR-010>>).
+Offene Punkte:: Die Story "Status der Reparatur abfragen" steht auf dem Board bei Terminplanung und bei Reparatur durchführen. Folge 112 bestätigt das: Die Statusseite aus <<{ch09}#adr-005,ADR-005>> entsteht aus beiden Bausteinen, Terminplanung liefert den Termin, Reparatur durchführen den Protokollstand (link:{mp3-112}#t=1941[32:21,role=ts f112], link:{mp3-112}#t=2284[38:04,role=ts f112]); wer sie rendert, ist nicht gesagt. Kaufen statt bauen ist offen: Terminplanung ist generische Arbeitsplanung, "es steht außer Frage, dass man eine Terminplanung kaufen kann", bewertet hat Eberhard das nicht (link:{mp3-112}#t=2638[43:58,role=ts f112]; <<{ch09}#adr-010,ADR-010>>).
 
 ==== Reparatur durchführen
 
@@ -141,12 +144,12 @@ Beispieldaten (Board Seite 7):: Reparatur "Schaltung kaputt" mit Protokoll:
 | Kunde informiert | | 0 €
 |===
 +
-Das Video nennt für die voraussichtlichen Kosten andere Zahlen: "Campagnolo-Schaltung", 200 Euro für das Schaltwerk, 20 Euro für die Montage (Folge 112, 28:06). Das Board hat als Endstand 100 € für das Schaltwerk; wir führen den Board-Stand.
+Das Video nennt für die voraussichtlichen Kosten andere Zahlen: "Campagnolo-Schaltung", 200 Euro für das Schaltwerk, 20 Euro für die Montage (Folge 112, link:{mp3-112}#t=1686[28:06,role=ts f112]). Das Board hat als Endstand 100 € für das Schaltwerk; wir führen den Board-Stand.
 
 Ablageort::
-Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, 54:13). Code gibt es nicht.
+Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, link:{mp3-112}#t=3253[54:13,role=ts f112]). Code gibt es nicht.
 
-Offene Punkte:: Der Baustein trägt die meisten Schnittstellen nach außen. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" zielt auf Preis und Rechnungselemente in diesem Baustein; sie stammt nicht aus Folge 112. Der SMS Versand ist laut <<{ch09}#adr-007,ADR-007>> nur vorgesehen, nicht gebaut. Entwurfsnotiz: Ein fünftes Modul Reparaturstatus mit Kundensicht hat Eberhard in Folge 112 erwogen und verworfen (35:03 bis 37:22). Die Kundensicht braucht dieselben Daten wie das Protokoll, nur weniger davon; das rechtfertigt kein eigenes Domänenmodell (<<{ch09}#adr-009,ADR-009>>).
+Offene Punkte:: Der Baustein trägt die meisten Schnittstellen nach außen. Die gelbe Notiz "ggf. finanziellen Aspekt separieren?" zielt auf Preis und Rechnungselemente in diesem Baustein; sie stammt nicht aus Folge 112. Der SMS Versand ist laut <<{ch09}#adr-007,ADR-007>> nur vorgesehen, nicht gebaut. Entwurfsnotiz: Ein fünftes Modul Reparaturstatus mit Kundensicht hat Eberhard in Folge 112 erwogen und verworfen (link:{mp3-112}#t=2103,2242[35:03 bis 37:22,role=ts f112]). Die Kundensicht braucht dieselben Daten wie das Protokoll, nur weniger davon; das rechtfertigt kein eigenes Domänenmodell (<<{ch09}#adr-009,ADR-009>>).
 
 ==== Materialbeschaffung
 
@@ -163,7 +166,7 @@ Zugeordnete Stories (Board Seite 7)::
 Beispieldaten (Board Seite 7):: "Bestellung bei einem Großhändler"
 
 Ablageort::
-Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, 54:13). Code gibt es nicht.
+Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, link:{mp3-112}#t=3253[54:13,role=ts f112]). Code gibt es nicht.
 
 Offene Punkte:: NOTE: Offen: Ob die Bestellung beim Großhändler per Hand, per E-Mail oder über eine Schnittstelle läuft, sagt das Board nicht.
 
@@ -178,10 +181,10 @@ Schnittstellen::
 Zugeordnete Stories (Board Seite 7)::
 * Reparatur bezahlen
 
-Beispieldaten (Board Seite 7):: "Geldbetrag". Das Video nennt als Beispiele 10, 150 und 250 Euro (Folge 112, 46:01 und 61:30); das Modul kennt "als Datum nur noch einen Geldbetrag" und nichts über die Reparatur (45:49).
+Beispieldaten (Board Seite 7):: "Geldbetrag". Das Video nennt als Beispiele 10, 150 und 250 Euro (Folge 112, link:{mp3-112}#t=2761[46:01,role=ts f112] und link:{mp3-112}#t=3690[61:30,role=ts f112]); das Modul kennt "als Datum nur noch einen Geldbetrag" und nichts über die Reparatur (link:{mp3-112}#t=2749[45:49,role=ts f112]).
 
 Ablageort::
-Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, 54:13). Code gibt es nicht.
+Eigenes Projekt in der Versionskontrolle, siehe <<{ch09}#adr-011,ADR-011>> (Folge 112, link:{mp3-112}#t=3253[54:13,role=ts f112]). Code gibt es nicht.
 
 Offene Punkte:: R-010 aus <<{ch09}#adr-004,ADR-004>>: Läuft das System in der Cloud, muss Bezahlung die Kasse im Laden erreichen (Board Seite 10, "Kann man aus der Cloud in die Kasse kommunizieren?"). R-011: Der Zahlungsstatus kommt aus zwei Quellen.
 
@@ -192,3 +195,20 @@ NOTE: Offen: Das Board zeigt keine Ebene 2. Kein Baustein ist als Whitebox zerle
 === Ebene 3
 
 NOTE: Offen: Nicht vorhanden, siehe Ebene 2.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end

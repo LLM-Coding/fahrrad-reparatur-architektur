@@ -5,6 +5,9 @@
 :jbake-order: 1
 :filename: /chapters/01_introduction_and_goals.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
+ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
+ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
+ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -22,17 +25,17 @@ Dieses Dokument beschreibt die Architektur des Reparatur-Systems für einen loka
 
 ==== Das System nimmt Reparaturen online an und organisiert die Werkstatt
 
-Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Mitarbeitenden will Reparaturen über das Web annehmen und die Werkstatt organisieren (16:46). Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden, statt dafür in den Laden zu kommen (14:02). Der Shop betreibt bereits einen Webshop (14:25). Das Reparatur-System ergänzt ihn um Reparaturen als eigenen Bereich unter `/reparatur` (<<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-003,ADR-003>>).
+Ein lokaler Fahrradshop in Kaiserslautern mit drei bis vier Mitarbeitenden will Reparaturen über das Web annehmen und die Werkstatt organisieren (link:{mp3-111}#t=1006[16:46,role=ts f111]). Kund:innen sollen ihr Fahrrad online zur Reparatur anmelden, statt dafür in den Laden zu kommen (link:{mp3-111}#t=842[14:02,role=ts f111]). Der Shop betreibt bereits einen Webshop (link:{mp3-111}#t=865[14:25,role=ts f111]). Das Reparatur-System ergänzt ihn um Reparaturen als eigenen Bereich unter `/reparatur` (<<{ch09}#adr-002,ADR-002>>, <<{ch09}#adr-003,ADR-003>>).
 
 Drei Geschäftsziele treiben den Entwurf:
 
-* Kund:innen beauftragen Reparaturen online. "Wenn Kunden damit keine Reparaturen beauftragen, dann haben wir ein Problem" (41:52).
+* Kund:innen beauftragen Reparaturen online. "Wenn Kunden damit keine Reparaturen beauftragen, dann haben wir ein Problem" (link:{mp3-111}#t=2512[41:52,role=ts f111]).
 * Die Werkstatt organisiert Reparaturen im System: Termine, täglicher Reparaturplan, Protokoll, Bestellung von Ersatzteilen und Werkzeug.
-* Funktioniert das System gut, will der Shop es als SaaS-Lösung anderen Fahrradshops anbieten (42:13).
+* Funktioniert das System gut, will der Shop es als SaaS-Lösung anderen Fahrradshops anbieten (link:{mp3-111}#t=2533[42:13,role=ts f111]).
 
 ==== Drei Akteure und fünfzehn Stories bilden das Backlog
 
-Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder weniger gut strukturiert" und dient dem Architekten als Input (09:38). Eine fünfzehnte Story kam in Folge 112 hinzu und steht nur auf Seite 7.
+Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder weniger gut strukturiert" und dient dem Architekten als Input (link:{mp3-111}#t=578[09:38,role=ts f111]). Eine fünfzehnte Story kam in Folge 112 hinzu und steht nur auf Seite 7.
 
 [cols="1,3" options="header"]
 |===
@@ -45,24 +48,24 @@ Das Backlog liegt als Stories auf Seite 1 des Miro-Boards. Es ist "mehr oder wen
 |Reparatur bezahlen; Fahrrad zur Reparatur abgeben
 
 |Fahrrad-Mechaniker:in
-|Kunde über das Ende der Reparatur informieren; Fahrrad-Defekt aufnehmen; Voraussichtliche Kosten berechnen (seit Folge 112, 27:06; nur Board Seite 7); Reparatur einplanen; Täglichen Reparaturplan erstellen; Nächste Reparatur beginnen; Reparatur protokollieren; Ersatzteile bestellen; Werkzeuge bestellen
+|Kunde über das Ende der Reparatur informieren; Fahrrad-Defekt aufnehmen; Voraussichtliche Kosten berechnen (seit Folge 112, link:{mp3-112}#t=1626[27:06,role=ts f112]; nur Board Seite 7); Reparatur einplanen; Täglichen Reparaturplan erstellen; Nächste Reparatur beginnen; Reparatur protokollieren; Ersatzteile bestellen; Werkzeuge bestellen
 |===
 
-NOTE: Die Story "Voraussichtliche Kosten berechnen" kam in Folge 112 auf einen Vorschlag aus dem Chat hinzu (27:06) und liegt im Modul Reparatur durchführen. Board Seite 7 führt sie, Seite 1 nicht; das Board ist an dieser Stelle in sich nicht konsistent. Der Akteur ist auf dem Board nicht benannt; die Zuordnung zur Mechaniker:in folgt aus dem Beispiel im Video (28:06: Schaltung ansehen, Teile und Montage kalkulieren).
+NOTE: Die Story "Voraussichtliche Kosten berechnen" kam in Folge 112 auf einen Vorschlag aus dem Chat hinzu (link:{mp3-112}#t=1626[27:06,role=ts f112]) und liegt im Modul Reparatur durchführen. Board Seite 7 führt sie, Seite 1 nicht; das Board ist an dieser Stelle in sich nicht konsistent. Der Akteur ist auf dem Board nicht benannt; die Zuordnung zur Mechaniker:in folgt aus dem Beispiel im Video (28:06: Schaltung ansehen, Teile und Montage kalkulieren).
 
 ==== Das Beispiel ist eine Architektur-Kata mit expliziten Annahmen
 
 Eberhard entwirft das System live, ohne echten Auftraggeber. Er trifft dafür Annahmen und benennt sie:
 
-* Die Gespräche mit Anforderern und Fachexperten sind imaginär. "Ich dokumentiere das, was in diesem imaginären Gespräch rüberkommt" (14:47).
-* Die fachliche Detaillierung der Stories ist Aufgabe des Requirements Engineering, nicht des Architekten (09:38).
-* Der Shop hat keine IT-Abteilung. "Die haben eigentlich nicht wirklich einen Betrieb" (17:05). Der Betrieb ist deshalb kein Akteur des Systems (17:09).
-* Wo das System läuft (Cloud oder lokaler Server), ist eine Architekturentscheidung und keine Anforderung. Den Geschäftsführer zu fragen bringt "mir egal" oder "was ist die Cloud?" (10:22, 10:42).
-* Die arc42-Kapitelreihenfolge ist nicht die Vorgehensreihenfolge (11:43). Eberhard beginnt mit dem Kontextdiagramm (13:00), erhebt dann Qualitätsszenarien und denkt erst danach über eine Lösung nach.
+* Die Gespräche mit Anforderern und Fachexperten sind imaginär. "Ich dokumentiere das, was in diesem imaginären Gespräch rüberkommt" (link:{mp3-111}#t=887[14:47,role=ts f111]).
+* Die fachliche Detaillierung der Stories ist Aufgabe des Requirements Engineering, nicht des Architekten (link:{mp3-111}#t=578[09:38,role=ts f111]).
+* Der Shop hat keine IT-Abteilung. "Die haben eigentlich nicht wirklich einen Betrieb" (link:{mp3-111}#t=1025[17:05,role=ts f111]). Der Betrieb ist deshalb kein Akteur des Systems (link:{mp3-111}#t=1029[17:09,role=ts f111]).
+* Wo das System läuft (Cloud oder lokaler Server), ist eine Architekturentscheidung und keine Anforderung. Den Geschäftsführer zu fragen bringt "mir egal" oder "was ist die Cloud?" (link:{mp3-111}#t=622[10:22,role=ts f111], link:{mp3-111}#t=642[10:42,role=ts f111]).
+* Die arc42-Kapitelreihenfolge ist nicht die Vorgehensreihenfolge (link:{mp3-111}#t=703[11:43,role=ts f111]). Eberhard beginnt mit dem Kontextdiagramm (link:{mp3-111}#t=780[13:00,role=ts f111]), erhebt dann Qualitätsszenarien und denkt erst danach über eine Lösung nach.
 
 === Qualitätsziele
 
-Eberhard erhebt die Qualitätsziele selbst und nutzt ISO 25010 als Checkliste, statt reflexhaft "wartbar und skalierbar" zu fordern (43:43). Der Fachexperte nennt Benutzerfreundlichkeit als das, was zählt (41:44). Aus dem Gespräch ergibt sich diese Rangfolge:
+Eberhard erhebt die Qualitätsziele selbst und nutzt ISO 25010 als Checkliste, statt reflexhaft "wartbar und skalierbar" zu fordern (link:{mp3-111}#t=2623[43:43,role=ts f111]). Der Fachexperte nennt Benutzerfreundlichkeit als das, was zählt (link:{mp3-111}#t=2504[41:44,role=ts f111]). Aus dem Gespräch ergibt sich diese Rangfolge:
 
 [cols="1,3,4,2" options="header"]
 |===
@@ -71,20 +74,20 @@ Eberhard erhebt die Qualitätsziele selbst und nutzt ISO 25010 als Checkliste, s
 |1
 |Benutzerfreundlichkeit (Usability) für Kund:innen und Mitarbeitende
 |"Insbesondere Benutzerfreundlichkeit ist wichtig. Wenn Kunden damit keine Reparaturen beauftragen, dann haben wir ein Problem. Das wird nur funktionieren, wenn das benutzerfreundlich ist." Gilt "in erster Linie für Kunden, aber auch für die Leute in der Werkstatt". Ohne Benutzerfreundlichkeit stellt sich die Frage, "warum zum Teufel entwickeln wir das überhaupt".
-|41:44, 41:52, 42:06, 42:56, 59:13
+|link:{mp3-111}#t=2504[41:44,role=ts f111], link:{mp3-111}#t=2512[41:52,role=ts f111], link:{mp3-111}#t=2526[42:06,role=ts f111], link:{mp3-111}#t=2576[42:56,role=ts f111], link:{mp3-111}#t=3553[59:13,role=ts f111]
 
 |2
 |Änderbarkeit, konkret Richtung SaaS für andere Shops
 |"Wenn dieses System besonders gut funktioniert, dann wollen wir eine SaaS-Lösung draus machen", also "dafür sorgen, dass andere Leute das benutzen können". Änderungsszenario: Der Umbau zum SaaS dauert höchstens zwei Monate und nicht mehr als 20 Personentage. Ob das Mandantenfähigkeit oder eine Installation pro Fahrradladen bedeutet, hängt davon ab, "ob wir diese Installation pro Fahrradladen finanzieren können".
-|42:13, 43:52, 44:12, 57:42, 58:15
+|link:{mp3-111}#t=2533[42:13,role=ts f111], link:{mp3-111}#t=2632[43:52,role=ts f111], link:{mp3-111}#t=2652[44:12,role=ts f111], link:{mp3-111}#t=3462[57:42,role=ts f111], link:{mp3-111}#t=3495[58:15,role=ts f111]
 
 |3
 |Verfügbarkeit, differenziert nach Nutzergruppe
 |Shop-System: 99 % zwischen 9 und 18 Uhr, nach Ausfall spätestens nach 30 Minuten wieder da. Web-System für Kund:innen: 99,9 % zwischen 7 und 24 Uhr, nachts 99 %. Eberhard fasst zusammen: "Wir haben eher entspannte Anforderungen bezüglich der Verfügbarkeit." Details in <<{ch09}#adr-008,ADR-008>>.
-|55:07, 55:42, 56:21, 59:18
+|link:{mp3-111}#t=3307[55:07,role=ts f111], link:{mp3-111}#t=3342[55:42,role=ts f111], link:{mp3-111}#t=3381[56:21,role=ts f111], link:{mp3-111}#t=3558[59:18,role=ts f111]
 |===
 
-Security und Vertraulichkeit sind bewusst nachrangig. "Es wäre wahrscheinlich gut, wenn das System nicht Informationen über irgendwelche Kunden nach draußen leckt. Aber selbst wenn das passiert, das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (58:29 bis 58:48). Die übrigen ISO-25010-Kategorien sind "nicht so wahnsinnig wichtig" (58:22).
+Security und Vertraulichkeit sind bewusst nachrangig. "Es wäre wahrscheinlich gut, wenn das System nicht Informationen über irgendwelche Kunden nach draußen leckt. Aber selbst wenn das passiert, das sind am Ende Fahrradreparaturdaten, ist das wirklich so kritisch? Da müssen wir mit dem Experten nochmal sprechen" (link:{mp3-111}#t=3509,3528[58:29 bis 58:48,role=ts f111]). Die übrigen ISO-25010-Kategorien sind "nicht so wahnsinnig wichtig" (link:{mp3-111}#t=3502[58:22,role=ts f111]).
 
 Die konkreten Qualitätsszenarien vom Miro-Board (Seiten 5 und 6) stehen in <<{ch10}#section-quality-scenarios,Qualitätsanforderungen>>. Wie die Architektur die drei Ziele erreicht, beschreibt <<{ch04}#section-solution-strategy,Lösungsstrategie>>.
 
@@ -101,20 +104,20 @@ Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es 
 |Meldet das Fahrrad online zur Reparatur an, ohne sich neu zu registrieren (Webshop-Login genügt, <<{ch09}#adr-001,ADR-001>>). 90 % schaffen die Beauftragung in zwei Minuten (Board Seite 5). Fragt den Status ab, wird bei Fertigstellung informiert (<<{ch09}#adr-007,ADR-007>>), zahlt online oder im Laden.
 
 |Shop-Mitarbeiter:in
-|Drei bis vier Personen im Laden (16:46)
-|Nimmt Fahrräder an und rechnet Reparaturen an der Kasse ab (<<{ch09}#adr-004,ADR-004>>). Bedient das System nach einer Stunde Einarbeitung eigenständig. Erwartet Verfügbarkeit im Laden zwischen 9 und 18 Uhr; überbrückt 30 Minuten Ausfall "mit Zettel und Bleistift" (55:42).
+|Drei bis vier Personen im Laden (link:{mp3-111}#t=1006[16:46,role=ts f111])
+|Nimmt Fahrräder an und rechnet Reparaturen an der Kasse ab (<<{ch09}#adr-004,ADR-004>>). Bedient das System nach einer Stunde Einarbeitung eigenständig. Erwartet Verfügbarkeit im Laden zwischen 9 und 18 Uhr; überbrückt 30 Minuten Ausfall "mit Zettel und Bleistift" (link:{mp3-111}#t=3342[55:42,role=ts f111]).
 
 |Fahrrad-Mechaniker:in
 |Werkstatt des Shops
 |Nimmt Defekte auf, plant Reparaturen ein, arbeitet den täglichen Reparaturplan ab, protokolliert Positionen, bestellt Ersatzteile und Werkzeug (<<{ch09}#adr-006,ADR-006>>). Bedient das System nach einer Stunde Einarbeitung eigenständig.
 
 |Shop-Inhaber:in
-|Geschäftsführer, Ansprechpartner des Architekten (10:05)
-|Kund:innen beauftragen Reparaturen online, sonst "haben wir ein Problem" (41:52). Das System läuft ohne eigene IT-Kenntnisse im Shop (Cloud, eigener Support; Board Seite 5). Perspektive: SaaS für andere Shops. Zum Betriebsmodell keine Meinung ("mir egal", 10:22).
+|Geschäftsführer, Ansprechpartner des Architekten (link:{mp3-111}#t=605[10:05,role=ts f111])
+|Kund:innen beauftragen Reparaturen online, sonst "haben wir ein Problem" (link:{mp3-111}#t=2512[41:52,role=ts f111]). Das System läuft ohne eigene IT-Kenntnisse im Shop (Cloud, eigener Support; Board Seite 5). Perspektive: SaaS für andere Shops. Zum Betriebsmodell keine Meinung ("mir egal", link:{mp3-111}#t=622[10:22,role=ts f111]).
 
 |Steuerberater:in / Rechnungswesen
 |Extern, außerhalb des Shops
-|Reparaturen werden "vernünftig verbucht gegenüber dem Steuerberater" (20:35). Das System liefert Rechnungselemente an das Rechnungswesen (Board Seite 9).
+|Reparaturen werden "vernünftig verbucht gegenüber dem Steuerberater" (link:{mp3-111}#t=1235[20:35,role=ts f111]). Das System liefert Rechnungselemente an das Rechnungswesen (Board Seite 9).
 
 |Webshop-Betreiber
 |Hersteller und Betreiber des Standard-Webshops
@@ -122,3 +125,29 @@ Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es 
 |===
 
 NOTE: Offen: Ob der Webshop-Betreiber die URL-Umleitung und den Zugriff auf die User Database tatsächlich anbietet, wurde in Folge 111 nicht geprüft. Quelle: Transkript Folge 112/113 ausstehend.
+
+// hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 111</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<script src="/js/hoerprobe.js" defer></script>
+++++
+
+// hoerprobe:end
