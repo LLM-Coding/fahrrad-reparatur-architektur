@@ -104,7 +104,7 @@ Rel(repsys, sms, "sendet Info über Reparaturstatus")
 
 Das Reparatur-System trägt die Verantwortung für alles rund um die Reparatur: Termine, Plan, Protokoll, Bestand an Ersatzteilen und Werkzeug (<<{ch09}#adr-006,ADR-006>>) und die Bezahlung. Es besitzt keine eigene Nutzerverwaltung und keine eigene Zahlungsabwicklung; beides liegt bei Nachbarsystemen. Der Großhändler für Ersatzteile und Werkzeug ist kein externes System im Kontext, sondern Empfänger einer Bestellung (Board Seite 7).
 
-NOTE: Offen: Ob die Bestellung beim Großhändler über eine Schnittstelle oder manuell läuft, zeigt das Board nicht. Quelle: Transkript Folge 112/113 ausstehend.
+NOTE: Offen: Ob die Bestellung beim Großhändler über eine Schnittstelle oder manuell läuft, zeigt das Board nicht. Folge 112 ordnet die Bestellung der Materialbeschaffung zu, ohne den Weg zum Großhändler festzulegen (Folge 112, link:{mp3-112}#t=2858[47:38,role=ts f112,title="Da wäre halt meine Aussage, dass das vielleicht auch was Eigenes ist. Und zwar eben die Materialbeschaffung, die jetzt sowas kennt wie eine Bestellung von Bestellung bei einem Großhändler. So, das wäre jetzt also so eine grobe fachliche Aufteilung."]); Folge 113 kommt nicht darauf zurück.
 
 === Technischer Kontext
 
@@ -178,12 +178,12 @@ NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst n
 
 ++++
 <figure class="hoerprobe">
-<figcaption>Hörprobe Folge 111</figcaption>
-<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+<figcaption>Hörprobe Folge 112</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3" controls preload="none" class="player f112"></audio>
 </figure>
 ++++
 
-link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
 
 ++++
 <script src="/js/hoerprobe.js" defer></script>

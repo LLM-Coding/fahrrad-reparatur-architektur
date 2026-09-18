@@ -14,6 +14,7 @@ ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-st
 ifndef::ch04[:ch04: 04_solution_strategy.adoc]
 ifndef::ch09[:ch09: 09_architecture_decisions.adoc]
 ifndef::ch10[:ch10: 10_quality_requirements.adoc]
+ifndef::ch11[:ch11: 11_technical_risks.adoc]
 
 
 [[section-introduction-and-goals]]
@@ -132,18 +133,17 @@ Die Stakeholder sind Rollen der Architektur-Kata. Reale Kontaktpersonen gibt es 
 |Der Webshop bleibt unverändert und hält keine Reparaturdaten (<<{ch09}#adr-005,ADR-005>>). Das Reparatur-System hängt sich per URL-Umleitung von `/reparatur`, JWT-Cookie und REST an (<<{ch09}#adr-001,ADR-001>>, <<{ch09}#adr-002,ADR-002>>).
 |===
 
-NOTE: Offen: Ob der Webshop-Betreiber die URL-Umleitung und den Zugriff auf die User Database tatsächlich anbietet, wurde in Folge 111 nicht geprüft. Quelle: Transkript Folge 112/113 ausstehend.
+NOTE: Offen: Ob der Webshop-Betreiber die URL-Umleitung und den Zugriff auf die User Database tatsächlich anbietet, prüft keine der drei Folgen. Folge 112 behandelt Webshop und User Database als ein Nachbarsystem, in dem das Reparatur-System eigene Seiten einblendet (Folge 112, link:{mp3-112}#t=3739[62:19,role=ts f112,title="würde jetzt behaupten, dass ich über das, da war die Idee, dass ich innerhalb des Websystems eine Information, Seiten einblenden kann, die es mir zum Beispiel ermöglichen, Reparaturen zu schedulen oder die es mir beispielsweise ermöglichen, den Reparaturstand zu sehen und so…"]). Folge 113 setzt Links vom Webshop zu Terminplanung, Reparatur und Bezahlung als "alles irgendwie machbar" voraus (Folge 113, link:{mp3-113}#t=1403,1424[23:23 bis 23:44,role=ts f113,title="Und da würde ich jetzt überall Links haben. Das heißt, es würde halt ein Link von dem Webshop hin zu der Terminplanung gehen. Es würde ein Link von dem Webshop hin zur Reparatur durchführen gehen. Und es würde ein Link existieren von dem Webshop hin zu, was habe ich hier, Bezahlung. Das ist alles irgendwie machbar."]). Die Annahme bleibt ungeprüft, siehe Risiko R-005 in <<{ch11}#section-technical-risks,Kapitel 11>>.
+
+// auszug:begin 113 1403 1424
+.Transkript Folge 113, link:{mp3-113}#t=1403,1424[23:23 bis 23:44,role=ts f113,title="Und da würde ich jetzt überall Links haben. Das heißt, es würde halt ein Link von dem Webshop hin zu der Terminplanung gehen. Es würde ein Link von dem Webshop hin zur Reparatur durchführen gehen. Und es würde ein Link existieren von dem Webshop hin zu, was habe ich hier, Bezahlung. Das ist alles irgendwie machbar."]
+[%collapsible.auszug]
+====
+Und da würde ich jetzt überall Links haben. Das heißt, es würde halt ein Link von dem Webshop hin zu der Terminplanung gehen. Es würde ein Link von dem Webshop hin zur Reparatur durchführen gehen. Und es würde ein Link existieren von dem Webshop hin zu, was habe ich hier, Bezahlung. Das ist alles irgendwie machbar.
+====
+// auszug:end
 
 // hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
-
-++++
-<figure class="hoerprobe">
-<figcaption>Hörprobe Folge 111</figcaption>
-<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
-</figure>
-++++
-
-link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
 
 ++++
 <figure class="hoerprobe">
@@ -153,6 +153,15 @@ link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf soft
 ++++
 
 link:https://software-architektur.tv/2022/03/11/folge112.html[Folge 112 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=K512HtCbb2Q[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+
+++++
+<figure class="hoerprobe">
+<figcaption>Hörprobe Folge 113</figcaption>
+<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+</figure>
+++++
+
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
 
 ++++
 <script src="/js/hoerprobe.js" defer></script>

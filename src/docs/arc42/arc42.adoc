@@ -18,6 +18,7 @@ include::chapters/config.adoc[]
 :ch04:
 :ch09:
 :ch10:
+:ch11:
 
 //additional style for arc42 help callouts
 
