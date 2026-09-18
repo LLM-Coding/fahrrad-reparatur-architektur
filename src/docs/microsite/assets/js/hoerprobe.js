@@ -69,7 +69,9 @@
     if (!active) { bar.hidden = true; return; }
     bar.hidden = false;
     var state = active.paused ? 'pausiert' : 'läuft';
-    barText.textContent = episode(active) + ' · ' + fmt(active.currentTime) + ' · ' + state;
+    var end = parseFloat(active.dataset.hoerprobeEnd || '');
+    var until = end ? ' · bis ' + fmt(end) : '';
+    barText.textContent = episode(active) + ' · ' + fmt(active.currentTime) + until + ' · ' + state;
     barPause.textContent = active.paused ? 'Weiter' : 'Pause';
   }
 
@@ -108,7 +110,7 @@
   document.addEventListener('click', function (ev) {
     var link = ev.target.closest ? ev.target.closest('a.ts') : null;
     if (!link) { return; }
-    var m = (link.getAttribute('href') || '').match(/^(.*\.mp3)#t=([\d.]+)/);
+    var m = (link.getAttribute('href') || '').match(/^(.*\.mp3)#t=([\d.]+)(?:,([\d.]+))?/);
     if (!m) { return; }
     var player = findPlayer(link, m[1]);
     if (!player) { return; }
@@ -121,6 +123,8 @@
     active = player;
     markLink(link);
     player.dataset.hoerprobeAt = m[2];
+    // Spanne (#t=start,ende): der Player hält am Ende der Stelle an.
+    player.dataset.hoerprobeEnd = m[3] || '';
     render();
     // Bei preload="none" kommen die Metadaten erst nach dem Klick. Hat der Hörer inzwischen
     // einen anderen Player gestartet, verfällt der alte Sprung.
@@ -139,7 +143,7 @@
     var el = ev.target;
     if (!el || el.tagName !== 'AUDIO') { return; }
     ensureBar();
-    if (active !== el) { markLink(null); }
+    if (active !== el) { markLink(null); el.dataset.hoerprobeEnd = ''; }
     active = el;
     pauseOthers(el);
     render();
@@ -154,6 +158,12 @@
   }, true);
 
   document.addEventListener('timeupdate', function (ev) {
-    if (ev.target === active) { render(); }
+    if (ev.target !== active) { return; }
+    var end = parseFloat(active.dataset.hoerprobeEnd || '');
+    if (end && active.currentTime >= end) {
+      active.dataset.hoerprobeEnd = '';  // "Weiter" spielt danach über das Ende hinaus
+      active.pause();
+    }
+    render();
   }, true);
 })();

@@ -19,7 +19,7 @@ ifndef::ch10[:ch10: 10_quality_requirements.adoc]
 [[section-context-and-scope]]
 == Kontextabgrenzung
 
-Das Kontextdiagramm war Eberhards erster Schritt. "Ich habe dadurch ein besseres Bild bekommen, was ich bauen soll und mit wem ich interagieren muss, insbesondere welche Verantwortung ich habe und welche Schnittstellen" (Folge 111, link:{mp3-111}#t=1563[26:03,role=ts f111]). Er trennt fachlichen und technischen Kontext in zwei Diagramme (link:{mp3-111}#t=1671[27:51,role=ts f111], link:{mp3-111}#t=1702[28:22,role=ts f111]). Beide zeigen dieselben drei Akteure und sieben externen Systeme (Miro-Board Seiten 2 und 3).
+Das Kontextdiagramm war Eberhards erster Schritt. "Ich habe dadurch ein besseres Bild bekommen, was ich bauen soll und mit wem ich interagieren muss, insbesondere welche Verantwortung ich habe und welche Schnittstellen" (Folge 111, link:{mp3-111}#t=1563[26:03,role=ts f111,title="fragen erstmal noch dazu irgendwelche Kommentare. Wie bewertet ihr das? Also ich fand es halt, ich habe wie gesagt ja das nun vorbereitet und habe mich halt dazu entschieden, als erstes das Systemkontext-Diagramm zu machen. Und was ich dabei halt hilfreich fand, ist, dass ich…"]). Er trennt fachlichen und technischen Kontext in zwei Diagramme (link:{mp3-111}#t=1671[27:51,role=ts f111,title="Also zum Beispiel meine Adresse oder sowas. Gut, das hier ist jetzt so ein System-Kontext-Diagramm, das so auf Business-Ebene das kommuniziert. Das heißt, ich sehe das hier abstrakt, ohne konkrete technische Sachen. Was wir jetzt noch mal machen können, ist, wir können…"], link:{mp3-111}#t=1702[28:22,role=ts f111,title="linken Bereich duplizieren. Und wir können jetzt einfach noch mal mehr Informationen sammeln. Und zwar über die technische Umsetzung dieser Schnittstellen. Und eine von den technischen Entscheidungen oder eine von den Sachen, die wir hier jetzt haben, ist, wir haben uns dazu...…"]). Beide zeigen dieselben drei Akteure und sieben externen Systeme (Miro-Board Seiten 2 und 3).
 
 === Fachlicher Kontext
 
@@ -151,7 +151,7 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |Kasse
 |REST
-|Protokoll "meinetwegen REST" (link:{mp3-111}#t=1852[30:52,role=ts f111]); die Details sind bewusst offen gelassen.
+|Protokoll "meinetwegen REST" (link:{mp3-111}#t=1852[30:52,role=ts f111,title="und im Frontend gäbe es eine Integration über so einen Button. Das führt dazu, dass solche Sachen halt häufig einfach zu integrieren sind. Und hier hätten wir jetzt auch irgendwelche Protokolle. Also wir hätten zum Beispiel ein REST-Protokoll Richtung Kasse zu dem E-Mail-System.…"]); die Details sind bewusst offen gelassen.
 
 |Online Payment Service
 |REST und UI-Integration (Redirect-Button)
@@ -163,16 +163,16 @@ Rel(repsys, sms, "Benachrichtigung", "REST")
 
 |EMail System
 |REST
-|Zugekaufter Dienst, etwa AWS Simple Email Service (link:{mp3-111}#t=1862[31:02,role=ts f111]).
+|Zugekaufter Dienst, etwa AWS Simple Email Service (link:{mp3-111}#t=1862[31:02,role=ts f111,title="Also wir hätten zum Beispiel ein REST-Protokoll Richtung Kasse zu dem E-Mail-System. Das sind zum Beispiel Sachen, die man halt bei ABS kaufen kann. Das heißt, man könnte jetzt nicht also simple E-Mail-Service, den könnte man also entsprechend hier über eine Schnittstelle…"]).
 
 |SMS Versand
 |REST
 |Kanal vorgesehen, nicht entschieden (<<{ch09}#adr-007,ADR-007>>).
 |===
 
-Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (link:{mp3-111}#t=1793[29:53,role=ts f111], link:{mp3-111}#t=1804[30:04,role=ts f111]).
+Die fachlichen Schnittstellen bilden sich so auf die technischen ab: Alles, was Akteure tun, läuft über den Webbrowser und den vom Webshop umgeleiteten Pfad `/reparatur`. Die Identität der Kund:in kommt nicht aus einem eigenen Login, sondern aus dem JWT-Cookie des Webshops; die Nutzerdaten dazu liefert die User Database per REST. Bezahlung im Laden fließt als Preis per REST an die Kasse, Online-Bezahlung als REST-Aufruf plus UI-Redirect an den Payment Service. Rechnungselemente und Benachrichtigungen verlassen das System ausschließlich als ausgehende REST-Aufrufe. Für alle Protokolle außer der Webshop-Anbindung gilt REST als Default; Eberhard hat gRPC oder anderes ausdrücklich nicht bewertet (link:{mp3-111}#t=1793[29:53,role=ts f111,title="unsere Verantwortung. So, und dann müssten wir jetzt hier die restlichen Protokolle noch definieren. Mir war das hervorragend. Das ist jetzt ehrlich gesagt zu doof. Da steht halt irgendwas drin, meinetwegen REST oder irgendwas anderes, gRPC oder so, und dann hätten wir halt…"], link:{mp3-111}#t=1804[30:04,role=ts f111,title="Das ist jetzt ehrlich gesagt zu doof. Da steht halt irgendwas drin, meinetwegen REST oder irgendwas anderes, gRPC oder so, und dann hätten wir halt diese Informationen da drin. Das wäre jetzt für das Rechnungswesen auch, glaube ich, gar nicht so spannend. Spannend ist vielleicht…"]).
 
-NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst nicht erfasst (link:{mp3-111}#t=2136[35:36,role=ts f111]). Ob Kasse und Rechnungswesen aus der Cloud erreichbar sind, bleibt eine offene Frage auf dem Board (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.
+NOTE: Offen: Hosting der externen Systeme (Webshop, User Database) ist bewusst nicht erfasst (link:{mp3-111}#t=2136[35:36,role=ts f111,title="Also die Frage, wie komme ich mit dem Webshop irgendwie zurande? Und darüber haben wir ja auch diskutiert. Das ist also tatsächlich, glaube ich, ein spannender Constraint. Der Jendrik Ottmann fragt, würde dann neben den Protokollen noch die Hosting-Environment fehlen für unsere…"]). Ob Kasse und Rechnungswesen aus der Cloud erreichbar sind, bleibt eine offene Frage auf dem Board (Seiten 10 und 11). Quelle: Transkript Folge 112/113 ausstehend.
 
 // hoerprobe:begin (generiert von transcription/analysis/link_timestamps.py)
 

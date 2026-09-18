@@ -53,7 +53,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Akteur. Im Webshop registrierte Person, die ein Fahrrad zur Reparatur anmeldet, den Status abfragt, bezahlt und das Fahrrad abholt.
 
 |Mandant
-|Ein Fahrradshop als Nutzerorganisation innerhalb einer SaaS-Installation. Mandantenfähigkeit bedeutet: eine Installation bedient mehrere Shops mit getrennten Daten. Alternative ist eine Installation pro Shop; die Wahl ist offen (Folge 111, link:{mp3-111}#t=2638[43:58,role=ts f111], link:{mp3-111}#t=2652[44:12,role=ts f111]).
+|Ein Fahrradshop als Nutzerorganisation innerhalb einer SaaS-Installation. Mandantenfähigkeit bedeutet: eine Installation bedient mehrere Shops mit getrennten Daten. Alternative ist eine Installation pro Shop; die Wahl ist offen (Folge 111, link:{mp3-111}#t=2638[43:58,role=ts f111,title="Und wir sollten halt irgendwie auch uns überlegen, wie wir dieses System dann später mal zum SaaS-System umbauen können. Jan fragt, bedeutet SaaS Mandantenfähigkeit und Installation pro Fahrradladen? Das wäre dann beispielsweise etwas, was wir bei den Fach, genau, das wäre halt…"], link:{mp3-111}#t=2652[44:12,role=ts f111,title="Das wäre dann beispielsweise etwas, was wir bei den Fach, genau, das wäre halt auch etwas, worüber wir nochmal bei den Qualitätsszenarien sozusagen reden könnten. Also wie, das hängt dann ja eben davon ab, ob wir zum Beispiel diese Installation pro Fahrradladen finanzieren…"]).
 
 |Materialbeschaffung
 |Modul des Reparatur-Systems (Board Seite 7). Enthält die Stories "Ersatzteile bestellen" und "Werkzeuge bestellen".
@@ -92,7 +92,7 @@ Das Glossar hält die Ubiquitous Language des Beispiels fest. Fachbegriffe stamm
 |Berechneter Termin, an dem die Werkstatt eine Reparatur ausführt. Ergebnis der Story "Reparaturtermin berechnen". Die Terminplanung übergibt den Termin an das Modul Reparatur durchführen (Board Seite 9).
 
 |REST
-|Schnittstellenstil über HTTP. Default für alle Schnittstellen zu Kasse, Rechnungswesen, Payment Service, E-Mail und SMS. Alternativen wie gRPC wurden nicht bewertet (Folge 111, link:{mp3-111}#t=1793[29:53,role=ts f111]).
+|Schnittstellenstil über HTTP. Default für alle Schnittstellen zu Kasse, Rechnungswesen, Payment Service, E-Mail und SMS. Alternativen wie gRPC wurden nicht bewertet (Folge 111, link:{mp3-111}#t=1793[29:53,role=ts f111,title="unsere Verantwortung. So, und dann müssten wir jetzt hier die restlichen Protokolle noch definieren. Mir war das hervorragend. Das ist jetzt ehrlich gesagt zu doof. Da steht halt irgendwas drin, meinetwegen REST oder irgendwas anderes, gRPC oder so, und dann hätten wir halt…"]).
 
 |SaaS
 |Software as a Service. Ziel: das Reparatur-System anderen Fahrradshops über das Internet anbieten. Änderungsszenario: Umbau in höchstens zwei Monaten und 20 Personentagen (Board Seite 6). Im Whisper-Transkript als "SARS" wiedergegeben.

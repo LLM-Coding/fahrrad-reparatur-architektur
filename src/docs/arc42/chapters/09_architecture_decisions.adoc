@@ -160,7 +160,7 @@ d16 -[hidden]down- d18
 | Synchron oder Messages | ADR-012 | neu | offen, in Folge 112 ausdrücklich vertagt
 | Mandantenfähigkeit gegen Webshop-Kopplung | ADR-001, ADR-013, Mandantenfähigkeit beschlossen | P4 | Kopplung im Video nicht behandelt
 | Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P5, Reserve | offen, im Video nicht behandelt
-| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (link:{mp3-113}#t=3115[51:55,role=ts f113]), nicht entschieden
+| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (link:{mp3-113}#t=3115[51:55,role=ts f113,title="Da müssen wir trotzdem noch entscheiden, welche Programmiersprache benutzen wir, welche Libraries benutzen wir, wie bauen wir das Frontend. Diese Voraussetzungen muss ich schaffen, bevor ich mich an die Tastatur setze, das ist sehr klar. Aber das sind Dinge, die ich jetzt gar…"]), nicht entschieden
 |===
 
 === Übersicht der Entscheidungen
