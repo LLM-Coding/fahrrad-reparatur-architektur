@@ -21,12 +21,12 @@
     'background:#F59E0B;color:#1a2a3a;font-weight:600;font-size:.9rem}' +
     '.hoerprobe-bar button.stop{background:transparent;color:#fff;font-size:1.1rem;padding:.1rem .4rem}' +
     'a.ts.ts-active{background:#FDE68A;border-radius:.2rem;padding:0 .2rem}' +
-    /* Eigener Tooltip mit fester Breite; der native title-Tooltip wird beim Laden dorthin verschoben. */
-    'a.ts[data-tip]{position:relative}' +
-    'a.ts[data-tip]:hover::after,a.ts[data-tip]:focus::after{content:attr(data-tip);position:absolute;' +
-    'left:0;top:1.5em;z-index:1040;width:22rem;max-width:80vw;padding:.5rem .7rem;' +
-    'background:#334E68;color:#fff;font-size:.85rem;line-height:1.35;font-weight:400;' +
-    'white-space:normal;text-align:left;border-radius:.4rem;box-shadow:0 .25rem .75rem rgba(0,0,0,.3)}' +
+    /* Eigener Tooltip mit fester Breite; der native title-Tooltip wird beim Laden dorthin verschoben.
+     * position:fixed am body, damit kein overflow-Container (z. B. Tabellen) ihn abschneidet. */
+    '.ts-tip{position:fixed;z-index:1060;display:none;width:22rem;max-width:calc(100vw - 1rem);' +
+    'padding:.5rem .7rem;background:#334E68;color:#fff;font-size:.85rem;line-height:1.35;font-weight:400;' +
+    'white-space:normal;text-align:left;border-radius:.4rem;box-shadow:0 .25rem .75rem rgba(0,0,0,.3);' +
+    'pointer-events:none}' +
     '@media print{.hoerprobe-bar{display:none}}';
 
   function episode(el) {
@@ -47,13 +47,53 @@
     document.head.appendChild(style);
   }
 
-  // title -> data-tip: gleicher Text, aber als CSS-Tooltip mit fester Breite statt nativ.
+  // title -> data-tip: gleicher Text, aber als Tooltip mit fester Breite statt nativ.
   function moveTooltips() {
     var links = document.querySelectorAll('a.ts[title]');
     for (var i = 0; i < links.length; i++) {
       links[i].setAttribute('data-tip', links[i].getAttribute('title'));
       links[i].removeAttribute('title');
     }
+  }
+
+  // Ein Tooltip für alle Zeitmarken: unter dem Link, am rechten Rand nach links, am unteren nach oben.
+  var tip = null, tipFor = null;
+
+  function showTip(link) {
+    tipFor = link;
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.className = 'ts-tip';
+      tip.setAttribute('role', 'tooltip');
+      document.body.appendChild(tip);
+    }
+    tip.textContent = link.getAttribute('data-tip');
+    tip.style.display = 'block';
+    var r = link.getBoundingClientRect(), gap = 4, edge = 8;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.max(edge, Math.min(r.left, window.innerWidth - w - edge));
+    var top = r.bottom + gap;
+    if (top + h > window.innerHeight - edge) { top = Math.max(edge, r.top - h - gap); }
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+
+  function hideTip() {
+    tipFor = null;
+    if (tip) { tip.style.display = 'none'; }
+  }
+
+  function tipLink(e) {
+    return e.target.closest ? e.target.closest('a.ts[data-tip]') : null;
+  }
+
+  function installTooltips() {
+    document.addEventListener('mouseover', function (e) { var l = tipLink(e); if (l) { showTip(l); } });
+    document.addEventListener('mouseout', function (e) { if (tipLink(e)) { hideTip(); } });
+    document.addEventListener('focusin', function (e) { var l = tipLink(e); if (l) { showTip(l); } });
+    document.addEventListener('focusout', hideTip);
+    // Auch innere Container scrollen (Inhaltsverzeichnis, breite Tabellen): mitführen statt ausblenden.
+    window.addEventListener('scroll', function () { if (tipFor) { showTip(tipFor); } }, true);
   }
 
   function ensureBar() {
@@ -177,6 +217,7 @@
 
   installStyle();
   moveTooltips();
+  installTooltips();
 
   document.addEventListener('timeupdate', function (ev) {
     if (ev.target !== active) { return; }
