@@ -27,7 +27,7 @@
     'padding:.5rem .7rem;background:#334E68;color:#fff;font-size:.85rem;line-height:1.35;font-weight:400;' +
     'white-space:normal;text-align:left;border-radius:.4rem;box-shadow:0 .25rem .75rem rgba(0,0,0,.3);' +
     'pointer-events:none}' +
-    '@media print{.hoerprobe-bar{display:none}}';
+    '@media print{.hoerprobe-bar,.ts-tip{display:none}}';
 
   function episode(el) {
     var m = (el.className || '').match(/\bf(\d{3})\b/);
@@ -57,28 +57,40 @@
   }
 
   // Ein Tooltip für alle Zeitmarken: unter dem Link, am rechten Rand nach links, am unteren nach oben.
+  // pointer-events:none mit Absicht: ein Klick auf den Tooltip soll nicht die Wiedergabe starten.
   var tip = null, tipFor = null;
 
   function showTip(link) {
+    if (tipFor && tipFor !== link) { tipFor.removeAttribute('aria-describedby'); }
     tipFor = link;
     if (!tip) {
       tip = document.createElement('div');
       tip.className = 'ts-tip';
+      tip.id = 'ts-tip';
       tip.setAttribute('role', 'tooltip');
       document.body.appendChild(tip);
     }
+    link.setAttribute('aria-describedby', 'ts-tip');
     tip.textContent = link.getAttribute('data-tip');
+    placeTip();
+  }
+
+  function placeTip() {
+    // clientWidth/-Height ohne Scrollleiste; erste Zeile, falls der Link umbricht
+    var vw = document.documentElement.clientWidth, vh = document.documentElement.clientHeight;
+    var r = tipFor.getClientRects()[0] || tipFor.getBoundingClientRect(), gap = 4, edge = 8;
+    if (r.bottom < 0 || r.top > vh || r.right < 0 || r.left > vw) { hideTip(); return; }
     tip.style.display = 'block';
-    var r = link.getBoundingClientRect(), gap = 4, edge = 8;
     var w = tip.offsetWidth, h = tip.offsetHeight;
-    var left = Math.max(edge, Math.min(r.left, window.innerWidth - w - edge));
+    var left = Math.max(edge, Math.min(r.left, vw - w - edge));
     var top = r.bottom + gap;
-    if (top + h > window.innerHeight - edge) { top = Math.max(edge, r.top - h - gap); }
+    if (top + h > vh - edge) { top = Math.max(edge, r.top - h - gap); }
     tip.style.left = left + 'px';
     tip.style.top = top + 'px';
   }
 
   function hideTip() {
+    if (tipFor) { tipFor.removeAttribute('aria-describedby'); }
     tipFor = null;
     if (tip) { tip.style.display = 'none'; }
   }
@@ -88,12 +100,23 @@
   }
 
   function installTooltips() {
-    document.addEventListener('mouseover', function (e) { var l = tipLink(e); if (l) { showTip(l); } });
-    document.addEventListener('mouseout', function (e) { if (tipLink(e)) { hideTip(); } });
+    var pending = false;
+    function follow() {
+      if (!tipFor || pending) { return; }
+      pending = true;
+      window.requestAnimationFrame(function () { pending = false; if (tipFor) { placeTip(); } });
+    }
+    // Nicht bei Touch: iOS schluckt sonst den ersten Tap, wenn beim Hover Inhalt erscheint.
+    document.addEventListener('pointerover', function (e) {
+      var l = e.pointerType !== 'touch' && tipLink(e); if (l) { showTip(l); }
+    });
+    document.addEventListener('pointerout', function (e) { if (tipLink(e)) { hideTip(); } });
     document.addEventListener('focusin', function (e) { var l = tipLink(e); if (l) { showTip(l); } });
-    document.addEventListener('focusout', hideTip);
+    document.addEventListener('focusout', function (e) { if (tipLink(e)) { hideTip(); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { hideTip(); } });
     // Auch innere Container scrollen (Inhaltsverzeichnis, breite Tabellen): mitführen statt ausblenden.
-    window.addEventListener('scroll', function () { if (tipFor) { showTip(tipFor); } }, true);
+    window.addEventListener('scroll', follow, true);
+    window.addEventListener('resize', follow);
   }
 
   function ensureBar() {
