@@ -91,10 +91,10 @@ Diese Lücke ist der Kern des ADR. Das Szenario misst Datenverlust, das SLA miss
 ++++
 <figure class="hoerprobe">
 <figcaption>Hörprobe Folge 113</figcaption>
-<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/113.mp3" controls preload="none" class="player f113"></audio>
 </figure>
 ++++
 
-link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle. Audio: software-architektur.tv (Eberhard Wolff, Ralf D. Müller), Lizenz link:https://creativecommons.org/licenses/by/4.0/deed.de[CC BY 4.0]; für genaues Springen mit konstanter Bitrate neu kodiert.
 
 // hoerprobe:end

@@ -17,6 +17,8 @@ on:
   push:
     branches:
       - main
+  # Pull requests only build the site; deploy runs for main alone
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -25,7 +27,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -89,6 +91,16 @@ jobs:
           ./dtcw local generateSite
           test -f build/microsite/output/index.html
 
+      # The episode MP3s (CBR re-encodes, ~30 MB each) live as assets of the
+      # release audio-cbr, not in git. Pages serves them with range requests,
+      # so the player can seek exactly.
+      - name: Add episode audio
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download audio-cbr --repo "$GITHUB_REPOSITORY" --pattern '11?.mp3' --dir build/microsite/output/audio
+          ls -l build/microsite/output/audio
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
@@ -98,6 +110,7 @@ jobs:
           path: build/microsite/output
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
