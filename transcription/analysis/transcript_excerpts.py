@@ -10,6 +10,11 @@ Laeuft nach link_timestamps.py. Zwei Ergaenzungen je Link link:{mp3-11x}#t=..[..
    // auszug:begin <folge> <a> <b> ... // auszug:end. Spannen in Tabellen, Listen, Block-Titeln und
    Quell-/Passthrough-Bloecken bekommen nur den Tooltip.
 
+3. Startpunkt: Die Wiedergabe beginnt am Anfang des ersten zitierten Segments, nicht an der Zeitmarke,
+   damit man hoert, was der Tooltip zeigt. Das Media Fragment #t= zeigt auf die volle Sekunde davor
+   (ohne JavaScript), die Rolle start-<sekunden> traegt den genauen Wert fuer hoerprobe.js. Die Zeitmarke
+   selbst bleibt als Linktext (14:25) stehen; aus ihr liest ein erneuter Lauf die Belegstelle.
+
 Quelle: transcription/api/11x-whisper1.json (OpenAI whisper-1 verbose_json, Segmente in MP3-Sekunden).
 Aufruf:  python3 transcription/analysis/transcript_excerpts.py [--dry-run] [--verbose]
 Idempotent: vorhandene title-Attribute werden ersetzt, alte Auszug-Bloecke neu erzeugt; der zweite Lauf
@@ -30,6 +35,9 @@ MARK_BEGIN, MARK_END = "// auszug:begin", "// auszug:end"
 
 # Link ohne oder mit bereits gesetztem title-Attribut; der Tooltip enthaelt weder " noch ]
 LINK_RE = re.compile(r'link:\{mp3-(11[123])\}#t=(\d+)(?:,(\d+))?\[([^\]"]*?)(?:,title="[^"\]]*")?\]')
+# Belegstelle aus dem Linktext ("14:25" oder "14:25 bis 15:10"), Startpunkt-Rolle eines frueheren Laufs
+EVIDENCE_RE = re.compile(r"^(\d+):(\d{2})\b")
+START_ROLE_RE = re.compile(r" start-[\d.]+")
 LIST_RE = re.compile(r"^(?:[*\-.]+ |\d+\. |[^\s].*?:: )")
 DELIMITERS = ("----", "++++", "....", "====", "|===")
 BAD_CHARS_RE = re.compile(r"[*_`^~{}#\\]")
@@ -58,11 +66,21 @@ def load_segments():
     return segs
 
 
+def quoted(segments, lo: float, hi: float):
+    """Segmente, die [lo, hi] ueberlappen."""
+    return [(start, text) for start, end, text in segments if end > lo and start < hi]
+
+
 def wording(segments, lo: float, hi: float) -> str:
     """Wortlaut aller Segmente, die [lo, hi] ueberlappen, mit normalisiertem Whitespace."""
-    parts = [text for start, end, text in segments if end > lo and start < hi]
-    text = re.sub(r"\s+", " ", " ".join(parts)).strip()
+    text = re.sub(r"\s+", " ", " ".join(text for _, text in quoted(segments, lo, hi))).strip()
     return BAD_CHARS_RE.sub("", text)
+
+
+def segment_start(segments, lo: float, hi: float):
+    """Beginn des ersten zitierten Segments, None ohne Treffer."""
+    found = quoted(segments, lo, hi)
+    return found[0][0] if found else None
 
 
 def shorten(text: str, limit: int) -> str:
@@ -81,14 +99,24 @@ def mmss(seconds: int) -> str:
 
 
 def link_with_tooltip(segments, ep: str, start: int, end, attrs: str) -> str:
-    if end is None:
-        text = shorten(wording(segments[ep], start - SINGLE_BEFORE, start + SINGLE_AFTER), MAX_SINGLE)
-        frag = str(start)
+    """start ist die Belegstelle; Fragment und Rolle zeigen auf den Beginn des zitierten Wortlauts."""
+    lo, hi = (start - SINGLE_BEFORE, start + SINGLE_AFTER) if end is None else (start, end)
+    text = shorten(wording(segments[ep], lo, hi), MAX_SINGLE if end is None else MAX_SPAN)
+    play = segment_start(segments[ep], lo, hi)
+    attrs = START_ROLE_RE.sub("", attrs)
+    if play is None:
+        play = start
     else:
-        text = shorten(wording(segments[ep], start, end), MAX_SPAN)
-        frag = f"{start},{end}"
+        attrs = attrs.replace(f"role=ts f{ep}", f"role=ts f{ep} start-{play:g}", 1)
+    frag = str(int(play)) if end is None else f"{int(play)},{end}"
     title = f',title="{tooltip_text(text)}"' if text else ""
     return f"link:{{mp3-{ep}}}#t={frag}[{attrs}{title}]"
+
+
+def evidence(m) -> int:
+    """Belegstelle eines Links: aus dem Linktext, sonst (noch nie verschoben) aus dem Fragment."""
+    ev = EVIDENCE_RE.match(m.group(4))
+    return int(ev.group(1)) * 60 + int(ev.group(2)) if ev else int(m.group(2))
 
 
 def add_tooltips(lines, segments):
@@ -98,7 +126,7 @@ def add_tooltips(lines, segments):
         nonlocal count
         count += 1
         end = int(m.group(3)) if m.group(3) else None
-        return link_with_tooltip(segments, m.group(1), int(m.group(2)), end, m.group(4))
+        return link_with_tooltip(segments, m.group(1), evidence(m), end, m.group(4))
 
     return [LINK_RE.sub(repl, line) for line in lines], count
 
@@ -179,7 +207,7 @@ def add_excerpts(lines, segments, verbose: bool, name: str):
             else:
                 open_delims.append(delim)
             continue
-        spans = [(m.group(1), int(m.group(2)), int(m.group(3))) for m in LINK_RE.finditer(line) if m.group(3)]
+        spans = [(m.group(1), evidence(m), int(m.group(3))) for m in LINK_RE.finditer(line) if m.group(3)]
         if not spans:
             continue
         kind = classify(lines, li, open_delims)
