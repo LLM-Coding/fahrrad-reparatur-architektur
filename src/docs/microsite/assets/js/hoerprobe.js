@@ -1,5 +1,6 @@
 /* Hörprobe: Klick auf einen Zeitstempel-Link (a.ts, href = MP3-URL#t=Sekunden) springt im
- * eingebetteten Player derselben Seite an die Stelle. Ohne JavaScript öffnet der Link die MP3
+ * eingebetteten Player derselben Seite an die Stelle, genauer an den Beginn des im Tooltip zitierten
+ * Segments (Klasse start-<Sekunden>). Ohne JavaScript öffnet der Link die MP3
  * direkt an der Stelle (Media Fragment). Progressive Enhancement, kein Rendering von Inhalt.
  *
  * Läuft ein Player, zeigt eine feste Leiste am unteren Rand Folge und Position und bietet
@@ -197,7 +198,9 @@
     if (!player) { return; }
     ev.preventDefault();
     ensureBar();
-    var t = parseFloat(m[2]);
+    // Genauer Beginn des zitierten Segments (Rolle start-<sek>), sonst die volle Sekunde aus #t=.
+    var start = (link.className || '').match(/\bstart-(\d+(?:\.\d+)?)\b/);
+    var t = parseFloat(start ? start[1] : m[2]);
     // Zweiter Klick auf dieselbe laufende Zeitmarke pausiert.
     if (!player.paused && link === activeLink) { player.pause(); return; }
     pauseOthers(player);
