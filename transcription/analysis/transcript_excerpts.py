@@ -36,7 +36,7 @@ MARK_BEGIN, MARK_END = "// auszug:begin", "// auszug:end"
 # Link ohne oder mit bereits gesetztem title-Attribut; der Tooltip enthaelt weder " noch ]
 LINK_RE = re.compile(r'link:\{mp3-(11[123])\}#t=(\d+)(?:,(\d+))?\[([^\]"]*?)(?:,title="[^"\]]*")?\]')
 # Belegstelle aus dem Linktext ("14:25" oder "14:25 bis 15:10"), Startpunkt-Rolle eines frueheren Laufs
-EVIDENCE_RE = re.compile(r"^(\d+):(\d{2})\b")
+EVIDENCE_RE = re.compile(r"^(\d+):(\d{2})(?![:\d])")
 START_ROLE_RE = re.compile(r" start-[\d.]+")
 LIST_RE = re.compile(r"^(?:[*\-.]+ |\d+\. |[^\s].*?:: )")
 DELIMITERS = ("----", "++++", "....", "====", "|===")
@@ -107,16 +107,21 @@ def link_with_tooltip(segments, ep: str, start: int, end, attrs: str) -> str:
     if play is None:
         play = start
     else:
-        attrs = attrs.replace(f"role=ts f{ep}", f"role=ts f{ep} start-{play:g}", 1)
+        role = f"role=ts f{ep}"
+        if role not in attrs:
+            sys.exit(f"Folge {ep}, {mmss(start)}: Rolle '{role}' fehlt im Link [{attrs}]")
+        attrs = attrs.replace(role, f"{role} start-{play:.2f}".rstrip("0").rstrip("."), 1)
     frag = str(int(play)) if end is None else f"{int(play)},{end}"
     title = f',title="{tooltip_text(text)}"' if text else ""
     return f"link:{{mp3-{ep}}}#t={frag}[{attrs}{title}]"
 
 
 def evidence(m) -> int:
-    """Belegstelle eines Links: aus dem Linktext, sonst (noch nie verschoben) aus dem Fragment."""
+    """Belegstelle eines Links aus dem Linktext. Das Fragment taugt nicht: es ist schon verschoben."""
     ev = EVIDENCE_RE.match(m.group(4))
-    return int(ev.group(1)) * 60 + int(ev.group(2)) if ev else int(m.group(2))
+    if not ev:
+        sys.exit(f"Linktext ohne Zeitmarke mm:ss: {m.group(0)[:80]}")
+    return int(ev.group(1)) * 60 + int(ev.group(2))
 
 
 def add_tooltips(lines, segments):
