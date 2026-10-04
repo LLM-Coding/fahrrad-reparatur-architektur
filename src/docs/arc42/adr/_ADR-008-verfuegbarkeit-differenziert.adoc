@@ -94,10 +94,10 @@ Die Verfügbarkeitsziele und die Randbedingung "keine IT-Experten" fließen in d
 ++++
 <figure class="hoerprobe">
 <figcaption>Hörprobe Folge 111</figcaption>
-<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3" controls preload="none" class="player f111"></audio>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/111.mp3" controls preload="none" class="player f111"></audio>
 </figure>
 ++++
 
-link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+link:https://software-architektur.tv/2022/02/25/folge111.html[Folge 111 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=-FCkp1aJzRY[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle. Audio: software-architektur.tv (Eberhard Wolff, Ralf D. Müller), Lizenz link:https://creativecommons.org/licenses/by/4.0/deed.de[CC BY 4.0]; für genaues Springen mit konstanter Bitrate neu kodiert.
 
 // hoerprobe:end

@@ -19,11 +19,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DOC_GLOBS = ["src/docs/arc42/chapters/*.adoc", "src/docs/arc42/adr/_ADR-*.adoc"]
 
-MP3_URLS = {
-    "111": "https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3",
-    "112": "https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3",
-    "113": "https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3",
-}
+# CBR-Kopien der podcaster.de-MP3s (64 kbit/s mono, gleiche Zeitachse), liegen als Assets des Releases
+# "audio-cbr" und werden beim Deploy nach /audio/ der Pages-Site kopiert (.github/workflows/docs.yml).
+# Grund: Die Originale sind VBR mit grober Sprungtabelle; Browser springen dort bis zu 15 s daneben.
+MP3_URLS = {ep: f"https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/{ep}.mp3" for ep in ("111", "112", "113")}
 EPISODE_PAGES = {
     "111": "https://software-architektur.tv/2022/02/25/folge111.html",
     "112": "https://software-architektur.tv/2022/03/11/folge112.html",
@@ -235,7 +234,10 @@ def hoerprobe_block(episodes, with_script: bool):
             "",
             f"link:{EPISODE_PAGES[ep]}[Folge {ep} auf software-architektur.tv] und "
             f"link:https://www.youtube.com/watch?v={YOUTUBE_IDS[ep]}[Video auf YouTube]. "
-            "Die Zeitmarken im Text springen im Player an die Stelle.",
+            "Die Zeitmarken im Text springen im Player an die Stelle."
+            " Audio: software-architektur.tv (Eberhard Wolff, Ralf D. Müller), Lizenz "
+            "link:https://creativecommons.org/licenses/by/4.0/deed.de[CC BY 4.0]; "
+            "für genaues Springen mit konstanter Bitrate neu kodiert.",
         ]
     if with_script:
         block += ["", "++++", SCRIPT_TAG, "++++"]

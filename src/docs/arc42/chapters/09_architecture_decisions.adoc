@@ -5,9 +5,9 @@
 :jbake-order: 9
 :filename: /chapters/09_architecture_decisions.adoc
 ifndef::imagesdir[:imagesdir: ../../images]
-ifndef::mp3-111[:mp3-111: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitektur-xcf.mp3]
-ifndef::mp3-112[:mp3-112: https://1evriw.podcaster.de/software-architektur-im-stream/media/WirBauenEineSoftwareArchitekturStrukturDerLoesung.mp3]
-ifndef::mp3-113[:mp3-113: https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3]
+ifndef::mp3-111[:mp3-111: https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/111.mp3]
+ifndef::mp3-112[:mp3-112: https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/112.mp3]
+ifndef::mp3-113[:mp3-113: https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/113.mp3]
 
 :toc:
 // Kapitel-Attribute für Querverweise: Microsite verlinkt Dateien, Gesamtdokument (arc42.adoc) setzt sie leer.
@@ -208,11 +208,11 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 ++++
 <figure class="hoerprobe">
 <figcaption>Hörprobe Folge 113</figcaption>
-<audio src="https://1evriw.podcaster.de/software-architektur-im-stream/media/Qualitaeten_nicht-funktionale_Anforderungen_umsetzen_-_Wir_bauen_eine_Software-Architektur.mp3" controls preload="none" class="player f113"></audio>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/113.mp3" controls preload="none" class="player f113"></audio>
 </figure>
 ++++
 
-link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle.
+link:https://software-architektur.tv/2022/03/25/folge113.html[Folge 113 auf software-architektur.tv] und link:https://www.youtube.com/watch?v=oteC-_RZzPk[Video auf YouTube]. Die Zeitmarken im Text springen im Player an die Stelle. Audio: software-architektur.tv (Eberhard Wolff, Ralf D. Müller), Lizenz link:https://creativecommons.org/licenses/by/4.0/deed.de[CC BY 4.0]; für genaues Springen mit konstanter Bitrate neu kodiert.
 
 ++++
 <script src="/js/hoerprobe.js" defer></script>

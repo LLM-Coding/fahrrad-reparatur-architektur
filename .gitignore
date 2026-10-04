@@ -6,3 +6,4 @@ transcription/out/
 transcription/logs/
 .env
 contest/
+.tmp/
