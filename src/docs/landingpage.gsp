@@ -7,7 +7,7 @@
                 <h1 class="display-4">Wir bauen eine Software-Architektur</h1>
                 <p class="lead">
                     Architekturdokumentation und ADRs zu Eberhard Wolffs Architektur-Kata
-                    Fahrrad-Reparatur-System, software-architektur.tv Folgen 111 bis 113.
+                    Fahrrad-Reparatur-System, <a href="https://software-architektur.tv/tags.html#Wir%20bauen%20eine%20Software-Architektur">Software Architektur im Stream Folgen 111 bis 113</a>.
                 </p>
                 <p>
                     <a class="btn btn-primary btn-lg mr-2 mb-2" href="arc42/chapters/09_architecture_decisions.html">Zu den Entscheidungen</a>
