@@ -12,6 +12,8 @@
 
 Am 6. Oktober 2026 entschieden auf den InfoDays ein Architekt und ein Sprachmodell dieselben drei Fragen. Die Keynote "Der Architektur-Turing-Test" hielten Ralf D. Müller und Eberhard Wolff von Software-Architektur im Stream. Eberhard Wolff und Claude schrieben zu drei offenen Problemen des Fahrrad-Reparatur-Systems je ein ADR. Das Publikum las beide Fassungen, ohne den Urheber zu kennen, und stimmte zweimal ab: Welches ADR eignet sich besser? Und welches hat die KI geschrieben? Diese Seite hält Ablauf, Regeln und Ergebnisse fest. Die sechs ADRs stehen im Wortlaut in Kapitel 9.
 
+Die Aufzeichnung der Keynote dauert gut eine Stunde: link:https://www.youtube.com/watch?v=iiNWOeQaJIY["Der Architektur-Turing-Test" als Video auf YouTube].
+
 == Drei offene Fragen kamen auf die Bühne
 
 Die Folgen 111 bis 113 von software-architektur.tv ließen mehrere Entscheidungen offen (Kapitel 9, Abschnitt "Die Front"). Drei davon wurden gespielt:
