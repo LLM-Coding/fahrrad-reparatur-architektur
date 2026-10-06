@@ -6,6 +6,7 @@
 :filename: /experiment/architektur-turing-test.adoc
 :toc:
 :ch09: ../arc42/chapters/09_architecture_decisions.html
+:video: https://www.youtube.com/watch?v=iiNWOeQaJIY
 
 [[section-architektur-turing-test]]
 = Der Architektur-Turing-Test
@@ -39,7 +40,7 @@ Die Regeln sollten verhindern, dass das Publikum etwas anderes bewertet als den 
 * *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. Im Saal war auf keiner Seite eine Matrix zu sehen. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
 * *Auflösung am Schluss.* Wer A und wer B war, erfuhr der Saal erst nach der letzten Runde.
 
-Jede Runde begann mit der Problemstellung und einer Vorabfrage: "Wie würdet ihr entscheiden?" Dann folgten ADR A und ADR B, dann die beiden Abstimmungen.
+Jede Runde begann mit der Problemstellung. Dann folgten ADR A und ADR B, dann die beiden Abstimmungen mit je 60 Sekunden Zeit (link:{video}&t=1351s[22:31]). Eine Vorabfrage "Wie würdet ihr entscheiden?" kommt in der Aufzeichnung nicht vor.
 
 == Das Publikum stimmte zweimal je Runde ab
 
@@ -52,7 +53,7 @@ Jede Runde begann mit der Problemstellung und einer Vorabfrage: "Wie würdet ihr
 | 3 Verfügbarkeit | Eberhard Wolff | Claude | *15* | 12 | 9 / *17*
 |===
 
-Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Keynote. Die Ergebnisse der Vorabfrage "Wie würdet ihr entscheiden?" liegen hier nicht vor.
+Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Keynote.
 
 == Was die Zahlen zeigen
 
@@ -64,9 +65,27 @@ Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Key
 
 *Über alle Runden lag der Saal bei der Erkennung nahe am Zufall.* 37 von 76 Stimmen ordneten das KI-ADR richtig zu, knapp die Hälfte. Bei der Frage nach dem besseren ADR erhielt Claude 40 Stimmen, Eberhard 35.
 
-Die Zahlen stammen aus einem einzigen Saal. Wie viele Personen abstimmten, ist nicht bekannt; die Summen schwanken zwischen 22 und 27 Stimmen je Frage. Für mehr als ein Stimmungsbild reichen sie nicht.
+Die Zahlen stammen aus einer einzigen Veranstaltung. Rund 55 Personen nahmen an der Keynote teil, je Frage stimmten 22 bis 27 ab, also etwa die Hälfte. Für mehr als ein Stimmungsbild reichen die Zahlen nicht.
 
 Texte: Eberhard Wolff und Claude.
+
+== Ralf und Eberhard deuteten die Ergebnisse auf der Bühne
+
+Nach der Auflösung sprachen Ralf D. Müller und Eberhard Wolff über die drei Runden. Die Zeitmarken führen zur Stelle im Video.
+
+*Runde 1: Eberhard bleibt bei Keycloak.* Ralf fiel auf, wie oft Claudes ADR auf andere ADRs, Risiken und Qualitätsszenarien verweist (link:{video}&t=2744s[45:44]). Diese Dokumentation hatte die KI selbst erzeugt; Eberhard hatte sie bewusst nicht gelesen (link:{video}&t=2812s[46:52], link:{video}&t=760s[12:40]). Er nannte dagegen Produkte, Keycloak und Auth0, und wollte die Sicherheit nicht selbst bauen (link:{video}&t=2824s[47:04]). Seine Lösung sei auf ein späteres SaaS vorbereitet, etwa auf die Anbindung an das Active Directory einer Fahrradkette (link:{video}&t=2877s[47:57]). Ralf hielt die konkreten Technologien für einen wichtigen Punkt, dem die KI ausgewichen sei (link:{video}&t=2895s[48:15]). Zum Schluss blieb Eberhard dabei: Keycloak oder Auth0 hält er für die richtige Entscheidung, auch wenn die Mehrheit das anders sah (link:{video}&t=3642s[60:42]).
+
+*Runde 2: Das Team gibt den Ausschlag.* Ralf erinnerte Eberhards ADR mit einer Single-Page-App je Komponente an Self-Contained Systems (link:{video}&t=3022s[50:22]). Eberhard hielt dagegen, dass serverseitig gerenderte Seiten besser zu Self-Contained Systems passen (link:{video}&t=3054s[50:54]). Im Kern sage sein ADR: Was das Team kann, das nimmt man (link:{video}&t=3119s[51:59]). Die Wahl der Frontendtechnologie hält er hier für wenig bedeutsam (link:{video}&t=3631s[60:31]).
+
+*Runde 3: Eberhard lernte nach eigener Aussage am meisten über die Domäne* (link:{video}&t=3342s[55:42]). Ein Reparaturstatus unter einer schwer erratbaren URL sei sogar ein Vorteil, weil man den Link weitergeben kann; der Status sei kaum schützenswert (link:{video}&t=3368s[56:08]). Termine ohne Registrierung senken die Hürde für neue Kundinnen, bezahlen kann man vor Ort (link:{video}&t=3413s[56:53]). Er würde "wahrscheinlich die Integration in den Webshop einfach killen", das aber zuerst mit Domänenexpertinnen besprechen (link:{video}&t=3442s[57:22]).
+
+*Ralf: nicht bestanden, aber knapp.* Einmal hielt das Publikum den Menschen für die KI, zweimal lag es richtig. Damit habe die KI den Test nicht bestanden (link:{video}&t=3511s[58:31]). Bei der Frage nach dem besseren ADR sei das Bild ausgeglichen. Man könne die KI "wahrscheinlich ganz gut als unterstützendes Instrument nutzen" (link:{video}&t=3542s[59:02]).
+
+*Eberhard: Architektur entsteht im Team.* Das Experiment blende aus, dass Architekturentscheidungen ein gemeinsamer Prozess sind, mit Stakeholdern, Entwicklern und anderen Architektinnen. Beide Wege, "ich schließe mich ins Kämmerchen ein und entscheide das mal kurz" oder die KI entscheiden zu lassen, seien im wirklichen Leben nur bedingt gut (link:{video}&t=3249s[54:09]). Ob seine ADRs leicht verständlich sind, hätte er jemanden prüfen lassen sollen (link:{video}&t=3687s[61:27]).
+
+== Der Chat blieb ruhig
+
+Im Chat kamen wenige Kommentare. Ein Kommentar bestätigte, dass Benutzerfreundlichkeit wichtig ist (link:{video}&t=395s[06:35]). In einem anderen hieß es scherzhaft, man solle aufhören, LLMs zu vermenschlichen (link:{video}&t=2044s[34:04]). Zwei Kommentare zum Schluss lobten, dass die Auflösung erst am Ende kam, und mahnten, solche Entscheidungen im Austausch mit vielen zu treffen; dann ergebe sich das Review auf Verständlichkeit von selbst (link:{video}&t=3702s[61:42], link:{video}&t=3783s[63:03]).
 
 == Keine Fassung ist beschlossen
 
