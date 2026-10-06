@@ -1,0 +1,160 @@
+[[adr-021]]
+== ADR-021: Für die Verfügbarkeit des Web-Systems trotz Webshop liegen zwei Vorschläge vor
+
+[cols="1,3"]
+|===
+| Status | Offen – zwei Vorschläge
+| Datum | 2026-10-06
+| Quelle | Keynote "Der Architektur-Turing-Test" (Ralf D. Müller, Eberhard Wolff), InfoDays, 06.10.2026, Runde 3 (Problem P5). Ablauf und Ergebnisse: link:https://llm-coding.github.io/fahrrad-reparatur-architektur/experiment/architektur-turing-test.html[Der Architektur-Turing-Test]
+|===
+
+Dieses ADR hält zwei gleichrangige Vorschläge fest: einen von Eberhard Wolff, einen von Claude. Beide stehen im Wortlaut da. Entschieden ist nichts; die Abstimmung im Saal ist ein Stimmungsbild, keine Entscheidung.
+
+=== Problem
+
+Wie das Web-System sein Verfügbarkeitsziel hält, obwohl es für Login und Nutzerdaten auf den Webshop angewiesen ist, ist nicht entschieden.
+
+=== Kontext
+
+Die Problemstellung, die beide Seiten erhielten:
+
+[quote]
+____
+Kund:innen melden sich im Webshop an. Das Reparatur-System liest das JWT-Cookie des Webshops und holt Adresse und Zahlungsart über dessen REST-Schnittstelle (ADR-001). Dafür läuft es als Pfad `/reparatur` unter der Webshop-Domain (ADR-002). ADR-008 setzt die Verfügbarkeitsziele: Web-System 99,9 % zwischen 7 und 24 Uhr, nachts 99 %. Der Webshop ist ein Fertigprodukt eines externen Betreibers; sein SLA ist unbekannt. Der Laden hat kein Betriebsteam.
+____
+
+Voraussetzungen sind <<adr-001>>, <<adr-002>> und <<adr-008>>.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-z-04,QS-Z-04>> (99,9 % von 7 bis 24 Uhr), <<{ch10}#qs-z-05,QS-Z-05>> (99 % nachts), <<{ch10}#qs-z-06,QS-Z-06>> (Wiederanlauf in 5 Minuten), <<{ch10}#qs-u-02,QS-U-02>> (Reparatur in 2 Minuten beauftragt), <<{ch10}#qs-u-07,QS-U-07>> (Betrieb ohne IT-Experten).
+
+*Bekannte Risiken:* R-002 (Webshop-Ausfall legt Login und Adressabfrage lahm), R-005 (Betrieb der Umleitung nach `/reparatur` offen), R-022 (Betriebsmodell offen).
+
+=== Fassung Eberhard Wolff
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-A.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Das Web-System soll zwischen 7 und 24 Uhr zu 99,9% und den Rest der Zeit zu 99% zur Verfügung stehen.
+
+Der Webshop hat Links zu den Komponenten „Reparatur durchführen“, „Terminplanung“ und „Bezahlung“.
+
+Die Webshop User Database bietet die Authentifizierung als einen JWT-Token als Cookie an.
+
+==== Optionen
+
+*Option 1.* Die Webshop User Database wird für einen Login direkt angesprochen. Die Komponenten verlassen sich auf die Existenz eines JWT-Tokens. Ein Ausfall der Webshop User Database führt zu einem Ausfall des Reparatursystems. Wenn die Bezahlung im Webshop ausfällt, kann man im Shop nicht online bezahlen.
+
+*Option 2.* Falls die Webshop User Database ausfällt: +
+Terminplanung ist unter Angabe einer beliebigen E-Mail-Adresse mit anschließender Bestätigung des Termins über einen Link möglich. +
+Kunden haben für den Reparatur-Status einen Link. Sie können den Status ohne Authentifizierung einsehen. +
+Wenn der Webshop ausfällt: +
+Bezahlung ist nur vor Ort möglich.
+
+*Option 3.* Statt der Webshop User Database wird eine eigene Authentifizierung genutzt, ggf. mit identischen Login-Daten. +
+Beim Ausfall des Webshops ist eine Bezahlung nur vor Ort möglich.
+
+==== Entscheidung
+
+Wir nutzen den Webshop, falls erfahrungsgemäß die Zuverlässigkeitsziele damit erreicht werden können. Sonst implementieren wir die Termin-Vergabe mit einer E-Mail-Adresse und verwalten den Reparatur-Status über einen Link. Online-Bezahlung ist bei Ausfall des Online-Shops nicht möglich.
+
+==== Begründung
+
+Option 1 ist am einfachsten implementierbar. Sie ist nur dann problematisch, wenn der Webshop die Verfügbarkeitsziele nicht erreicht.
+
+Option 2 ist ebenfalls einfach implementierbar, aber sichert Informationen weniger gut ab.
+
+Option 3 ist verhältnismäßig aufwändig. Die sichere Replikation von Login-Daten bedeutet, dass Credentials repliziert werden müssen. Das kann bzgl. Sicherheit problematisch sein.
+
+==== Konsequenzen
+
+* Option 2
+* Ein Angreifer könnte den Terminkalender mit Terminen füllen
+* Termine können ggf. nicht einem User im Webshop zugeordnet werden, wenn die E-Mail-Adressen unterschiedlich sind.
+* Der Link für den Status einer Reparatur oder eines Termins sollte nicht einfach erratbar sein (z.B. UUID).
+* Die Informationen über den Status einer Reparatur oder einen Termin sind nicht so gut geschützt wie bei Option 1.
+* Den Status einer Reparatur oder einen Termin können auch andere Personen außer dem Kunden selbst einsehen.
+* Online-Bezahlung ist in allen Optionen nur möglich, wenn der Shop verfügbar ist. Da das Rad abgeholt und angeliefert werden muss, ist eine Bezahlung vor Ort vermutlich akzeptabel.
+
+=== Fassung Claude
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-B.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Kund:innen melden sich im Webshop an; das Reparatur-System liest das JWT-Cookie und holt Adresse und Zahlungsart per REST (<<adr-001,ADR-001>>). Das Web-System soll zwischen 7 und 24 Uhr zu 99,9 % verfügbar sein, nachts zu 99 % (QS-Z-04, QS-Z-05), mit Wiederanlauf in fünf Minuten (QS-Z-06). Der Webshop ist ein Fertigprodukt eines externen Betreibers; sein SLA ist unbekannt. Fällt er aus, fallen Login und Adressabfrage mit (R-002). Der Laden hat kein Betriebsteam (QS-U-07). Die Beauftragung muss in zwei Minuten gelingen (QS-U-02).
+
+==== Optionen
+
+*Option 1: Verbundverfügbarkeit akzeptieren.* Wir fordern vom Webshop-Betreiber ein SLA und messen die 99,9 % nur für die Zeit, in der der Webshop läuft.
+
+*Option 2: Vom Webshop entkoppeln.* Das Reparatur-System prüft das JWT selbst mit dem öffentlichen Schlüssel des Webshops und hält Adresse und Zahlungsart je Kund:in als Kopie. Der Webshop wird nur beim Login gebraucht.
+
+*Option 3: Eigener Login als Ersatzweg.* Bei Webshop-Ausfall bietet das Reparatur-System einen eigenen Login per E-Mail-Link an.
+
+==== Entscheidung
+
+Wir entkoppeln das Reparatur-System vom laufenden Betrieb des Webshops. Es prüft das JWT selbst, hält Adresse und Zahlungsart als Kopie und lässt Kund:innen die Adresse im Formular überschreiben. Der Webshop wird nur für die Anmeldung gebraucht. Sein SLA klären wir vor der Umsetzung.
+
+==== Begründung
+
+Die Verbundverfügbarkeit zu akzeptieren misst das Ziel schön, ohne es zu erfüllen: Kund:innen merken den Ausfall trotzdem, und jede Minute kostet Umsatz. Ein eigener Login als Ersatzweg baut die zweite Nutzerverwaltung, die <<adr-001,ADR-001>> vermeidet, und verwirrt Kund:innen mit zwei Anmeldewegen. Die Entkopplung macht den Webshop zum Ausfallpunkt nur für die Anmeldung. Wer eingeloggt ist, beauftragt weiter: Das JWT trägt die Identität, die Kopie trägt die Adresse. Das schützt QS-U-02 und den größten Teil von QS-Z-04. Gegen diese Wahl spricht: Die Kopie kann veralten, und die JWT-Prüfung braucht den Schlüssel eines Anbieters, den wir nicht kontrollieren. Beides wiegt weniger als ein Ausfall. Wer beim Webshop-Ausfall nicht eingeloggt ist, bleibt draußen; das nehmen wir hin.
+
+==== Konsequenzen
+
+* Eingeloggte Kund:innen beauftragen auch bei Webshop-Ausfall; R-002 schrumpft auf die Anmeldung.
+* Das Reparatur-System hält Kund:innendaten als Kopie; R-001 wächst, Kopie und Quelle können auseinanderlaufen.
+* Der öffentliche Schlüssel des Webshops muss verfügbar sein; das klären wir mit dem Anbieter (R-005).
+* Risiko: Läuft die Umleitung nach `/reparatur` über den Reverse Proxy des Webshops, reißt sein Ausfall auch uns mit; die Umleitung braucht einen eigenen Betrieb (R-005, R-022).
+* Risiko: Ohne SLA des Webshops bleibt die Anmeldung unter 99,9 %; wir messen sie getrennt.
+
+==== Anhang: Pugh-Matrix
+
+Im Experiment nicht gezeigt; Eberhards Fassung hat keine Matrix. Option 2 ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | Option 1: Verbundverfügbarkeit | Option 2: Entkoppeln (Referenz) | Option 3: Eigener Ersatz-Login
+
+| Verfügbarkeit Web 99,9 % für Kund:innen erlebbar (QS-Z-04) | -1 | 0 | +1
+| Beauftragung in zwei Minuten mit vorbelegter Adresse (QS-U-02) | 0 | 0 | -1
+| Ein Anmeldeweg für Kund:innen (R-008) | 0 | 0 | -1
+| Abhängigkeit vom Webshop-Anbieter (Schlüssel, SLA, R-005) | -1 | 0 | +1
+| Konsistenz der Kundendaten (R-001) | +1 | 0 | -1
+| Aufwand für die Umsetzung | +1 | 0 | -1
+| Betrieb ohne IT-Experten (QS-U-07) | 0 | 0 | 0
+| Vertragliche Durchsetzbarkeit eines SLA beim Fertigprodukt | ? | 0 | 0
+
+| *Summe* | *0 (1 Zelle offen)* | *0* | *-2*
+|===
+
+Option 1 endet rechnerisch gleichauf mit der Referenz. Den Ausschlag gibt das Geschäft: Jede Minute Ausfall im Web ist Umsatzausfall, und ein Messfenster ändert daran nichts. Ob der Webshop-Anbieter überhaupt ein SLA anbietet, ist offen.
+
+=== Abstimmung
+
+Im Saal hieß Eberhards Fassung A, Claudes Fassung B. Eine KI-Stimme las beide vor; die Urheber wurden erst am Schluss genannt.
+
+[cols="3,1,1"]
+|===
+| Frage | Eberhard Wolff (A) | Claude (B)
+
+| Welches ADR eignet sich besser für die Situation? | 15 | 12
+| Welches ADR ist KI-generiert? | 9 | 17
+|===
+
+Die Mehrheit hielt Eberhards Fassung für die bessere und erkannte Claudes Fassung als KI-generiert.
+
+=== Konsequenzen
+
+* Die Entscheidung bleibt offen. Wer sie trifft, wählt zwischen dem Webshop mit E-Mail-Fallback für Termine und Status (Eberhard Wolff) und der Entkopplung vom laufenden Webshop-Betrieb (Claude).
+* Claudes Fassung beruft sich auf Risiken aus Kapitel 11 (R-001, R-002, R-005, R-008, R-022); Eberhards Fassung nennt keine Risiko-IDs.
