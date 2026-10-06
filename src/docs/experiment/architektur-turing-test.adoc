@@ -1,0 +1,112 @@
+:jbake-title: Der Architektur-Turing-Test
+:jbake-type: page_toc
+:jbake-status: published
+:jbake-menu: experiment
+:jbake-order: 1
+:filename: /experiment/architektur-turing-test.adoc
+:toc:
+:audio: https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test
+:ch09: ../arc42/chapters/09_architecture_decisions.html
+
+[[section-architektur-turing-test]]
+= Der Architektur-Turing-Test
+
+Am 6. Oktober 2026 entschieden auf den InfoDays ein Architekt und ein Sprachmodell dieselben drei Fragen. Die Keynote "Der Architektur-Turing-Test" hielten Ralf D. Müller und Eberhard Wolff von Software-Architektur im Stream. Eberhard Wolff und Claude schrieben zu drei offenen Problemen des Fahrrad-Reparatur-Systems je ein ADR. Das Publikum las beide Fassungen, ohne den Urheber zu kennen, und stimmte zweimal ab: Welches ADR eignet sich besser? Und welches hat die KI geschrieben? Diese Seite hält Ablauf, Regeln und Ergebnisse fest. Die sechs ADRs stehen im Wortlaut in Kapitel 9.
+
+== Drei offene Fragen kamen auf die Bühne
+
+Die Folgen 111 bis 113 von software-architektur.tv ließen mehrere Entscheidungen offen (Kapitel 9, Abschnitt "Die Front"). Drei davon wurden gespielt:
+
+[cols="1,4,2"]
+|===
+| Runde | Problem | ADR
+
+| 1 | P1: Wie melden sich Mechaniker:innen und Shop-Mitarbeitende an? | link:{ch09}#adr-019[ADR-019]
+| 2 | P3: Welche Frontendtechnologie bekommt das Reparatur-System? | link:{ch09}#adr-020[ADR-020]
+| 3 | P5: Wie erreicht das Web-System 99,9 % Verfügbarkeit, wenn Login und Nutzerdaten vom Webshop abhängen? | link:{ch09}#adr-021[ADR-021]
+|===
+
+== Das Experiment lief blind
+
+Die Regeln sollten verhindern, dass das Publikum etwas anderes bewertet als den Text.
+
+* *Gleiche Vorgabe.* Beide Autoren erhielten dieselbe Problemstellung: Ausgangslage, Kräfte und bekannte Risiken, aber keine Lösungsoptionen. Sie steht in jedem ADR unter "Kontext".
+* *Gleiches Format.* Beide schrieben ein ADR mit denselben Abschnitten: Kontext, Optionen, Entscheidung, Begründung, Konsequenzen.
+* *Kein Blick zum anderen.* Keiner sah den Text des anderen vor der Abstimmung.
+* *Anonym als A und B.* Das Publikum sah die beiden ADRs nur als A und B. Die Zuordnung wechselte von Runde zu Runde.
+* *Gleiche Stimme.* Eine synthetische Stimme (Cartesia, Stimme Lorelei) las beide Fassungen vor. So verriet keine Stimme den Urheber.
+* *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. Im Saal war auf keiner Seite eine Matrix zu sehen. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
+* *Auflösung am Schluss.* Wer A und wer B war, erfuhr der Saal erst nach der letzten Runde.
+
+Jede Runde begann mit der Problemstellung und einer Vorabfrage: "Wie würdet ihr entscheiden?" Dann folgten ADR A und ADR B, dann die beiden Abstimmungen.
+
+== Das Publikum stimmte zweimal je Runde ab
+
+[cols="2,1,1,1,1,2"]
+|===
+| Runde | A | B | Besser: A | Besser: B | KI-generiert: A / B
+
+| 1 Anmeldung | Eberhard Wolff | Claude | 4 | *18* | *19* / 5
+| 2 Frontend | Claude | Eberhard Wolff | 10 | *16* | *15* / 11
+| 3 Verfügbarkeit | Eberhard Wolff | Claude | *15* | 12 | 9 / *17*
+|===
+
+Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Keynote. Die Ergebnisse der Vorabfrage "Wie würdet ihr entscheiden?" liegen hier nicht vor.
+
+== Was die Zahlen zeigen
+
+*Runde 1 gewann Claude, und der Saal hielt Eberhard für die KI.* 18 von 22 Stimmen hielten Claudes ADR für das bessere. 19 von 24 Stimmen hielten Eberhards ADR für KI-generiert. Die Mehrheit lag bei der Erkennung falsch.
+
+*Runde 2 und 3 gewann Eberhard, und der Saal erkannte die KI.* In Runde 2 hielten 16 von 26 Stimmen Eberhards ADR für das bessere, 15 von 26 erkannten Claudes ADR als KI-generiert. In Runde 3 lauteten die Zahlen 15 von 27 und 17 von 26.
+
+*In jeder Runde hielt die Mehrheit das bessere ADR für das menschliche.* Das bessere ADR war dabei einmal Claudes und zweimal Eberhards. Ob das Urteil über die Qualität das Urteil über den Urheber gelenkt hat oder umgekehrt, zeigen die Zahlen nicht.
+
+*Über alle Runden lag der Saal bei der Erkennung nahe am Zufall.* 37 von 76 Stimmen ordneten das KI-ADR richtig zu, knapp die Hälfte. Bei der Frage nach dem besseren ADR erhielt Claude 40 Stimmen, Eberhard 35.
+
+Die Zahlen stammen aus einem einzigen Saal. Wie viele Personen abstimmten, ist nicht bekannt; die Summen schwanken zwischen 22 und 27 Stimmen je Frage. Für mehr als ein Stimmungsbild reichen sie nicht.
+
+== Die Hörproben sind die Lesungen der KI-Stimme
+
+Die kurze Fassung enthält Kontext, Entscheidung und Begründung, die lange das ganze ADR. Die Dateien tragen die Bezeichnung aus dem Saal (A oder B), nicht den Namen des Autors.
+
+[cols="2,2,3,1"]
+|===
+| Runde | Fassung | Kurze Fassung | Ganzes ADR
+
+| 1 Anmeldung | A: Eberhard Wolff
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-A.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R1-P1-A-voll.mp3[MP3]
+| 1 Anmeldung | B: Claude
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-B.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R1-P1-B-voll.mp3[MP3]
+| 2 Frontend | A: Claude
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-A.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R2-P3-A-voll.mp3[MP3]
+| 2 Frontend | B: Eberhard Wolff
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-B.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R2-P3-B-voll.mp3[MP3]
+| 3 Verfügbarkeit | A: Eberhard Wolff
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-A.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R3-P5-A-voll.mp3[MP3]
+| 3 Verfügbarkeit | B: Claude
+a| ++++
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-B.mp3" controls preload="none"></audio>
+++++
+| link:{audio}/R3-P5-B-voll.mp3[MP3]
+|===
+
+Stimme: Cartesia, Lorelei. Texte: Eberhard Wolff und Claude; Eberhard Wolff hat der Veröffentlichung seiner Fassungen mit Namensnennung zugestimmt.
+
+== Keine Fassung ist beschlossen
+
+Die drei ADRs tragen den Status "Offen – zwei Vorschläge". Die Abstimmung im Saal ist kein Beschluss des Teams. Beide Fassungen stehen gleichrangig nebeneinander: link:{ch09}#adr-019[ADR-019], link:{ch09}#adr-020[ADR-020] und link:{ch09}#adr-021[ADR-021].

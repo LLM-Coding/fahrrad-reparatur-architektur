@@ -70,9 +70,9 @@ package "A  Kundenzugang über den Webshop" {
   rectangle "ADR-002\nPfad /reparatur" as a2 #C8E6C9
   rectangle "ADR-003\nEigener Bereich" as a3 #C8E6C9
   rectangle "ADR-005\nStatusseite" as a5 #C8E6C9
-  rectangle "<b>Login für Mitarbeitende\nund Mechaniker:innen (P1)" as f1 #FFCDD2
-  rectangle "<b>Verfügbarkeit bei\nWebshop-Ausfall (P5, Reserve)" as f6 #FFCDD2
-  rectangle "<b>Frontendtechnologie (P3)" as f7 #FFCDD2
+  rectangle "<b>Login für Mitarbeitende\nund Mechaniker:innen (P1)\nADR-019: zwei Vorschläge" as f1 #FFCDD2
+  rectangle "<b>Verfügbarkeit bei\nWebshop-Ausfall (P5)\nADR-021: zwei Vorschläge" as f6 #FFCDD2
+  rectangle "<b>Frontendtechnologie (P3)\nADR-020: zwei Vorschläge" as f7 #FFCDD2
 }
 
 package "B  Fachliche Struktur" {
@@ -154,18 +154,18 @@ d16 -[hidden]down- d18
 |===
 | Entscheidung | Voraussetzungen (gefallen) | Contest | Stand
 
-| Login für Mitarbeitende und Mechaniker:innen | ADR-001 | P1 | offen, im Video nicht behandelt
+| Login für Mitarbeitende und Mechaniker:innen | ADR-001 | P1 | offen, im Video nicht behandelt; zwei Vorschläge in <<adr-019>>
 | Kasse aus der Cloud erreichen | ADR-004, ADR-013 | P2 | offen, in Folge 113 als Risiko benannt, Kassenproxy als Option
 | Monolith oder Microservices | ADR-011, ADR-013, ADR-015, ADR-016 | Reserve | ADR-014 vertagt, "relativ irrelevant" für die Szenarien
 | Synchron oder Messages | ADR-012 | neu | offen, in Folge 112 ausdrücklich vertagt
 | Mandantenfähigkeit gegen Webshop-Kopplung | ADR-001, ADR-013, Mandantenfähigkeit beschlossen | P4 | Kopplung im Video nicht behandelt
-| Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P5, Reserve | offen, im Video nicht behandelt
-| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (link:{mp3-113}#t=3110[51:55,role=ts f113 start-3110.02,title="Da müssen wir trotzdem noch entscheiden, welche Programmiersprache benutzen wir, welche Libraries benutzen wir, wie bauen wir das Frontend. Diese Voraussetzungen muss ich schaffen, bevor ich mich an die Tastatur setze, das ist sehr klar. Aber das sind Dinge, die ich jetzt gar…"]), nicht entschieden
+| Verfügbarkeit bei Webshop-Ausfall | ADR-001, ADR-008 | P5 | offen, im Video nicht behandelt; zwei Vorschläge in <<adr-021>>
+| Frontendtechnologie | ADR-001, ADR-002, ADR-003 | P3 | offen, in Folge 113 als Voraussetzung vor dem ersten Code genannt (link:{mp3-113}#t=3110[51:55,role=ts f113 start-3110.02,title="Da müssen wir trotzdem noch entscheiden, welche Programmiersprache benutzen wir, welche Libraries benutzen wir, wie bauen wir das Frontend. Diese Voraussetzungen muss ich schaffen, bevor ich mich an die Tastatur setze, das ist sehr klar. Aber das sind Dinge, die ich jetzt gar…"]), nicht entschieden; zwei Vorschläge in <<adr-020>>
 |===
 
 === Übersicht der Entscheidungen
 
-Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112, ADR-013 bis 018 aus Folge 113). Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
+Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle ist die Serie "Wir bauen eine Software-Architektur" von software-architektur.tv, Folgen 111 bis 113 (ADR-001 bis 008 aus Folge 111, ADR-009 bis 012 aus Folge 112, ADR-013 bis 018 aus Folge 113). ADR-019 bis 021 stammen aus der Keynote "Der Architektur-Turing-Test" am 06.10.2026; sie halten je zwei Vorschläge fest, einen von Eberhard Wolff und einen von Claude, und haben deshalb keine gemeinsame Pugh-Matrix. Zeitmarken verweisen auf die jeweilige Folge. Risiken tragen IDs R-NNN und werden in Kapitel 11 geführt.
 
 [cols="1,4,2"]
 |===
@@ -189,6 +189,9 @@ Jede Entscheidung ist ein ADR nach Nygard mit einer 3-Punkt-Pugh-Matrix. Quelle 
 | <<adr-016>> | Relationale Datenbank als Managed Service (RDS) | Accepted
 | <<adr-017>> | Eigener Support mit Rufbereitschaft statt Betrieb durch den Shop | Accepted
 | <<adr-018>> | Netzausfall im Laden wird als Risiko akzeptiert | Accepted
+| <<adr-019>> | Für die Anmeldung der Mitarbeitenden liegen zwei Vorschläge vor | Offen – zwei Vorschläge
+| <<adr-020>> | Für die Frontendtechnologie liegen zwei Vorschläge vor | Offen – zwei Vorschläge
+| <<adr-021>> | Für die Verfügbarkeit des Web-Systems trotz Webshop liegen zwei Vorschläge vor | Offen – zwei Vorschläge
 |===
 
 
@@ -255,3 +258,9 @@ include::../adr/_ADR-016-relationale-datenbank-rds.adoc[leveloffset=+1]
 include::../adr/_ADR-017-eigener-support-rufbereitschaft.adoc[leveloffset=+1]
 
 include::../adr/_ADR-018-netzausfall-im-laden.adoc[leveloffset=+1]
+
+include::../adr/_ADR-019-anmeldung-mitarbeitende-zwei-vorschlaege.adoc[leveloffset=+1]
+
+include::../adr/_ADR-020-frontendtechnologie-zwei-vorschlaege.adoc[leveloffset=+1]
+
+include::../adr/_ADR-021-verfuegbarkeit-trotz-webshop-zwei-vorschlaege.adoc[leveloffset=+1]

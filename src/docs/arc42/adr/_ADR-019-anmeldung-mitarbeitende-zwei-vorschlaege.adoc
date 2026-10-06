@@ -1,0 +1,161 @@
+[[adr-019]]
+== ADR-019: Für die Anmeldung der Mitarbeitenden liegen zwei Vorschläge vor
+
+[cols="1,3"]
+|===
+| Status | Offen – zwei Vorschläge
+| Datum | 2026-10-06
+| Quelle | Keynote "Der Architektur-Turing-Test" (Ralf D. Müller, Eberhard Wolff), InfoDays, 06.10.2026, Runde 1 (Problem P1). Ablauf und Ergebnisse: link:https://llm-coding.github.io/fahrrad-reparatur-architektur/experiment/architektur-turing-test.html[Der Architektur-Turing-Test]
+|===
+
+Dieses ADR hält zwei gleichrangige Vorschläge fest: einen von Eberhard Wolff, einen von Claude. Beide stehen im Wortlaut da. Entschieden ist nichts; die Abstimmung im Saal ist ein Stimmungsbild, keine Entscheidung.
+
+=== Problem
+
+Wie sich Mechaniker:innen und Shop-Mitarbeitende anmelden und wer ihre Konten verwaltet, ist nicht entschieden.
+
+=== Kontext
+
+Die Problemstellung, die beide Seiten erhielten:
+
+[quote]
+____
+Das Reparatur-System übernimmt Konten und Login der Kund:innen aus dem Webshop (ADR-001). Nach dem Login liefert der Webshop ein JWT-Cookie, das das Reparatur-System unter dem Pfad `/reparatur` liest (ADR-002). Der Webshop ist ein Fertigprodukt und kennt nur Kund:innen. Mechaniker:innen und Shop-Mitarbeitende bedienen die Werkstattfunktionen im Browser, doch für sie ist keine Anmeldung entschieden. Der Laden hat drei bis vier Mitarbeitende und keine IT-Abteilung.
+____
+
+Voraussetzungen sind <<adr-001>> und <<adr-002>>.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-05,QS-U-05>> und <<{ch10}#qs-u-06,QS-U-06>> (Einarbeitung in einer Stunde), <<{ch10}#qs-u-07,QS-U-07>> (Betrieb ohne IT-Experten), <<{ch10}#qs-a-01,QS-A-01>> (SaaS in 2 Monaten und 20 PT).
+
+*Bekannte Risiken:* R-002 (Webshop-Ausfall legt Login und Adressabfrage lahm), R-003 (Kopplung an diesen Webshop gegen das SaaS-Ziel), R-007 (geteilter Origin).
+
+=== Fassung Eberhard Wolff
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-A.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Kund:innen loggen sich über den Webshop ein.
+
+Mitarbeitende müssen sich ebenfalls einloggen können.
+
+Das System soll später auch als SaaS-Lösung angeboten werden.
+
+Das System für Mitarbeiter:innen soll zwischen 9 und 18 Uhr zu 99% verfügbar sein und maximal 5 Minuten ausfallen. Der Preis einer Reparatur soll sogar nach 2 Minuten schon wieder ermittelt werden können.
+
+Im Shop sind keine IT-Spezialisten. Daher läuft das System in der Cloud.
+
+Mitarbeitende arbeiten nur im Shop mit dem System.
+
+==== Optionen
+
+*Option 1.* Login mit Hilfe einer Standard-Software wie Keycloak oder Auth0 implementieren. Das führt eine zusätzliche, nicht-triviale Komponente ein. Dafür ist die Lösung sicher. Sie bringt eine Benutzerverwaltung mit. Sie kann bei der späteren Implementierung des SaaS mit anderen Lösungen für die Verwaltung von Benutzern integriert werden.
+
+*Option 2.* Login auch für Mitarbeitende über den Shop. Das ist gegebenenfalls einfacher, weil diese Option bereits für die Kund:innen genutzt wird. Allerdings haben Mitarbeitende eine andere Oberfläche als Kund:innen, so dass niemals dieselben Web-Seiten von beiden Gruppen genutzt werden. Die Einheitlichkeit ist daher kein sehr großer Vorteil. Außerdem müssen Mitarbeitende im Shop registriert werden, was u.a. wegen Datenschutz problematisch sein kann. Für ein SaaS-Angebot trägt die Lösung wohl kaum.
+
+*Option 3.* Wir implementieren ein eigenes Login mit einer eigenen Benutzerverwaltung. Das ist nicht sicher, wenn die Implementierung fehlerhaft ist – und sie wirklich sicher umzusetzen kann schwierig sein. Die Umsetzung kann aufwändig sein, weil eine Benutzerverwaltung entwickelt werden muss, die Mitarbeitende im Shop nutzen. Wenn für ein SaaS die Integration mit einer Kunden-Benutzerverwaltung notwendig ist, muss diese Implementierung entsprechend erweitert werden.
+
+==== Entscheidung
+
+Login mit Hilfe einer Standard-Software wie Keycloak oder Auth0 implementieren.
+
+==== Begründung
+
+Option 1  (Standard-Software) bietet hohe Sicherheit, eine hohe Geschwindigkeit bei der Implementierung und eine gute Erweiterbarkeit für die SaaS-Lösung. Eine Einarbeitung in die Standard-Software ist allerdings notwendig.
+
+Option 2 (Webshop) bietet demgegenüber nur den Vorteil, dass keine Einarbeitung notwendig ist, und überzeugt konzeptionell nicht.
+
+Option 3 (eigene Implementierung) spart ebenso die Einarbeitung in die Standard-Software, erhöht wahrscheinlich den Aufwand spätestens bei der SaaS-Lösung.
+
+==== Konsequenzen
+
+* Eine Standard-Software muss ausgewählt werden.
+* Wenn die Software ein SaaS ist, entstehen ggf. zusätzliche Kosten für ein Abo. Diese können beispielsweise bei einer Übernahme des SaaS-Anbieters deutlich steigen.
+* Wenn die Software kein SaaS ist, entsteht zusätzlicher Aufwand im Betrieb. Wenn die Software als Container ausgeliefert wird, ist das ein Grund für den Betrieb des Reparatursystems in einem Container, um so das gesamte System einheitlich zu betreiben.
+* Ein Framework wie Spring Security kann die Abhängigkeit des Codes zu der gewählten Lösung verringern. Allerdings müssten bei einer Migration die Benutzerdaten migriert werden.
+* Es sollten Maßnahmen ergriffen werden, um den Zugriff auf den Login, die internen Anwendungen und die Benutzerverwaltung auf den Shop zu limitieren.
+
+=== Fassung Claude
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-B.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Der Webshop verwaltet nur Kund:innen. Ihr Login liefert ein JWT-Cookie, das das Reparatur-System unter `/reparatur` liest (<<adr-001,ADR-001>>, <<adr-002,ADR-002>>). Mechaniker:innen und Shop-Mitarbeitende arbeiten im Werkstatt-Teil, doch für sie gibt es keine Anmeldung. Der Laden hat drei bis vier Mitarbeitende und keine IT-Experten (QS-U-07). Neue Mitarbeitende bedienen das System nach einer Stunde (QS-U-05, QS-U-06). Die Werkstatt soll auch laufen, wenn der Webshop ausfällt (R-002). Der Umbau zum SaaS darf 20 Personentage nicht überschreiten (QS-A-01, R-003). Security ist bewusst nachrangig.
+
+==== Optionen
+
+*Option 1: Mitarbeitende als Webshop-Kund:innen.* Jede Mitarbeiter:in erhält ein Kund:innen-Konto im Webshop. Das Reparatur-System führt eine Liste, welche Konten Werkstattrechte haben. Ein Login-Mechanismus für alle.
+
+*Option 2: Eigene Mitarbeiter-Konten im Werkstatt-Teil.* Die Inhaber:in legt Konten mit der Rolle Mechaniker:in oder Shop an. Login mit E-Mail und Passwort, unabhängig vom Webshop.
+
+*Option 3: Identitätsdienst zukaufen.* Ein Cloud-Identitätsdienst verwaltet Mitarbeiter-Konten, Passwörter und das Zurücksetzen. Das Reparatur-System prüft nur dessen Token.
+
+==== Entscheidung
+
+Wir führen eigene Mitarbeiter-Konten im Werkstatt-Teil des Reparatur-Systems. Die Inhaber:in legt sie auf einer Verwaltungsseite an und vergibt eine von zwei Rollen. Der Login läuft getrennt vom JWT-Cookie des Webshops. Kund:innen-Login und Mitarbeiter-Login bleiben zwei Wege.
+
+==== Begründung
+
+Mitarbeitende als Webshop-Kund:innen zu führen missbraucht Kund:innen-Konten als Personalkonten. Das verschärft R-002, weil dann auch die Werkstatt beim Webshop-Ausfall stillsteht, und R-003, weil jeder weitere Shop einen Webshop mit passender Schnittstelle bräuchte. Ein zugekaufter Identitätsdienst passt zur Linie "Dienste kaufen statt betreiben". Doch seine Verwaltungsoberfläche richtet sich an IT-Fachleute, nicht an eine Inhaber:in ohne IT-Kenntnisse (QS-U-07). Eigene Mitarbeiter-Konten halten die Werkstatt unabhängig vom Webshop, sind je Mandant konfigurierbar und in einer Stunde erklärt: Konto anlegen, Rolle wählen, fertig. Gegen diese Wahl spricht, dass wir Passwort-Speicherung und Zurücksetzen selbst bauen und pflegen. Bei drei bis vier Konten und nachrangiger Security ist das tragbar.
+
+==== Konsequenzen
+
+* Die Werkstatt arbeitet weiter, wenn der Webshop ausfällt; R-002 trifft nur noch Kund:innen.
+* Zwei Login-Wege im selben System: Kund:innen per Webshop-JWT, Mitarbeitende per eigenem Konto.
+* Das Zurücksetzen eines Passworts muss ohne IT-Experten gehen, etwa durch die Inhaber:in.
+* Risiko: Selbst gebaute Passwort-Speicherung ist ein Einfallstor; wir nutzen einen erprobten Hash-Algorithmus und beachten R-007.
+* Risiko: Beim Umbau zum SaaS braucht jeder Mandant eine eigene Inhaber:in-Rolle; die Kontenverwaltung muss mandantenfähig sein (R-026).
+
+==== Anhang: Pugh-Matrix
+
+NOTE: Der Anhang war für eine Folie "Bewertung" vorgesehen, im Experiment aber nicht gezeigt. Eberhards Fassung hat keine Matrix. Der erste Satz des Originals ("Wird auf der Folie Bewertung gezeigt.") ist deshalb weggelassen.
+
+Option 2 ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | Option 1: Webshop-Kund:innen-Konten | Option 2: Eigene Mitarbeiter-Konten (Referenz) | Option 3: Identitätsdienst
+
+| Einarbeitung in einer Stunde (QS-U-05, QS-U-06) | 0 | 0 | 0
+| Betrieb ohne IT-Experten: Kontenpflege durch die Inhaber:in (QS-U-07) | 0 | 0 | -1
+| Werkstatt unabhängig vom Webshop (R-002) | -1 | 0 | 0
+| Änderbarkeit Richtung SaaS (R-003, R-026) | -1 | 0 | +1
+| Aufwand für die Umsetzung (Passwörter, Zurücksetzen) | +1 | 0 | +1
+| Security (Passwort-Speicherung, R-007) | 0 | 0 | +1
+| Fachliche Passung (Personal ist kein Kunde) | -1 | 0 | 0
+| Laufende Kosten je Mandant | 0 | 0 | ?
+
+| *Summe* | *-2* | *0* | *+2 (1 Zelle offen)*
+|===
+
+Die ungewichtete Summe spricht für Option 3. Den Ausschlag gibt QS-U-07: Die Inhaber:in muss Konten selbst anlegen, und die Verwaltungsoberfläche eines Identitätsdienstes richtet sich an IT-Fachleute. Ändert sich das, etwa weil der eigene Support die Kontenpflege übernimmt, ist Option 3 die bessere Wahl.
+
+=== Abstimmung
+
+Im Saal hieß Eberhards Fassung A, Claudes Fassung B. Eine KI-Stimme las beide vor; die Urheber wurden erst am Schluss genannt.
+
+[cols="3,1,1"]
+|===
+| Frage | Eberhard Wolff (A) | Claude (B)
+
+| Welches ADR eignet sich besser für die Situation? | 4 | 18
+| Welches ADR ist KI-generiert? | 19 | 5
+|===
+
+Die Mehrheit hielt Claudes Fassung für die bessere und Eberhards für die KI-generierte.
+
+=== Konsequenzen
+
+* Die Entscheidung bleibt offen. Wer sie trifft, wählt zwischen einer Standard-Software (Eberhard Wolff) und eigenen Mitarbeiter-Konten (Claude).
+* Claudes Fassung beruft sich auf Risiken aus Kapitel 11 (R-002, R-003, R-007, R-026); Eberhards Fassung nennt keine Risiko-IDs.

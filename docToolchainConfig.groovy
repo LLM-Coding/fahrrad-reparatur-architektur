@@ -40,7 +40,7 @@ microsite.with {
     // Landing page, relative to inputPath (src/docs). Static HTML fragment, no JS.
     landingPage = 'landingpage.gsp'
     // Menu: code -> title. Codes come from :jbake-menu: headers or folder names.
-    menu = [arc42: 'arc42']
+    menu = [arc42: 'arc42', experiment: 'Experiment']
     footerMail = ''
     footerTwitter = ''
     footerSO = ''

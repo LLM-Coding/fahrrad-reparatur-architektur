@@ -1,0 +1,162 @@
+[[adr-020]]
+== ADR-020: Für die Frontendtechnologie liegen zwei Vorschläge vor
+
+[cols="1,3"]
+|===
+| Status | Offen – zwei Vorschläge
+| Datum | 2026-10-06
+| Quelle | Keynote "Der Architektur-Turing-Test" (Ralf D. Müller, Eberhard Wolff), InfoDays, 06.10.2026, Runde 2 (Problem P3). Ablauf und Ergebnisse: link:https://llm-coding.github.io/fahrrad-reparatur-architektur/experiment/architektur-turing-test.html[Der Architektur-Turing-Test]
+|===
+
+Dieses ADR hält zwei gleichrangige Vorschläge fest: einen von Eberhard Wolff, einen von Claude. Beide stehen im Wortlaut da. Entschieden ist nichts; die Abstimmung im Saal ist ein Stimmungsbild, keine Entscheidung.
+
+=== Problem
+
+Mit welcher Technologie das Frontend für Kund:innen, Shop-Mitarbeitende und Mechaniker:innen gebaut wird, und ob es ein Frontend für alle drei Gruppen ist, ist nicht entschieden.
+
+=== Kontext
+
+Die Problemstellung, die beide Seiten erhielten:
+
+[quote]
+____
+Alle Nutzergruppen bedienen das Reparatur-System im Webbrowser: Kund:innen kommen aus dem Webshop, Shop-Mitarbeitende und Mechaniker:innen arbeiten im Laden und in der Werkstatt (Board Seite 10). Das System läuft als eigener Bereich neben dem Webshop (ADR-003) unter dem Pfad `/reparatur` derselben Domain, damit der Browser das JWT-Cookie des Webshops mitschickt (ADR-001, ADR-002). Die Same-Origin-Policy kam in Folge 111 aus dem Chat und ist der Grund für die Umleitung (31:24 bis 31:56). Der Webshop ist ein Fertigprodukt; er verlinkt auf Terminplanung, Reparatur durchführen und Bezahlung (Folge 113, 23:22 bis 23:41). Die Statusseite für Kund:innen rendert das Reparatur-System selbst (ADR-005). "Wie bauen wir das Frontend?" nennt Eberhard Wolff in Folge 113 als Voraussetzung vor dem ersten Code, entscheidet es aber nicht (51:49 bis 52:31). Der Laden hat keine IT-Abteilung.
+____
+
+Voraussetzungen sind <<adr-001>>, <<adr-002>> und <<adr-003>>; die Statusseite kommt aus <<adr-005>>.
+
+*Betroffene Qualitätsszenarien:* <<{ch10}#qs-u-02,QS-U-02>> (Reparatur in 2 Minuten beauftragt), <<{ch10}#qs-u-03,QS-U-03>> (4 von 5 Punkten), <<{ch10}#qs-u-05,QS-U-05>> und <<{ch10}#qs-u-06,QS-U-06>> (Einarbeitung in einer Stunde), <<{ch10}#qs-u-07,QS-U-07>> (Betrieb ohne IT-Experten), <<{ch10}#qs-a-01,QS-A-01>> (SaaS in 2 Monaten und 20 PT).
+
+*Bekannte Risiken:* R-003 (Kopplung an diesen Webshop gegen das SaaS-Ziel), R-004 (JWT-Cookie nur in derselben Domain), R-006 (Umleitung je Laden beim SaaS-Umbau), R-007 (geteilter Origin), R-014 (Statusseite als Fremdkörper), R-015 (Status im Kundenkonto gesucht).
+
+=== Fassung Eberhard Wolff
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-B.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Andere Systeme verlinken in das Reparatur-System.
+
+Benutzerfreundlichkeit: Mitarbeitende sollen sich nach einer Stunde im System eingearbeitet haben. 85% sollen das System weiterempfehlen. Kunden sollen das System mit 4 von 5 Punkten bewerten.
+
+Annahme: Entwickler:innen kennen ein bestimmtes SPA-Framework.
+
+Annahme: Ein Team (5-7 Personen) entwickelt das gesamte System.
+
+Die UIs dienen zur Eingabe und Ausgabe von Daten. Es gibt keine komplexen Grafiken o.ä. wie bei einer Karten-Anwendung oder einem Spiel. Die Terminplanung hat wahrscheinlich das komplexeste UI.
+
+Es gibt keinen Bedarf für komplexe Komposition von UIs. Jede Komponente hat genau eine UI.
+
+Ggf. muss das Bezahl-System über eine UI-Integration angesprochen werden.
+
+==== Optionen
+
+*Option 1.* Wir benutzen das SPA-Framework, das die Entwickler:innen kennen. Sie können schnell loslegen und können typische Probleme schnell lösen. Mit einem SPA-Framework wären sogar komplexere UIs umsetzbar. Jede Komponente hat ihr eigenes SPA.
+
+*Option 2.* Wir benutzen eine andere Web-Technologie – nicht notwendigerweise ein SPA. Ggf. ermöglicht diese eine bessere Modularisierung und Komposition von UIs.
+
+==== Entscheidung
+
+Wir benutzen ein SPA-Framework. Jede Komponente hat ein eigenes SPA.
+
+==== Begründung
+
+Integration mit Links ist mit jeder Web-Technologie möglich.
+
+Die notwendige Benutzerfreundlichkeit hat keinen Einfluss auf die Technologie-Entscheidung (siehe Folge 114 zu Benutzerfreundlichkeit).
+
+Eine komplexe Modularisierung und Komposition der UIs ist nicht notwendig. Jede Komponente hat eine eigene UI. Das Team ist so klein, dass auch eine Skalierung auf mehrere Teams als Motivation für eine Modularisierung nicht gegeben ist.
+
+Durch die Vertrautheit können Entwickler:innen schnell mit der Implementierung loslegen.
+
+==== Konsequenzen
+
+* Gegebenenfalls ist für die Terminplanung doch eine komplexere UI notwendig, die aber mit einem SPA abgebildet werden kann.
+* Zwischen den SPAs für die verschiedenen Komponenten gibt es einen spürbaren Übergang - u.a. entsteht durch den Start des SPAs eine Wartezeit. Das ist akzeptabel, weil solche Wechsel selten vorkommen.
+* Ein einheitliches UI über SPAs hinweg muss mit Konventionen und ggf. passenden gemeinsamen Artefakten unterstützt werden.
+* Die Integration des Bezahlsystems muss sichergestellt werden.
+
+=== Fassung Claude
+
+++++
+<figure class="hoerprobe">
+<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
+<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-A.mp3" controls preload="none"></audio>
+</figure>
+++++
+
+==== Kontext
+
+Alle Nutzergruppen arbeiten im Browser unter `/reparatur`; der Webshop, ein Fertigprodukt, liefert Login und JWT-Cookie (<<adr-001,ADR-001>>, <<adr-002,ADR-002>>, <<adr-003,ADR-003>>). Kund:innen beauftragen eine Reparatur in 2 Minuten (QS-U-02) und bewerten die selbst gerenderte Statusseite mit 4 von 5 Punkten (<<adr-005,ADR-005>>, QS-U-03, R-014, R-015). Mitarbeitende bedienen das System nach einer Stunde (QS-U-05, QS-U-06). Der Shop hat keine IT-Experten (QS-U-07), das Team pflegt vier Repositories (<<adr-011,ADR-011>>, R-032). Der SaaS-Umbau darf 20 PT nicht überschreiten (QS-A-01, R-003, R-006). Eine Schichtung nach UI, Logik und Persistenz ist verworfen (<<adr-009,ADR-009>>). Monolith oder Container bleibt offen (<<adr-014,ADR-014>>).
+
+==== Optionen
+
+*Option 1: Server-gerenderte Seiten je Modul.* Jedes Modul liefert seine HTML-Seiten selbst, JavaScript nur für kleine Ergänzungen. Vorteil: kein eigenes Frontend-Artefakt, Cookie und Pfadpräfix laufen durch. Nachteil: Werkstatt-Ansichten bleiben seitenbasiert.
+
+*Option 2: Eine Single-Page-Application für alle.* Ein JavaScript-Frontend im fünften Repository spricht REST-APIs aller vier Module. Vorteil: reiche Interaktion, ein Erscheinungsbild. Nachteil: eine UI-Schicht quer über die Module, eigener Build, eigenes Deployment.
+
+*Option 3: Geteiltes Frontend.* Kund:innen-Seiten server-gerendert, Werkstatt als Single-Page-Application. Vorteil: Interaktion dort, wo täglich gearbeitet wird. Nachteil: zwei Technologien, zwei Build-Ketten.
+
+==== Entscheidung
+
+Wir bauen server-gerenderte HTML-Seiten. Jedes der vier Module rendert seine eigenen Seiten unter `/reparatur`; ein gemeinsames Stylesheet lehnt sie an den Webshop an. JavaScript ergänzt einzelne Seiten, rendert aber keine Inhalte. Keine Single-Page-Application, auch nicht für die Werkstatt allein. Template-Engine und Sprache wählt das Team nach Gewohnheit.
+
+==== Begründung
+
+Server-gerenderte Seiten nutzen den Webshop-Login am einfachsten: Der Browser schickt das JWT-Cookie mit jedem Seitenaufruf, das Auftragsformular kommt vorbelegt vom Server (QS-U-02). Eine Single-Page-Application müsste das Cookie an jeden API-Aufruf hängen und den Zugriff doppelt prüfen; das vertieft die Webshop-Kopplung (R-003) und legt das Reparaturprotokoll als API offen (R-027). Ein fünftes Repository mit eigener Build-Kette trifft ein Team ohne Betrieb (QS-U-07, R-032) und führt die verworfene UI-Schicht quer über alle Module wieder ein (<<adr-009,ADR-009>>). Je Mandant braucht das Frontend nur ein Stylesheet (QS-A-01). Gegen die Wahl spricht: Tagesplan und Protokoll bleiben Formulare; verlangt die UX-Expertin mehr Interaktion, rüsten wir seitenweise nach.
+
+==== Konsequenzen
+
+* Kein Frontend-Repository, keine getrennte Frontend-Pipeline; jedes Modul enthält seine Oberfläche.
+* Das gemeinsame Stylesheet ist ein fünftes, kleines Artefakt; <<adr-011,ADR-011>> ist zu ergänzen.
+* Statusseite per Stylesheet an den Webshop angelehnt (R-014); der Verweis aus dem Webshop bleibt offen (R-015).
+* Risiko: Die UX-Folge verlangt für Tagesplan und Protokoll mehr Interaktion; dann entsteht JavaScript je Modul ohne gemeinsame Basis (neu).
+* Risiko: Ohne Theme des Fertigprodukts bleibt die Angleichung Handarbeit und driftet bei jedem Webshop-Update (neu).
+
+==== Anhang: Pugh-Matrix
+
+NOTE: Der Anhang war für eine Folie "Bewertung" vorgesehen, im Experiment aber nicht gezeigt. Eberhards Fassung hat keine Matrix. Der erste Satz des Originals ("Wird auf der Folie Bewertung gezeigt.") ist deshalb weggelassen.
+
+Option 1 ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams.
+
+[cols="3,1,1,1"]
+|===
+| Kriterium | Option 1: Server-gerenderte Seiten je Modul (Referenz) | Option 2: Eine Single-Page-Application für alle | Option 3: Geteiltes Frontend
+
+| Reparatur beauftragen in 2 Minuten (QS-U-02) | 0 | ? | 0
+| Nur gefilterte Protokolldaten erreichen den Browser (R-027) | 0 | -1 | 0
+| Einarbeitung der Werkstatt in einer Stunde (QS-U-05, QS-U-06) | 0 | ? | ?
+| Interaktion für Tagesplan und Protokoll | 0 | +1 | +1
+| Betrieb ohne IT-Experten: Artefakte und Build-Ketten (QS-U-07, R-032) | 0 | -1 | -1
+| SaaS-Umbau in 20 PT (QS-A-01, R-003, R-006) | 0 | -1 | ?
+| Fachlicher Schnitt ohne UI-Schicht (ADR-009) | 0 | -1 | -1
+| Ein Erscheinungsbild über vier Module (R-014) | 0 | +1 | ?
+
+| *Summe* | *0* | *-2 (2 Zellen offen)* | *-1 (3 Zellen offen)*
+|===
+
+Die Summe spricht für Option 1. Den Ausschlag geben QS-U-07 und ADR-009: Ein Team ohne Betrieb trägt kein fünftes Artefakt mit eigener Build-Kette, und eine UI-Schicht quer über die Module ist der Schnitt, den Folge 112 verworfen hat. Bewertet die UX-Folge die Interaktion in der Werkstatt höher als angenommen, rückt Option 3 nach.
+
+=== Abstimmung
+
+Im Saal hieß Claudes Fassung A, Eberhards Fassung B. Eine KI-Stimme las beide vor; die Urheber wurden erst am Schluss genannt.
+
+[cols="3,1,1"]
+|===
+| Frage | Eberhard Wolff (B) | Claude (A)
+
+| Welches ADR eignet sich besser für die Situation? | 16 | 10
+| Welches ADR ist KI-generiert? | 11 | 15
+|===
+
+Die Mehrheit hielt Eberhards Fassung für die bessere und erkannte Claudes Fassung als KI-generiert.
+
+=== Konsequenzen
+
+* Die Entscheidung bleibt offen. Wer sie trifft, wählt zwischen einem SPA je Komponente (Eberhard Wolff) und server-gerenderten Seiten je Modul (Claude).
+* Claudes Fassung beruft sich auf Risiken aus Kapitel 11 (R-003, R-006, R-014, R-015, R-027, R-032) und nennt zwei neue Risiken ohne ID; Eberhards Fassung nennt keine Risiko-IDs.
