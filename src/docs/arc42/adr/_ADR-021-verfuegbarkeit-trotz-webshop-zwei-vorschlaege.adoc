@@ -8,7 +8,7 @@
 | Quelle | Keynote "Der Architektur-Turing-Test" (Ralf D. Müller, Eberhard Wolff), InfoDays, 06.10.2026, Runde 3 (Problem P5). Ablauf und Ergebnisse: link:https://llm-coding.github.io/fahrrad-reparatur-architektur/experiment/architektur-turing-test.html[Der Architektur-Turing-Test]
 |===
 
-Dieses ADR hält zwei gleichrangige Vorschläge fest: einen von Eberhard Wolff, einen von Claude. Beide stehen im Wortlaut da. Entschieden ist nichts; die Abstimmung im Saal ist ein Stimmungsbild, keine Entscheidung.
+Dieses ADR hält zwei gleichrangige Vorschläge fest: einen von Eberhard Wolff, einen von Claude. Beide stehen im Wortlaut da. Entschieden ist nichts; die Abstimmung des Publikums ist ein Stimmungsbild, keine Entscheidung.
 
 === Problem
 
@@ -130,7 +130,7 @@ Option 1 endet rechnerisch gleichauf mit der Referenz. Den Ausschlag gibt das Ge
 
 === Abstimmung
 
-Im Saal hieß Eberhards Fassung A, Claudes Fassung B. Eine KI-Stimme las beide vor; die Urheber wurden erst am Schluss genannt.
+In der Keynote hieß Eberhards Fassung A, Claudes Fassung B. Eine KI-Stimme las beide vor; die Urheber wurden erst am Schluss genannt.
 
 [cols="3,1,1"]
 |===

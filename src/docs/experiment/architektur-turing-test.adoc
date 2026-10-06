@@ -15,7 +15,7 @@ Am 6. Oktober 2026 entschieden auf den InfoDays ein Architekt und ein Sprachmode
 
 Die Aufzeichnung der Keynote dauert gut eine Stunde: link:https://www.youtube.com/watch?v=iiNWOeQaJIY["Der Architektur-Turing-Test" als Video auf YouTube].
 
-== Drei offene Fragen kamen auf die Bühne
+== Drei offene Fragen kamen in die Keynote
 
 Die Folgen 111 bis 113 von software-architektur.tv ließen mehrere Entscheidungen offen (Kapitel 9, Abschnitt "Die Front"). Drei davon wurden gespielt:
 
@@ -37,8 +37,8 @@ Die Regeln sollten verhindern, dass das Publikum etwas anderes bewertet als den 
 * *Kein Blick zum anderen.* Keiner sah den Text des anderen vor der Abstimmung.
 * *Anonym als A und B.* Das Publikum sah die beiden ADRs nur als A und B. Die Zuordnung wechselte von Runde zu Runde.
 * *Gleiche Stimme.* Eine synthetische Stimme (Cartesia, Stimme Lorelei) las beide Fassungen vor. So verriet keine Stimme den Urheber.
-* *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. Im Saal war auf keiner Seite eine Matrix zu sehen. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
-* *Auflösung am Schluss.* Wer A und wer B war, erfuhr der Saal erst nach der letzten Runde.
+* *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. In der Keynote war auf keiner Seite eine Matrix zu sehen. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
+* *Auflösung am Schluss.* Wer A und wer B war, erfuhr das Publikum erst nach der letzten Runde.
 
 Jede Runde begann mit der Problemstellung. Dann folgten ADR A und ADR B, dann die beiden Abstimmungen mit je 60 Sekunden Zeit (link:{video}&t=1351s[22:31]). Eine Vorabfrage "Wie würdet ihr entscheiden?" kommt in der Aufzeichnung nicht vor.
 
@@ -57,19 +57,19 @@ Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Key
 
 == Was die Zahlen zeigen
 
-*Runde 1 gewann Claude, und der Saal hielt Eberhard für die KI.* 18 von 22 Stimmen hielten Claudes ADR für das bessere. 19 von 24 Stimmen hielten Eberhards ADR für KI-generiert. Die Mehrheit lag bei der Erkennung falsch.
+*Runde 1 gewann Claude, und das Publikum hielt Eberhard für die KI.* 18 von 22 Stimmen hielten Claudes ADR für das bessere. 19 von 24 Stimmen hielten Eberhards ADR für KI-generiert. Die Mehrheit lag bei der Erkennung falsch.
 
-*Runde 2 und 3 gewann Eberhard, und der Saal erkannte die KI.* In Runde 2 hielten 16 von 26 Stimmen Eberhards ADR für das bessere, 15 von 26 erkannten Claudes ADR als KI-generiert. In Runde 3 lauteten die Zahlen 15 von 27 und 17 von 26.
+*Runde 2 und 3 gewann Eberhard, und das Publikum erkannte die KI.* In Runde 2 hielten 16 von 26 Stimmen Eberhards ADR für das bessere, 15 von 26 erkannten Claudes ADR als KI-generiert. In Runde 3 lauteten die Zahlen 15 von 27 und 17 von 26.
 
 *In jeder Runde hielt die Mehrheit das bessere ADR für das menschliche.* Das bessere ADR war dabei einmal Claudes und zweimal Eberhards. Ob das Urteil über die Qualität das Urteil über den Urheber gelenkt hat oder umgekehrt, zeigen die Zahlen nicht.
 
-*Über alle Runden lag der Saal bei der Erkennung nahe am Zufall.* 37 von 76 Stimmen ordneten das KI-ADR richtig zu, knapp die Hälfte. Bei der Frage nach dem besseren ADR erhielt Claude 40 Stimmen, Eberhard 35.
+*Über alle Runden lag das Publikum bei der Erkennung nahe am Zufall.* 37 von 76 Stimmen ordneten das KI-ADR richtig zu, knapp die Hälfte. Bei der Frage nach dem besseren ADR erhielt Claude 40 Stimmen, Eberhard 35.
 
 Die Zahlen stammen aus einer einzigen Veranstaltung. Rund 55 Personen nahmen an der Keynote teil, je Frage stimmten 22 bis 27 ab, also knapp die Hälfte. Für mehr als ein Stimmungsbild reichen die Zahlen nicht.
 
 Texte: Eberhard Wolff und Claude.
 
-== Ralf und Eberhard deuteten die Ergebnisse auf der Bühne
+== Ralf und Eberhard deuteten die Ergebnisse im Stream
 
 Nach der Auflösung sprachen Ralf D. Müller und Eberhard Wolff über die drei Runden. Die Zeitmarken führen zur Stelle im Video.
 
@@ -89,4 +89,4 @@ Ein Kommentar bestätigte, dass Benutzerfreundlichkeit wichtig ist (link:{video}
 
 == Keine Fassung ist beschlossen
 
-Die drei ADRs tragen den Status "Offen – zwei Vorschläge". Die Abstimmung im Saal ist kein Beschluss des Teams. Beide Fassungen stehen gleichrangig nebeneinander: link:{ch09}#adr-019[ADR-019], link:{ch09}#adr-020[ADR-020] und link:{ch09}#adr-021[ADR-021].
+Die drei ADRs tragen den Status "Offen – zwei Vorschläge". Die Abstimmung des Publikums ist kein Beschluss des Teams. Beide Fassungen stehen gleichrangig nebeneinander: link:{ch09}#adr-019[ADR-019], link:{ch09}#adr-020[ADR-020] und link:{ch09}#adr-021[ADR-021].
