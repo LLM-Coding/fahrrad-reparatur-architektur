@@ -31,13 +31,6 @@ Voraussetzungen sind <<adr-001>> und <<adr-002>>.
 
 === Fassung Eberhard Wolff
 
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-A.mp3" controls preload="none"></audio>
-</figure>
-++++
-
 ==== Kontext
 
 Kund:innen loggen sich über den Webshop ein.
@@ -81,13 +74,6 @@ Option 3 (eigene Implementierung) spart ebenso die Einarbeitung in die Standard-
 * Es sollten Maßnahmen ergriffen werden, um den Zugriff auf den Login, die internen Anwendungen und die Benutzerverwaltung auf den Shop zu limitieren.
 
 === Fassung Claude
-
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-B.mp3" controls preload="none"></audio>
-</figure>
-++++
 
 ==== Kontext
 
