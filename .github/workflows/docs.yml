@@ -101,6 +101,20 @@ jobs:
           gh release download audio-cbr --repo "$GITHUB_REPOSITORY" --pattern '11?.mp3' --dir build/microsite/output/audio
           ls -l build/microsite/output/audio
 
+      # Readings of the Architektur-Turing-Test ADRs (TTS, 64k CBR mono),
+      # assets of the release audio-turing-test. Until that release is
+      # published the step only warns, so the build stays green.
+      - name: Add Turing test audio
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view audio-turing-test --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            gh release download audio-turing-test --repo "$GITHUB_REPOSITORY" --pattern 'R?-P?-?*.mp3' --dir build/microsite/output/audio/turing-test
+            ls -l build/microsite/output/audio/turing-test
+          else
+            echo "::warning::Release audio-turing-test not published; Turing test audio missing"
+          fi
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

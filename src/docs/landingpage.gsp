@@ -97,6 +97,19 @@
 
         </section>
 
+        <!-- Experiment -->
+        <section class="row mt-2 mb-2">
+            <div class="col-12">
+                <h2 class="h3">Der Architektur-Turing-Test</h2>
+                <p>
+                    Drei offene Entscheidungen, je ein ADR von Eberhard Wolff und von Claude, blind vorgelesen:
+                    Auf den InfoDays am 6.&nbsp;Oktober 2026 stimmte das Publikum ab, welches ADR besser ist
+                    und welches die KI geschrieben hat.
+                    <a href="experiment/architektur-turing-test.html">Ablauf und Ergebnisse</a>
+                </p>
+            </div>
+        </section>
+
         <!-- Entscheidungslandkarte -->
         <section class="row mt-4 mb-4">
             <div class="col-12">
