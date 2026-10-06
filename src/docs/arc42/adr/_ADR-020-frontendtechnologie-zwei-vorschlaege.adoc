@@ -120,7 +120,9 @@ Server-gerenderte Seiten nutzen den Webshop-Login am einfachsten: Der Browser sc
 
 ==== Anhang: Pugh-Matrix
 
-Im Experiment nicht gezeigt; Eberhards Fassung hat keine Matrix. Option 1 ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams.
+NOTE: Der Anhang war für eine Folie "Bewertung" vorgesehen, im Experiment aber nicht gezeigt. Eberhards Fassung hat keine Matrix. Der erste Satz des Originals ("Wird auf der Folie Bewertung gezeigt.") ist deshalb weggelassen.
+
+Option 1 ist die Referenz und steht auf 0. Zellen mit `?` brauchen ein Urteil des Teams.
 
 [cols="3,1,1,1"]
 |===

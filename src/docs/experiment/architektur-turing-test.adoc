@@ -15,7 +15,7 @@ Am 6. Oktober 2026 entschieden auf den InfoDays ein Architekt und ein Sprachmode
 
 == Drei offene Fragen kamen auf die Bühne
 
-Folge 111 bis 113 von software-architektur.tv ließen sechs Entscheidungen offen (Kapitel 9, Abschnitt "Die Front"). Drei davon wurden gespielt:
+Die Folgen 111 bis 113 von software-architektur.tv ließen mehrere Entscheidungen offen (Kapitel 9, Abschnitt "Die Front"). Drei davon wurden gespielt:
 
 [cols="1,4,2"]
 |===
@@ -35,7 +35,7 @@ Die Regeln sollten verhindern, dass das Publikum etwas anderes bewertet als den 
 * *Kein Blick zum anderen.* Keiner sah den Text des anderen vor der Abstimmung.
 * *Anonym als A und B.* Das Publikum sah die beiden ADRs nur als A und B. Die Zuordnung wechselte von Runde zu Runde.
 * *Gleiche Stimme.* Eine synthetische Stimme (Cartesia, Stimme Lorelei) las beide Fassungen vor. So verriet keine Stimme den Urheber.
-* *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. Die Anhänge wurden auf beiden Seiten weggelassen, damit die Form den Urheber nicht verrät. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
+* *Keine Pugh-Matrix.* Claudes ADRs hatten eine Pugh-Matrix als Anhang, Eberhards nicht. Im Saal war auf keiner Seite eine Matrix zu sehen. In Kapitel 9 stehen sie wieder bei Claudes Fassung.
 * *Auflösung am Schluss.* Wer A und wer B war, erfuhr der Saal erst nach der letzten Runde.
 
 Jede Runde begann mit der Problemstellung und einer Vorabfrage: "Wie würdet ihr entscheiden?" Dann folgten ADR A und ADR B, dann die beiden Abstimmungen.
