@@ -31,13 +31,6 @@ Voraussetzungen sind <<adr-001>>, <<adr-002>> und <<adr-008>>.
 
 === Fassung Eberhard Wolff
 
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-A.mp3" controls preload="none"></audio>
-</figure>
-++++
-
 ==== Kontext
 
 Das Web-System soll zwischen 7 und 24 Uhr zu 99,9% und den Rest der Zeit zu 99% zur Verfügung stehen.
@@ -82,13 +75,6 @@ Option 3 ist verhältnismäßig aufwändig. Die sichere Replikation von Login-Da
 * Online-Bezahlung ist in allen Optionen nur möglich, wenn der Shop verfügbar ist. Da das Rad abgeholt und angeliefert werden muss, ist eine Bezahlung vor Ort vermutlich akzeptabel.
 
 === Fassung Claude
-
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-B.mp3" controls preload="none"></audio>
-</figure>
-++++
 
 ==== Kontext
 

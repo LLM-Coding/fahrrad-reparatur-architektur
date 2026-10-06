@@ -5,7 +5,6 @@
 :jbake-order: 1
 :filename: /experiment/architektur-turing-test.adoc
 :toc:
-:audio: https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test
 :ch09: ../arc42/chapters/09_architecture_decisions.html
 
 [[section-architektur-turing-test]]
@@ -65,47 +64,7 @@ Fett ist jeweils die Mehrheit. Die Zahlen stammen von den Ergebnisfolien der Key
 
 Die Zahlen stammen aus einem einzigen Saal. Wie viele Personen abstimmten, ist nicht bekannt; die Summen schwanken zwischen 22 und 27 Stimmen je Frage. Für mehr als ein Stimmungsbild reichen sie nicht.
 
-== Die Hörproben sind die Lesungen der KI-Stimme
-
-Die kurze Fassung enthält Kontext, Entscheidung und Begründung, die lange das ganze ADR. Die Dateien tragen die Bezeichnung aus dem Saal (A oder B), nicht den Namen des Autors.
-
-[cols="2,2,3,1"]
-|===
-| Runde | Fassung | Kurze Fassung | Ganzes ADR
-
-| 1 Anmeldung | A: Eberhard Wolff
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-A.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R1-P1-A-voll.mp3[MP3]
-| 1 Anmeldung | B: Claude
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R1-P1-B.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R1-P1-B-voll.mp3[MP3]
-| 2 Frontend | A: Claude
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-A.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R2-P3-A-voll.mp3[MP3]
-| 2 Frontend | B: Eberhard Wolff
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-B.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R2-P3-B-voll.mp3[MP3]
-| 3 Verfügbarkeit | A: Eberhard Wolff
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-A.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R3-P5-A-voll.mp3[MP3]
-| 3 Verfügbarkeit | B: Claude
-a| ++++
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R3-P5-B.mp3" controls preload="none"></audio>
-++++
-| link:{audio}/R3-P5-B-voll.mp3[MP3]
-|===
-
-Stimme: Cartesia, Lorelei. Texte: Eberhard Wolff und Claude; Eberhard Wolff hat der Veröffentlichung seiner Fassungen mit Namensnennung zugestimmt.
+Texte: Eberhard Wolff und Claude.
 
 == Keine Fassung ist beschlossen
 

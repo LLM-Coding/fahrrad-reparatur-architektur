@@ -31,13 +31,6 @@ Voraussetzungen sind <<adr-001>>, <<adr-002>> und <<adr-003>>; die Statusseite k
 
 === Fassung Eberhard Wolff
 
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-B.mp3" controls preload="none"></audio>
-</figure>
-++++
-
 ==== Kontext
 
 Andere Systeme verlinken in das Reparatur-System.
@@ -82,13 +75,6 @@ Durch die Vertrautheit können Entwickler:innen schnell mit der Implementierung 
 * Die Integration des Bezahlsystems muss sichergestellt werden.
 
 === Fassung Claude
-
-++++
-<figure class="hoerprobe">
-<figcaption>Gelesen im Experiment (Kontext, Entscheidung, Begründung)</figcaption>
-<audio src="https://llm-coding.github.io/fahrrad-reparatur-architektur/audio/turing-test/R2-P3-A.mp3" controls preload="none"></audio>
-</figure>
-++++
 
 ==== Kontext
 
